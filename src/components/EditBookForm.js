@@ -3,6 +3,8 @@ import Modal from 'react-modal';
 import { getDatabase, ref, child, get, update } from 'firebase/database';
 import { app } from '../firebase_setup/firebase.js';
 
+Modal.setAppElement('#root');
+
 function EditBookForm () {
   const [bookId, setBookId] = useState('');
   const [title, setTitle] = useState('');
@@ -43,7 +45,7 @@ function EditBookForm () {
         />
       </label>
       <button onClick={handleLookup}>Lookup</button>
-      <Modal isOpen={modalIsOpen}>
+      <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}>
         <form onSubmit={handleSubmit}>
           <label>
             Title:
