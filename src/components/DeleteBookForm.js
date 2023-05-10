@@ -1,32 +1,36 @@
 import React, { useState } from 'react';
-import { getDatabase, ref, push, set } from 'firebase/database';
+import { getDatabase, ref, query, orderByChild, equalTo, get, remove } from 'firebase/database';
 import { app } from '../firebase_setup/firebase.js';
 
-
-function AddBookForm() {
+function DeleteBookForm() {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [message, setMessage] = useState('');
 
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const db = getDatabase(app);
+    const booksRef = ref(db, 'books');
+    const booksQuery = query(booksRef, orderByChild('title'), equalTo(title));
 
-    // Create a new field that combines the title and author values
-    const title_author = `${title}_${author}`;
+    let bookDeleted = false;
+    const snapshot = await get(booksQuery);
+    snapshot.forEach((childSnapshot) => {
+      if (childSnapshot.val().author === author) {
+        remove(childSnapshot.ref);
+        bookDeleted = true;
+      }
+    });
 
-    // Set the isBorrowed status to false by default
-    const isBorrowed = false;
-
-    // Update the realtime database in Firebase
-    const newBookRef = push(ref(db, 'books'), { title, author, title_author, isBorrowed });
-    console.log(`New book added with ID: ${newBookRef.key}`);
-
-    // Clears the input field
+    if (bookDeleted) {
+        setMessage('Book deleted successfully!');
+    } else {
+        setMessage('No book found with the specified title and author.');
+    }
+    
+    //Clear the input fields after deletion
     setTitle('');
     setAuthor('');
-    setMessage('Book added successfully!');
   };
 
   return (
@@ -50,11 +54,11 @@ function AddBookForm() {
           />
         </label>
         <br />
-        <input type="submit" value="Add Book" />
+        <input type="submit" value="Delete Book" />
       </form>
       <p>{message}</p>
     </div>
   );
 }
 
-export default AddBookForm;
+export default DeleteBookForm;
