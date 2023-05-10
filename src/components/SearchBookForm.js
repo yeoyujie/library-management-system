@@ -8,6 +8,7 @@ function SearchBookForm() {
   const [books, setBooks] = useState([]);
   const [message, setMessage] = useState('');
 
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const db = getDatabase(app);
@@ -80,12 +81,15 @@ function SearchBookForm() {
       <ul>
         {books.map((book) => (
           <li key={book.id}>
-            {book.title} by {book.author}
+            {book.title} by {book.author} (Book ID is:{' '}
+            <span style={{ fontWeight: 'bold', color: '#15cdfc' }}>{book.id}</span>)
+            {/* <button onClick={() => handleEdit(book.id)}>Edit</button> */}
           </li>
         ))}
       </ul>
     </div>
   );
 }
+
 
 export default SearchBookForm;
