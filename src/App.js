@@ -13,17 +13,6 @@ function App() {
   const [view, setView] = useState('add');
 
   return (
-    // <Router>
-    //   <Navbar />
-    //     <button onClick={() => setView('add')}>Add Book</button>
-    //     <button onClick={() => setView('delete')}>Delete Book</button>
-    //     <button onClick={() => setView('search')}>Search Book</button>
-    //     <button onClick={() => setView('edit')}>Edit Book</button>
-      // {view === 'add' && <AddBookForm />}
-      // {view === 'delete' && <DeleteBook />}
-      // {view === 'search' && <SearchBookForm />}
-      // {view === 'edit' && <EditBookForm />}
-    // </Router>
 
     <Router>
     <Navbar setView={setView} view={view}/>
