@@ -13,8 +13,11 @@ function AddBookForm() {
     event.preventDefault();
     const db = getDatabase(app);
 
+    // Create a new field that combines the title and author values
+    const title_author = `${title}_${author}`;
+
     // Update the realtime database in Firebase
-    const newBookRef = push(ref(db, 'books'), { title, author });
+    const newBookRef = push(ref(db, 'books'), { title, author, title_author });
     console.log(`New book added with ID: ${newBookRef.key}`);
 
     // Clears the input field

@@ -3,6 +3,8 @@ import './App.css';
 import AddBookForm from './components/AddBookForm';
 import DeleteBookFormIndex from './components/DeleteBookFormIndex';
 import DeleteBookForm from './components/DeleteBookForm';
+import SearchBookForm from './components/SearchBookForm';
+
 
 
 function App() {
@@ -14,6 +16,8 @@ function App() {
       <DeleteBookFormIndex />
       <h1>Delete a Book</h1>
       <DeleteBookForm />
+      <h1>Search a Book</h1>
+      <SearchBookForm />
     </div>
   );
 }
