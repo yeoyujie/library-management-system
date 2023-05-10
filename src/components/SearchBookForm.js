@@ -33,7 +33,7 @@ function SearchBookForm() {
         equalTo(author)
       );
     }
-    
+
     if (booksQuery) {
       const snapshot = await get(booksQuery);
       const booksArray = [];
@@ -80,7 +80,7 @@ function SearchBookForm() {
       <ul>
         {books.map((book) => (
           <li key={book.id}>
-            {book.title} by {book.author}
+            {book.title} by {book.author} (ID: {book.id})
           </li>
         ))}
       </ul>

@@ -3,6 +3,7 @@ import './App.css';
 import AddBookForm from './components/AddBookForm';
 import DeleteBookFormIndex from './components/DeleteBookFormIndex';
 import DeleteBookForm from './components/DeleteBookForm';
+import EditBookForm from './components/EditBookForm';
 import SearchBookForm from './components/SearchBookForm';
 
 
@@ -18,6 +19,8 @@ function App() {
       <DeleteBookForm />
       <h1>Search a Book</h1>
       <SearchBookForm />
+      <h1>Edit a Book</h1>
+      <EditBookForm />
     </div>
   );
 }
