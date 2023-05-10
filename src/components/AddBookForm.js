@@ -16,8 +16,11 @@ function AddBookForm() {
     // Create a new field that combines the title and author values
     const title_author = `${title}_${author}`;
 
+    // Set the isBorrowed status to false by default
+    const isBorrowed = false;
+
     // Update the realtime database in Firebase
-    const newBookRef = push(ref(db, 'books'), { title, author, title_author });
+    const newBookRef = push(ref(db, 'books'), { title, author, title_author, isBorrowed });
     console.log(`New book added with ID: ${newBookRef.key}`);
 
     // Clears the input field
