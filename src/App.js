@@ -9,7 +9,9 @@ import Navbar from './components/Navbar';
 
 function App() {
   const [view, setView] = useState('search');
-  const [isAdmin, setIsAdmin] = useState(false);
+
+  //set to true for testing in dev mode
+  const [isAdmin, setIsAdmin] = useState(true);
 
   return (
     <Router>
