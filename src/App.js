@@ -8,14 +8,14 @@ import SearchBookForm from './components/SearchBookForm';
 import Navbar from './components/Navbar';
 
 function App() {
-  const [view, setView] = useState('add');
+  const [view, setView] = useState('search');
 
   return (
     <Router>
       <Navbar setView={setView} view={view}/>
+      {view === 'search' && <SearchBookForm />}
       {view === 'add' && <AddBookForm />}
       {view === 'delete' && <DeleteBook />}
-      {view === 'search' && <SearchBookForm />}
       {view === 'edit' && <EditBookForm />}
     </Router>
   );
