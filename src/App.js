@@ -1,28 +1,28 @@
 import './App.css';
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import AddBookForm from './components/AddBookForm';
 import DeleteBook from './components/DeleteBook';
 import EditBookForm from './components/EditBookForm';
 import SearchBookForm from './components/SearchBookForm';
 import Navbar from './components/Navbar';
 
-
-
 function App() {
-  const [view, setView] = useState('add');
+  const [view, setView] = useState('search');
+
+  //set to true for testing in dev mode
+  const [isAdmin, setIsAdmin] = useState(true);
 
   return (
-
     <Router>
-    <Navbar setView={setView} view={view}/>
-    {view === 'add' && <AddBookForm />}
-    {view === 'delete' && <DeleteBook />}
-    {view === 'search' && <SearchBookForm />}
-    {view === 'edit' && <EditBookForm />}
+      <Navbar setView={setView} view={view} isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
+      {view === 'search' && <SearchBookForm />}
+      {view === 'add' && isAdmin && <AddBookForm />}
+      {view === 'delete' && isAdmin && <DeleteBook />}
+      {view === 'edit' && isAdmin && <EditBookForm />}
     </Router>
-    );
-  }
+  );
+}
 
 
 export default App;

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getDatabase, ref, push, set } from 'firebase/database';
+import { getDatabase, ref, push } from 'firebase/database';
 import { app } from '../firebase_setup/firebase.js';
 
 
@@ -12,6 +12,11 @@ function AddBookForm() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const db = getDatabase(app);
+
+    if (!title || !author) {
+      alert('Please enter both the title and the author.');
+      return;
+    }
 
     // Create a new field that combines the title and author values
     const title_author = `${title}_${author}`;
