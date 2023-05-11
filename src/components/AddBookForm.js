@@ -14,7 +14,7 @@ function AddBookForm() {
     const db = getDatabase(app);
 
     if (!title || !author) {
-      setMessage('Please enter both a title and an author.');
+      alert('Please enter both the title and the author.');
       return;
     }
 

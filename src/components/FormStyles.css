@@ -23,13 +23,14 @@ input[type="text"] {
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
 }
 
-input[type="submit"] {
+button, input[type="submit"] {
   font-size: 16px;
   padding: 10px;
   border-radius: 5px;
   border: none;
   background-color: #15cdfc;
   color: white;
+  
 
   /* make the size of the submit button the same as the input boxes */
   width: calc(210px);

@@ -51,7 +51,9 @@ function EditBookForm() {
           onChange={(event) => setBookId(event.target.value)}
         />
       </label>
-      <button onClick={handleLookup}>Find</button>
+      <div style={{ textAlign: "center" }}>
+        <button onClick={handleLookup} type="submit">Find</button>
+      </div>
       <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}>
         <form onSubmit={handleSubmit}>
           <label>
@@ -93,7 +95,5 @@ function EditBookForm() {
     </>
   );
 }
-
-
 
 export default EditBookForm;
