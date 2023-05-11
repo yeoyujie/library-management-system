@@ -7,8 +7,9 @@ import {
   NavBtn,
   NavBtnLink
 } from './NavbarElements';
+import LoginPage from '../auth/LoginPage';
 
-const Navbar = ({ setView, view }) => {
+const Navbar = ({ setView, view}) => {
   return (
     <>
       <Nav>
@@ -17,9 +18,6 @@ const Navbar = ({ setView, view }) => {
         </NavLink>
         <Bars />
         <NavMenu>
-          {/* Second Nav */}
-          {/* <NavBtnLink to='/sign-in'>Sign In</NavBtnLink> */}
-
            <NavLink onClick={() => setView('add')} view={view} expectedView='add'>
             Add Book
             </NavLink>
@@ -34,8 +32,8 @@ const Navbar = ({ setView, view }) => {
             </NavLink>
         </NavMenu>
         <NavBtn>
-          <NavBtnLink to='/signin'>Sign In</NavBtnLink>
-        </NavBtn>
+          <LoginPage Button={NavBtnLink} />
+          </NavBtn>
       </Nav>
     </>
   );

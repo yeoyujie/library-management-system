@@ -13,6 +13,11 @@ function AddBookForm() {
     event.preventDefault();
     const db = getDatabase(app);
 
+    if (!title || !author) {
+      setMessage('Please enter both a title and an author.');
+      return;
+    }
+
     // Create a new field that combines the title and author values
     const title_author = `${title}_${author}`;
 
