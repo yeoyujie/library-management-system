@@ -9,7 +9,7 @@ function EditBookForm () {
   const [bookId, setBookId] = useState('');
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
+  // const [successMessage, setSuccessMessage] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const handleLookup = async () => {
@@ -30,7 +30,7 @@ function EditBookForm () {
     const db = getDatabase(app);
     const bookRef = ref(db, `books/${bookId}`);
     await update(bookRef, { title, author });
-    setSuccessMessage('Book updated successfully!');
+    alert('Book updated successfully!')
     setModalIsOpen(false);
   };
 
@@ -66,7 +66,6 @@ function EditBookForm () {
           </label>
           <br />
           <input type="submit" value="Submit" />
-          {successMessage && <p>{successMessage}</p>}
         </form>
         <button onClick={() => setModalIsOpen(false)}>Close</button>
       </Modal>

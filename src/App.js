@@ -9,14 +9,15 @@ import Navbar from './components/Navbar';
 
 function App() {
   const [view, setView] = useState('search');
+  const [isAdmin, setIsAdmin] = useState(false);
 
   return (
     <Router>
-      <Navbar setView={setView} view={view}/>
+      <Navbar setView={setView} view={view} isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
       {view === 'search' && <SearchBookForm />}
-      {view === 'add' && <AddBookForm />}
-      {view === 'delete' && <DeleteBook />}
-      {view === 'edit' && <EditBookForm />}
+      {view === 'add' && isAdmin && <AddBookForm />}
+      {view === 'delete' && isAdmin && <DeleteBook />}
+      {view === 'edit' && isAdmin && <EditBookForm />}
     </Router>
   );
 }

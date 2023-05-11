@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-const LoginPage = ({ Button }) => {
-  const [isAdmin, setIsAdmin] = useState(false);
+const LoginPage = ({ Button, setIsAdmin }) => {
+  // const [isAdmin, setIsAdmin] = useState(false);
 
   const handleButtonClick = () => {
     const password = window.prompt('Please enter the password:');
@@ -24,7 +24,7 @@ const LoginPage = ({ Button }) => {
   return (
     <>
       <Button onClick={handleButtonClick}>Log in as admin</Button>
-      {isAdmin && <p>You are now logged in as an admin.</p>}
+      {/* {isAdmin && <p>You are now logged in as an admin.</p>} */}
     </>
   );
 };
