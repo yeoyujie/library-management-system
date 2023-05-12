@@ -51,6 +51,37 @@ button, input[type="submit"] {
   }
 }
 
+.success-message,
+.error-message {
+  position: relative;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+.success-message {
+  background-color: #dff0d8;
+  color: #3c763d;
+  border: 1px solid #d6e9c6;
+}
+.error-message {
+  background-color: #f2dede;
+  color: #a94442;
+  border: 1px solid #ebccd1;
+}
+.success-message button,
+.error-message button {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  border: none;
+  background-color: transparent;
+  color: inherit;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
 .switch {
   position: relative;
   display: inline-block;
