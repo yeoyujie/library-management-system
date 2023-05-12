@@ -1,6 +1,5 @@
 import React from "react";
-import Form from "./Form";
-
+import bgPhoto from "../assets/bgPhoto.jpg";
 const LayoutForm = ({
   children,
   successMessage,
@@ -9,7 +8,14 @@ const LayoutForm = ({
 }) => {
   return (
     <div className="container">
-      <div className="search-form">
+      <div
+        className="search-form"
+        style={{
+          backgroundImage: `url(${bgPhoto})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <div className="search-form-card">{children}</div>
       </div>
       <div className="search-results">

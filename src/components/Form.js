@@ -1,16 +1,24 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
-const Form = ({
-  handleSubmit,
-  inputs,
-}) => {
+const Form = ({ handleSubmit, inputs }) => {
+  const firstInputRef = useRef();
+
+  useEffect(() => {
+    firstInputRef.current.focus();
+  }, []);
+
   return (
     <form onSubmit={handleSubmit}>
       {inputs.map(({ label, value, onChange }, index) => (
         <React.Fragment key={index}>
           <label>
             {label}:
-            <input type="text" value={value} onChange={onChange} />
+            <input
+              type="text"
+              value={value}
+              onChange={onChange}
+              ref={index === 0 ? firstInputRef : null}
+            />
           </label>
           <br />
         </React.Fragment>
