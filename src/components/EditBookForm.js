@@ -52,10 +52,28 @@ function EditBookForm() {
         />
       </label>
       <div style={{ textAlign: "center" }}>
-        <button onClick={handleLookup} type="submit">Find</button>
+        <button onClick={handleLookup} type="submit">
+          Find
+        </button>
       </div>
-      <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}>
-        <form onSubmit={handleSubmit}>
+      <Modal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        style={{
+          content: {
+            top: "50%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+            width: "500px", // adjust this value to make the modal larger
+            height: "500px", // adjust this value to make the modal larger
+            overflow: "hidden", // prevent scrollbar from showing
+          },
+        }}
+      >
+        <form onSubmit={handleSubmit} style={{ paddingTop: "0px" }}>
           <label>
             Title:
             <input
@@ -90,7 +108,6 @@ function EditBookForm() {
           <br />
           <input type="submit" value="Submit" />
         </form>
-        <button onClick={() => setModalIsOpen(false)}>Close</button>
       </Modal>
     </>
   );

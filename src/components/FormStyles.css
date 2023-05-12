@@ -56,7 +56,6 @@ input[type="submit"] {
   position: relative;
   padding: 10px;
   border-radius: 4px;
-  margin-top: 10px;
 }
 .success-message {
   background-color: #dff0d8;

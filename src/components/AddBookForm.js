@@ -12,9 +12,17 @@ function AddBookForm() {
     event.preventDefault();
     const db = getDatabase(app);
 
-    if (!title || !author) {
+
+    setSuccessMessage("");
+
+    if (!title && !author) {
       setErrorMessage("Please enter both the title and the author.");
-      setSuccessMessage("");
+      return;
+    } else if (!title) {
+      setErrorMessage("Please enter the title.");
+      return;
+    } else if (!author) {
+      setErrorMessage("Please enter the author.");
       return;
     }
 
@@ -34,7 +42,23 @@ function AddBookForm() {
     console.log(`New book added with ID: ${newBookRef.key}`);
 
     // Display a success message
-    setSuccessMessage("Book added successfully!");
+    setSuccessMessage(
+      <>
+        Book added successfully!
+        <br />
+        Title:{" "}
+        <strong style={{ fontSize: "18px" }}>
+          {title}
+        </strong>
+        <br />
+        Author:{" "}
+        <strong style={{ fontSize: "18px" }}>
+          {author}
+        </strong>
+        <br />
+        ID: {newBookRef.key}
+      </>
+    );
     setErrorMessage("");
 
     // Clears the input field
