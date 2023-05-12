@@ -9,13 +9,14 @@ import {
   update,
 } from "firebase/database";
 import { app } from "../firebase_setup/firebase.js";
-import './FormStyles.css';
+import "./FormStyles.css";
 
 function SearchBookForm() {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [books, setBooks] = useState([]);
-  const [message, setMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -58,9 +59,11 @@ function SearchBookForm() {
 
       setBooks(booksArray);
       if (booksArray.length > 0) {
-        setMessage("Books found!");
+        setSuccessMessage("Books found!");
+        setErrorMessage("");
       } else {
-        setMessage("No books found.");
+        setErrorMessage("No books found.");
+        setSuccessMessage("");
       }
     }
   };
@@ -69,15 +72,24 @@ function SearchBookForm() {
     const db = getDatabase(app);
     const bookRef = ref(db, `books/${bookId}`);
     await update(bookRef, { isBorrowed: true });
-    setMessage("Book borrowed successfully!");
+    setSuccessMessage("Book borrowed successfully!");
   };
 
   return (
     <>
+      {successMessage && (
+        <div className="success-message">{successMessage} </div>
+      )}
+      {errorMessage && <div className="error-message">{errorMessage} </div>}
       <form onSubmit={handleSubmit}>
         <label>
           Title:
-          <input type="text" value={title} onChange={handleTitleChange} autoFocus/>
+          <input
+            type="text"
+            value={title}
+            onChange={handleTitleChange}
+            autoFocus
+          />
         </label>
         <br />
         <label>
@@ -87,28 +99,29 @@ function SearchBookForm() {
         <br />
         <input type="submit" value="Search" />
       </form>
-      <p>{message}</p>
-      <ul>
+      <div className="book-list">
         {books.map((book) => (
-          <li key={book.id}>
-            {book.title} by {book.author} (Book ID is:{" "}
-            <span style={{ fontWeight: "bold", color: "#15cdfc" }}>
-              {book.id}
-            </span>
-            )
-            <span style={{ fontWeight: "bold", color: book.isBorrowed ? "red" : "green" }}>
-              {book.isBorrowed ? " (Borrowed)" : " (Available)"}
-            </span>
+          <div className="book-card" key={book.id}>
+            <h3>{book.title}</h3>
+            <p>by {book.author}</p>
+            <p>Book ID: {book.id}</p>
+            <p
+              style={{
+                fontWeight: "bold",
+                color: book.isBorrowed ? "red" : "green",
+              }}
+            >
+              {book.isBorrowed ? "Borrowed" : "Available"}
+            </p>
             {!book.isBorrowed && (
               <button onClick={() => handleBorrowBook(book.id)}>
                 Borrow Book
               </button>
             )}
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </>
   );
 }
-
 export default SearchBookForm;
