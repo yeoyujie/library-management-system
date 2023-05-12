@@ -3,6 +3,7 @@ import { getDatabase, ref, push } from "firebase/database";
 import { app } from "../firebase_setup/firebase.js";
 import Form from "./Form";
 import LayoutForm from "./LayoutForm";
+import { useTransition, animated } from "react-spring";
 
 function AddBookForm() {
   const [title, setTitle] = useState("");
@@ -53,8 +54,8 @@ function AddBookForm() {
 
     // Add the new book to the list of recently added books
     setRecentlyAddedBooks((prevBooks) => [
-      ...prevBooks,
       { id: newBookRef.key, title, author },
+      ...prevBooks,
     ]);
     setErrorMessage("");
 
@@ -76,18 +77,25 @@ function AddBookForm() {
     setAuthor("");
   };
 
+  // useTransition hook to animate the mounting and unmounting of book cards
+  const transitions = useTransition(recentlyAddedBooks, {
+    from: { opacity: 0, transform: "translate3d(-25%,0,0)" },
+    enter: { opacity: 1, transform: "translate3d(0%,0,0)" },
+    leave: { opacity: 0 },
+  });
+
   return (
     <LayoutForm
       successMessage={successMessage}
       errorMessage={errorMessage}
       bookListContent={
         <>
-          {recentlyAddedBooks.map((book) => (
-            <div className="book-card" key={book.id}>
+          {transitions((style, book) => (
+            <animated.div style={style} className="book-card" key={book.id}>
               <h3>{book.title}</h3>
               <p>by {book.author}</p>
               <p>Book ID: {book.id}</p>
-            </div>
+            </animated.div>
           ))}
         </>
       }

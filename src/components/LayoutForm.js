@@ -5,7 +5,6 @@ const LayoutForm = ({
   children,
   successMessage,
   errorMessage,
-  books,
   bookListContent,
 }) => {
   return (
