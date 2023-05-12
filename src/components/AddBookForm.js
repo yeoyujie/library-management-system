@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { getDatabase, ref, push } from "firebase/database";
 import { app } from "../firebase_setup/firebase.js";
 import Form from "./Form";
+import LayoutForm from "./LayoutForm";
 
 function AddBookForm() {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [recentlyAddedBooks, setRecentlyAddedBooks] = useState([]);
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -49,7 +51,13 @@ function AddBookForm() {
     });
     console.log(`New book added with ID: ${newBookRef.key}`);
 
-    // Display a success message
+    // Add the new book to the list of recently added books
+    setRecentlyAddedBooks((prevBooks) => [
+      ...prevBooks,
+      { id: newBookRef.key, title, author },
+    ]);
+    setErrorMessage("");
+
     setSuccessMessage(
       <>
         Book added successfully!
@@ -69,18 +77,21 @@ function AddBookForm() {
   };
 
   return (
-    <div>
-      {successMessage && (
-        <div className="success-message">
-          {successMessage}{" "}
-          <button onClick={() => setSuccessMessage("")}>x</button>
-        </div>
-      )}
-      {errorMessage && (
-        <div className="error-message">
-          {errorMessage} <button onClick={() => setErrorMessage("")}>x</button>
-        </div>
-      )}
+    <LayoutForm
+      successMessage={successMessage}
+      errorMessage={errorMessage}
+      bookListContent={
+        <>
+          {recentlyAddedBooks.map((book) => (
+            <div className="book-card" key={book.id}>
+              <h3>{book.title}</h3>
+              <p>by {book.author}</p>
+              <p>Book ID: {book.id}</p>
+            </div>
+          ))}
+        </>
+      }
+    >
       <Form
         handleSubmit={handleSubmit}
         inputs={[
@@ -96,7 +107,7 @@ function AddBookForm() {
           },
         ]}
       />
-    </div>
+    </LayoutForm>
   );
 }
 

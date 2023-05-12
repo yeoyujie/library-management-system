@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 const LoginPage = ({ Button, setIsAdmin }) => {
-  // const [isAdmin, setIsAdmin] = useState(false);
 
   const handleButtonClick = () => {
     const password = window.prompt('Please enter the password:');
