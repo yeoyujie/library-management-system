@@ -9,13 +9,14 @@ import {
   update,
 } from "firebase/database";
 import { app } from "../firebase_setup/firebase.js";
-import './FormStyles.css';
+import "./FormStyles.css";
 
 function SearchBookForm() {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [books, setBooks] = useState([]);
-  const [message, setMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -30,6 +31,7 @@ function SearchBookForm() {
     const db = getDatabase(app);
     const booksRef = ref(db, "books");
     let booksQuery;
+    let searchType;
 
     if (title && author) {
       // Use the title_author field to query for books with a specific title and author
@@ -38,12 +40,15 @@ function SearchBookForm() {
         orderByChild("title_author"),
         equalTo(`${title}_${author}`)
       );
+      searchType = "title and author";
     } else if (title) {
       // Use the title field only to query for books with a specific title
       booksQuery = query(booksRef, orderByChild("title"), equalTo(title));
+      searchType = "title";
     } else if (author) {
       // Use the author field only to query for books by a specific author
       booksQuery = query(booksRef, orderByChild("author"), equalTo(author));
+      searchType = "author";
     }
 
     if (booksQuery) {
@@ -57,10 +62,40 @@ function SearchBookForm() {
       });
 
       setBooks(booksArray);
+
       if (booksArray.length > 0) {
-        setMessage("Books found!");
+        let successMessage;
+        switch (searchType) {
+          case "title and author":
+            successMessage = (
+              <>
+                Books found by the title <em>{title}</em> and the author{" "}
+                <em>{author}</em>.
+              </>
+            );
+            break;
+          case "title":
+            successMessage = (
+              <>
+                Books found that match the title <em>{title}</em>.
+              </>
+            );
+            break;
+          case "author":
+            successMessage = (
+              <>
+                Books found that are written by <em>{author}</em>.
+              </>
+            );
+            break;
+          default:
+            successMessage = "Books found!";
+        }
+        setSuccessMessage(successMessage);
+        setErrorMessage("");
       } else {
-        setMessage("No books found.");
+        setErrorMessage(`No books found by ${searchType}.`);
+        setSuccessMessage("");
       }
     }
   };
@@ -69,46 +104,64 @@ function SearchBookForm() {
     const db = getDatabase(app);
     const bookRef = ref(db, `books/${bookId}`);
     await update(bookRef, { isBorrowed: true });
-    setMessage("Book borrowed successfully!");
+    setSuccessMessage("Book borrowed successfully!");
   };
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Title:
-          <input type="text" value={title} onChange={handleTitleChange} />
-        </label>
-        <br />
-        <label>
-          Author:
-          <input type="text" value={author} onChange={handleAuthorChange} />
-        </label>
-        <br />
-        <input type="submit" value="Search" />
-      </form>
-      <p>{message}</p>
-      <ul>
-        {books.map((book) => (
-          <li key={book.id}>
-            {book.title} by {book.author} (Book ID is:{" "}
-            <span style={{ fontWeight: "bold", color: "#15cdfc" }}>
-              {book.id}
-            </span>
-            )
-            <span style={{ fontWeight: "bold", color: book.isBorrowed ? "red" : "green" }}>
-              {book.isBorrowed ? " (Borrowed)" : " (Available)"}
-            </span>
-            {!book.isBorrowed && (
-              <button onClick={() => handleBorrowBook(book.id)}>
-                Borrow Book
-              </button>
-            )}
-          </li>
-        ))}
-      </ul>
+      <div className="container">
+        <div className="search-form">
+          <form onSubmit={handleSubmit}>
+            <label>
+              Title:
+              <input
+                type="text"
+                value={title}
+                onChange={handleTitleChange}
+                autoFocus
+              />
+            </label>
+            <br />
+            <label>
+              Author:
+              <input type="text" value={author} onChange={handleAuthorChange} />
+            </label>
+            <br />
+            <input type="submit" value="Search" />
+          </form>
+        </div>
+        <div className="search-results">
+          {successMessage && (
+            <div className="success-message">{successMessage} </div>
+          )}
+          {errorMessage && <div className="error-message">{errorMessage} </div>}
+          <div className="book-list-container">
+            <div className="book-list">
+              {books.map((book) => (
+                <div className="book-card" key={book.id}>
+                  <h3>{book.title}</h3>
+                  <p>by {book.author}</p>
+                  <p>Book ID: {book.id}</p>
+                  <p
+                    style={{
+                      fontWeight: "bold",
+                      color: book.isBorrowed ? "red" : "green",
+                    }}
+                  >
+                    {book.isBorrowed ? "Borrowed" : "Available"}
+                  </p>
+                  {!book.isBorrowed && (
+                    <button onClick={() => handleBorrowBook(book.id)}>
+                      Borrow Book
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
-
 export default SearchBookForm;

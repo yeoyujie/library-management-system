@@ -16,6 +16,7 @@ const LoginPage = ({ Button, setIsAdmin }) => {
     } else if (password === process.env.REACT_APP_SECRET_PASSWORD) {
       //Password matches
       setIsAdmin(true);
+      alert('Login Successful');
     } else {
       alert('Incorrect password');
     }
@@ -24,7 +25,6 @@ const LoginPage = ({ Button, setIsAdmin }) => {
   return (
     <>
       <Button onClick={handleButtonClick}>Log in as admin</Button>
-      {/* {isAdmin && <p>You are now logged in as an admin.</p>} */}
     </>
   );
 };
