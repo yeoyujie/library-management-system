@@ -11,6 +11,7 @@ import {
 import { app } from "../firebase_setup/firebase.js";
 import "./FormStyles.css";
 import LayoutForm from "./LayoutForm";
+import Form from "./Form";
 
 function SearchBookForm() {
   const [title, setTitle] = useState("");
@@ -115,24 +116,21 @@ function SearchBookForm() {
       books={books}
       handleBorrowBook={handleBorrowBook}
     >
-      <form onSubmit={handleSubmit}>
-        <label>
-          Title:
-          <input
-            type="text"
-            value={title}
-            onChange={handleTitleChange}
-            autoFocus
-          />
-        </label>
-        <br />
-        <label>
-          Author:
-          <input type="text" value={author} onChange={handleAuthorChange} />
-        </label>
-        <br />
-        <input type="submit" value="Search" />
-      </form>
+      <Form
+        handleSubmit={handleSubmit}
+        inputs={[
+          {
+            label: "Title",
+            value: title,
+            onChange: handleTitleChange,
+          },
+          {
+            label: "Author",
+            value: author,
+            onChange: handleAuthorChange,
+          },
+        ]}
+      />
     </LayoutForm>
   );
 }

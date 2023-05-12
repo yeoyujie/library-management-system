@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { getDatabase, ref, push } from "firebase/database";
 import { app } from "../firebase_setup/firebase.js";
+import Form from "./Form";
 
 function AddBookForm() {
   const [title, setTitle] = useState("");
@@ -8,10 +9,17 @@ function AddBookForm() {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value);
+  };
+
+  const handleAuthorChange = (event) => {
+    setAuthor(event.target.value);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const db = getDatabase(app);
-
 
     setSuccessMessage("");
 
@@ -46,15 +54,9 @@ function AddBookForm() {
       <>
         Book added successfully!
         <br />
-        Title:{" "}
-        <strong style={{ fontSize: "18px" }}>
-          {title}
-        </strong>
+        Title: <strong style={{ fontSize: "18px" }}>{title}</strong>
         <br />
-        Author:{" "}
-        <strong style={{ fontSize: "18px" }}>
-          {author}
-        </strong>
+        Author: <strong style={{ fontSize: "18px" }}>{author}</strong>
         <br />
         ID: {newBookRef.key}
       </>
@@ -79,28 +81,21 @@ function AddBookForm() {
           {errorMessage} <button onClick={() => setErrorMessage("")}>x</button>
         </div>
       )}
-      <form onSubmit={handleSubmit}>
-        <label>
-          Title:
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            autoFocus
-          />
-        </label>
-        <br />
-        <label>
-          Author:
-          <input
-            type="text"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-          />
-        </label>
-        <br />
-        <input type="submit" value="Add Book" />
-      </form>
+      <Form
+        handleSubmit={handleSubmit}
+        inputs={[
+          {
+            label: "Title",
+            value: title,
+            onChange: handleTitleChange,
+          },
+          {
+            label: "Author",
+            value: author,
+            onChange: handleAuthorChange,
+          },
+        ]}
+      />
     </div>
   );
 }
