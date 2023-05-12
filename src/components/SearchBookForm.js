@@ -111,24 +111,30 @@ function SearchBookForm() {
     <>
       <div className="container">
         <div className="search-form">
-          <form onSubmit={handleSubmit}>
-            <label>
-              Title:
-              <input
-                type="text"
-                value={title}
-                onChange={handleTitleChange}
-                autoFocus
-              />
-            </label>
-            <br />
-            <label>
-              Author:
-              <input type="text" value={author} onChange={handleAuthorChange} />
-            </label>
-            <br />
-            <input type="submit" value="Search" />
-          </form>
+          <div className="search-form-card">
+            <form onSubmit={handleSubmit}>
+              <label>
+                Title:
+                <input
+                  type="text"
+                  value={title}
+                  onChange={handleTitleChange}
+                  autoFocus
+                />
+              </label>
+              <br />
+              <label>
+                Author:
+                <input
+                  type="text"
+                  value={author}
+                  onChange={handleAuthorChange}
+                />
+              </label>
+              <br />
+              <input type="submit" value="Search" />
+            </form>
+          </div>
         </div>
         <div className="search-results">
           {successMessage && (

@@ -162,6 +162,15 @@ input:checked + .slider:before {
 
 .search-form {
   flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-form-card {
+  border: 2px solid #ccc;
+  border-radius: 20px;
+  padding: 30px 50px 50px 50px;
 }
 
 /* Results of the search queries returned as cards */
