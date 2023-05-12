@@ -86,6 +86,7 @@ function AddBookForm() {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            autoFocus
           />
         </label>
         <br />

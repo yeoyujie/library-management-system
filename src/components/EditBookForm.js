@@ -49,6 +49,7 @@ function EditBookForm() {
           type="text"
           value={bookId}
           onChange={(event) => setBookId(event.target.value)}
+          autoFocus
         />
       </label>
       <div style={{ textAlign: "center" }}>
@@ -80,6 +81,7 @@ function EditBookForm() {
               type="text"
               value={title}
               onChange={(event) => setTitle(event.target.value)}
+              autoFocus
             />
           </label>
           <br />

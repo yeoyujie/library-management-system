@@ -77,7 +77,7 @@ function SearchBookForm() {
       <form onSubmit={handleSubmit}>
         <label>
           Title:
-          <input type="text" value={title} onChange={handleTitleChange} />
+          <input type="text" value={title} onChange={handleTitleChange} autoFocus/>
         </label>
         <br />
         <label>
