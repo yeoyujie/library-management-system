@@ -31,6 +31,7 @@ function SearchBookForm() {
     const db = getDatabase(app);
     const booksRef = ref(db, "books");
     let booksQuery;
+    let searchType;
 
     if (title && author) {
       // Use the title_author field to query for books with a specific title and author
@@ -39,12 +40,15 @@ function SearchBookForm() {
         orderByChild("title_author"),
         equalTo(`${title}_${author}`)
       );
+      searchType = "title and author";
     } else if (title) {
       // Use the title field only to query for books with a specific title
       booksQuery = query(booksRef, orderByChild("title"), equalTo(title));
+      searchType = "title";
     } else if (author) {
       // Use the author field only to query for books by a specific author
       booksQuery = query(booksRef, orderByChild("author"), equalTo(author));
+      searchType = "author";
     }
 
     if (booksQuery) {
@@ -58,11 +62,39 @@ function SearchBookForm() {
       });
 
       setBooks(booksArray);
+
       if (booksArray.length > 0) {
-        setSuccessMessage("Books found!");
+        let successMessage;
+        switch (searchType) {
+          case "title and author":
+            successMessage = (
+              <>
+                Books found by the title <em>{title}</em> and the author{" "}
+                <em>{author}</em>.
+              </>
+            );
+            break;
+          case "title":
+            successMessage = (
+              <>
+                Books found that match the title <em>{title}</em>.
+              </>
+            );
+            break;
+          case "author":
+            successMessage = (
+              <>
+                Books found that are written by <em>{author}</em>.
+              </>
+            );
+            break;
+          default:
+            successMessage = "Books found!";
+        }
+        setSuccessMessage(successMessage);
         setErrorMessage("");
       } else {
-        setErrorMessage("No books found.");
+        setErrorMessage(`No books found by ${searchType}.`);
         setSuccessMessage("");
       }
     }
