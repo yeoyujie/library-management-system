@@ -109,49 +109,57 @@ function SearchBookForm() {
 
   return (
     <>
-      {successMessage && (
-        <div className="success-message">{successMessage} </div>
-      )}
-      {errorMessage && <div className="error-message">{errorMessage} </div>}
-      <form onSubmit={handleSubmit}>
-        <label>
-          Title:
-          <input
-            type="text"
-            value={title}
-            onChange={handleTitleChange}
-            autoFocus
-          />
-        </label>
-        <br />
-        <label>
-          Author:
-          <input type="text" value={author} onChange={handleAuthorChange} />
-        </label>
-        <br />
-        <input type="submit" value="Search" />
-      </form>
-      <div className="book-list">
-        {books.map((book) => (
-          <div className="book-card" key={book.id}>
-            <h3>{book.title}</h3>
-            <p>by {book.author}</p>
-            <p>Book ID: {book.id}</p>
-            <p
-              style={{
-                fontWeight: "bold",
-                color: book.isBorrowed ? "red" : "green",
-              }}
-            >
-              {book.isBorrowed ? "Borrowed" : "Available"}
-            </p>
-            {!book.isBorrowed && (
-              <button onClick={() => handleBorrowBook(book.id)}>
-                Borrow Book
-              </button>
-            )}
+      <div className="container">
+        <div className="search-form">
+          <form onSubmit={handleSubmit}>
+            <label>
+              Title:
+              <input
+                type="text"
+                value={title}
+                onChange={handleTitleChange}
+                autoFocus
+              />
+            </label>
+            <br />
+            <label>
+              Author:
+              <input type="text" value={author} onChange={handleAuthorChange} />
+            </label>
+            <br />
+            <input type="submit" value="Search" />
+          </form>
+        </div>
+        <div className="search-results">
+          {successMessage && (
+            <div className="success-message">{successMessage} </div>
+          )}
+          {errorMessage && <div className="error-message">{errorMessage} </div>}
+          <div className="book-list-container">
+            <div className="book-list">
+              {books.map((book) => (
+                <div className="book-card" key={book.id}>
+                  <h3>{book.title}</h3>
+                  <p>by {book.author}</p>
+                  <p>Book ID: {book.id}</p>
+                  <p
+                    style={{
+                      fontWeight: "bold",
+                      color: book.isBorrowed ? "red" : "green",
+                    }}
+                  >
+                    {book.isBorrowed ? "Borrowed" : "Available"}
+                  </p>
+                  {!book.isBorrowed && (
+                    <button onClick={() => handleBorrowBook(book.id)}>
+                      Borrow Book
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
+        </div>
       </div>
     </>
   );

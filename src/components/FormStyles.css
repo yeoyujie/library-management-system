@@ -7,6 +7,16 @@ body {
   box-sizing: border-box;
 }
 
+.container {
+  display: flex;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
 form {
   display: flex;
   flex-direction: column;
@@ -150,11 +160,27 @@ input:checked + .slider:before {
     border-radius:50%
 }
 
+.search-form {
+  flex: 1;
+}
 
 /* Results of the search queries returned as cards */
 .book-list {
+  flex: 1;
   display: flex;
   flex-direction: column;
+}
+
+.search-results {
+  flex: 1;
+}
+
+.book-list-container {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  height: calc(100vh - 100px);
+  overflow-y: auto;
 }
 
 .book-card {
