@@ -1,12 +1,12 @@
-import React from 'react';
-import Form from './Form';
+import React from "react";
+import Form from "./Form";
 
 const LayoutForm = ({
   children,
   successMessage,
   errorMessage,
   books,
-  handleBorrowBook,
+  bookListContent,
 }) => {
   return (
     <div className="container">
@@ -19,28 +19,7 @@ const LayoutForm = ({
         )}
         {errorMessage && <div className="error-message">{errorMessage} </div>}
         <div className="book-list-container">
-          <div className="book-list">
-            {books.map((book) => (
-              <div className="book-card" key={book.id}>
-                <h3>{book.title}</h3>
-                <p>by {book.author}</p>
-                <p>Book ID: {book.id}</p>
-                <p
-                  style={{
-                    fontWeight: 'bold',
-                    color: book.isBorrowed ? 'red' : 'green',
-                  }}
-                >
-                  {book.isBorrowed ? 'Borrowed' : 'Available'}
-                </p>
-                {!book.isBorrowed && (
-                  <button onClick={() => handleBorrowBook(book.id)}>
-                    Borrow Book
-                  </button>
-                )}
-              </div>
-            ))}
-          </div>
+          <div className="book-list">{bookListContent}</div>
         </div>
       </div>
     </div>

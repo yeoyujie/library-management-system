@@ -113,8 +113,30 @@ function SearchBookForm() {
     <LayoutForm
       successMessage={successMessage}
       errorMessage={errorMessage}
-      books={books}
-      handleBorrowBook={handleBorrowBook}
+      bookListContent={
+        <>
+          {books.map((book) => (
+            <div className="book-card" key={book.id}>
+              <h3>{book.title}</h3>
+              <p>by {book.author}</p>
+              <p>Book ID: {book.id}</p>
+              <p
+                style={{
+                  fontWeight: "bold",
+                  color: book.isBorrowed ? "red" : "green",
+                }}
+              >
+                {book.isBorrowed ? "Borrowed" : "Available"}
+              </p>
+              {!book.isBorrowed && (
+                <button onClick={() => handleBorrowBook(book.id)}>
+                  Borrow Book
+                </button>
+              )}
+            </div>
+          ))}
+        </>
+      }
     >
       <Form
         handleSubmit={handleSubmit}
