@@ -17,3 +17,19 @@ const logger = require("firebase-functions/logger");
 //   logger.info("Hello logs!", {structuredData: true});
 //   response.send("Hello from Firebase!");
 // });
+
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
+admin.initializeApp();
+
+exports.handleFormSGWebhook = functions.https.onRequest((req, res) => {
+  // Get the form response data from the request body
+  const formData = req.body;
+
+  // TODO: Decrypt the form response data
+
+  // TODO: Process the form response data and save it to your Firebase database
+
+  // Send a response to acknowledge receipt of the webhook event
+  res.status(200).send('Webhook event received');
+});

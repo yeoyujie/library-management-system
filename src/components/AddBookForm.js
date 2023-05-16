@@ -1,17 +1,28 @@
 import React, { useState } from "react";
 import { getDatabase, ref, push } from "firebase/database";
 import { app } from "../firebase_setup/firebase.js";
+import Form from "./Form";
+import LayoutForm from "./LayoutForm";
+import { useTransition, animated } from "react-spring";
 
 function AddBookForm() {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [recentlyAddedBooks, setRecentlyAddedBooks] = useState([]);
+
+  const handleTitleChange = (event) => {
+    setTitle(event.target.value);
+  };
+
+  const handleAuthorChange = (event) => {
+    setAuthor(event.target.value);
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const db = getDatabase(app);
-
 
     setSuccessMessage("");
 
@@ -41,20 +52,20 @@ function AddBookForm() {
     });
     console.log(`New book added with ID: ${newBookRef.key}`);
 
-    // Display a success message
+    // Add the new book to the list of recently added books
+    setRecentlyAddedBooks((prevBooks) => [
+      { id: newBookRef.key, title, author },
+      ...prevBooks,
+    ]);
+    setErrorMessage("");
+
     setSuccessMessage(
       <>
         Book added successfully!
         <br />
-        Title:{" "}
-        <strong style={{ fontSize: "18px" }}>
-          {title}
-        </strong>
+        Title: <strong style={{ fontSize: "18px" }}>{title}</strong>
         <br />
-        Author:{" "}
-        <strong style={{ fontSize: "18px" }}>
-          {author}
-        </strong>
+        Author: <strong style={{ fontSize: "18px" }}>{author}</strong>
         <br />
         ID: {newBookRef.key}
       </>
@@ -66,42 +77,45 @@ function AddBookForm() {
     setAuthor("");
   };
 
+  // useTransition hook to animate the mounting and unmounting of book cards
+  const transitions = useTransition(recentlyAddedBooks, {
+    from: { opacity: 0, transform: "translate3d(-25%,0,0)" },
+    enter: { opacity: 1, transform: "translate3d(0%,0,0)" },
+    leave: { opacity: 0 },
+  });
+
   return (
-    <div>
-      {successMessage && (
-        <div className="success-message">
-          {successMessage}{" "}
-          <button onClick={() => setSuccessMessage("")}>x</button>
-        </div>
-      )}
-      {errorMessage && (
-        <div className="error-message">
-          {errorMessage} <button onClick={() => setErrorMessage("")}>x</button>
-        </div>
-      )}
-      <form onSubmit={handleSubmit}>
-        <label>
-          Title:
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            autoFocus
-          />
-        </label>
-        <br />
-        <label>
-          Author:
-          <input
-            type="text"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-          />
-        </label>
-        <br />
-        <input type="submit" value="Add Book" />
-      </form>
-    </div>
+    <LayoutForm
+      successMessage={successMessage}
+      errorMessage={errorMessage}
+      bookListContent={
+        <>
+          {transitions((style, book) => (
+            <animated.div style={style} className="book-card" key={book.id}>
+              <h3>{book.title}</h3>
+              <p>by {book.author}</p>
+              <p>Book ID: {book.id}</p>
+            </animated.div>
+          ))}
+        </>
+      }
+    >
+      <Form
+        handleSubmit={handleSubmit}
+        inputs={[
+          {
+            label: "Title",
+            value: title,
+            onChange: handleTitleChange,
+          },
+          {
+            label: "Author",
+            value: author,
+            onChange: handleAuthorChange,
+          },
+        ]}
+      />
+    </LayoutForm>
   );
 }
 

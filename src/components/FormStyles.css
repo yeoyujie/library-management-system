@@ -15,6 +15,7 @@ html,
 body {
   height: 100%;
   overflow: hidden;
+  
 }
 
 form {
@@ -162,6 +163,16 @@ input:checked + .slider:before {
 
 .search-form {
   flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-form-card {
+  background-color: #f2f2f2;
+  border: 2px solid #ccc;
+  border-radius: 20px;
+  padding: 30px 50px 50px 50px;
 }
 
 /* Results of the search queries returned as cards */
