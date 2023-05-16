@@ -1,3 +1,13 @@
+import {
+  getDatabase,
+  ref,
+  query,
+  orderByChild,
+  equalTo,
+  update,
+} from "firebase/database";
+import { app } from "../../src/firebase_setup/firebase.js";
+
 // Instantiating formsg-sdk without parameters default to using the package's
 // production public signing key.
 const formsg = require("@opengovsg/formsg-sdk")();
@@ -27,9 +37,6 @@ exports.handler = async function (event, context) {
     data.encryptedContent
   );
 
-  // Parse the decrypted data as a JSON object
-  const formData = JSON.parse(decryptedData);
-
   // Access the responses array
   const responses = decryptedData.responses;
 
@@ -47,5 +54,30 @@ exports.handler = async function (event, context) {
 
   console.log(bookTitle, bookAuthor);
 
-  // Your code here to handle the book request
+    // Query the Firebase database for a book with the specified title and author
+    if (bookTitle && bookAuthor) {
+      try {
+        const db = getDatabase(app);
+        const booksRef = ref(db, 'books');
+        const booksQuery = query(
+          booksRef,
+          orderByChild('title_author'),
+          equalTo(`${bookTitle}_${bookAuthor}`)
+        );
+    
+        // Borrow the first book returned by the query
+        const snapshot = await get(booksQuery);
+        if (snapshot.exists()) {
+          const [bookId] = Object.keys(snapshot.val());
+          await update(ref(db, `books/${bookId}`), { isBorrowed: true });
+          console.log({bookTitle}  + "by " + {bookAuthor} + "is borrowed!")
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    
+    
+
+
 };
