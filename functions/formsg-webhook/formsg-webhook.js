@@ -31,11 +31,17 @@ exports.handler = async function (event, context) {
   // Parse the data from Formsg
   const data = JSON.parse(event.body);
 
+  console.log("This is the data")
+  console.log(data)
+
   // Decrypt the data using the secret key
   const decryptedData = formsg.crypto.decrypt(
     formSecretKey,
     data.encryptedContent
   );
+
+  console.log("This is the decrypted data")
+  console.log(decryptedData)
 
   // Access the responses array
   const responses = decryptedData.responses;
@@ -76,8 +82,4 @@ exports.handler = async function (event, context) {
         console.error(error);
       }
     }
-    
-    
-
-
 };
