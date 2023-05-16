@@ -13,6 +13,8 @@ exports.handler = async (event, context) => {
 
   // TODO: Process the form response data and save it to your Firebase database
 
+  console.log(formData);
+
   // Return a response to acknowledge receipt of the webhook event
   return {
     statusCode: 200,
