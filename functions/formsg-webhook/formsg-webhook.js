@@ -1,17 +1,9 @@
-// Docs on event and context https://docs.netlify.com/functions/build/#code-your-function-2
-const handler = async (event) => {
-  try {
-    const subject = event.queryStringParameters.name || 'World'
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ message: `Hello ${subject}` }),
-      // // more keys you can return:
-      // headers: { "headerName": "headerValue", ... },
-      // isBase64Encoded: true,
-    }
-  } catch (error) {
-    return { statusCode: 500, body: error.toString() }
-  }
-}
+exports.handler = async function(event, context) {
+  // Parse the data from Formsg
+  const data = JSON.parse(event.body);
 
-module.exports = { handler }
+  // Log the data to the console
+  console.log(data);
+
+  // Your code here to handle the book request
+};
