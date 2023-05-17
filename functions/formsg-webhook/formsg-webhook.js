@@ -16,17 +16,17 @@ const formsg = require("@opengovsg/formsg-sdk")();
 const formSecretKey = process.env.FORM_SECRET_KEY;
 
 exports.handler = async function (event, context) {
-  try {
-    formsg.webhooks.authenticate(
-      event.headers["x-formsg-signature"],
-      process.env.URL + "/.netlify/functions/formsg-webhook"
-    );
-  } catch (e) {
-    return {
-      statusCode: 401,
-      body: JSON.stringify({ message: "Unauthorized" }),
-    };
-  }
+  // try {
+  //   formsg.webhooks.authenticate(
+  //     event.headers["x-formsg-signature"],
+  //     process.env.URL + "/.netlify/functions/formsg-webhook"
+  //   );
+  // } catch (e) {
+  //   return {
+  //     statusCode: 401,
+  //     body: JSON.stringify({ message: "Unauthorized" }),
+  //   };
+  // }
 
   // Parse the data from Formsg
   const data = JSON.parse(event.body);
