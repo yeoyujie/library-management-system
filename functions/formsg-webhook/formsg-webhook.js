@@ -1,6 +1,3 @@
-// import admin, { app, AppOptions } from "firebase-admin";
-// import { FIREBASE_CONFIG_VAR } from "firebase-admin/lib/app/lifecycle";
-
 const admin = require("firebase-admin");
 const { privateKey } = JSON.parse(process.env.FIREBASE_PRIVATE_KEY)
 
@@ -55,9 +52,7 @@ exports.handler = async function (event, context) {
     };
   }
 
-  const db = admin.database();
 
-  const testBooksRef = ref(db, "books");
 
   if (!admin.apps.length) {
     firebaseAdminApp = admin.initializeApp(config);
@@ -67,6 +62,10 @@ exports.handler = async function (event, context) {
     console.log("App is initialised normally");
   }
 
+  const db = admin.database();
+
+  const testBooksRef = ref(db, "books");
+  
   testBooksRef
     .once("value")
     .then((snapshot) => {
