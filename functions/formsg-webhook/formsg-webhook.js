@@ -3,6 +3,7 @@ const serviceAccount = JSON.parse(Buffer.from(process.env.SERVICE_ACCOUNT_KEY, '
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://library-management-syste-ae450-default-rtdb.asia-southeast1.firebasedatabase.app" // replace with your own database URL
 });
 
 const db = admin.database();
