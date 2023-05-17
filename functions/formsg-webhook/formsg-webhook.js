@@ -1,4 +1,5 @@
 const admin = require("firebase-admin");
+
 const serviceAccount = JSON.parse(
   Buffer.from(process.env.SERVICE_ACCOUNT_KEY, "base64").toString()
 );
@@ -6,16 +7,21 @@ const serviceAccount = JSON.parse(
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL:
-    "https://library-management-syste-ae450-default-rtdb.asia-southeast1.firebasedatabase.app", // replace with your own database URL
+    "https://library-management-syste-ae450-default-rtdb.asia-southeast1.firebasedatabase.app", //replace with your own database URL
 });
 
 const db = admin.database();
 
 const testBooksRef = db.ref("books");
 
-testBooksRef.once("value", (snapshot) => {
-  console.log(snapshot.val());
-});
+booksRef
+  .once("value")
+  .then((snapshot) => {
+    console.log(snapshot.val());
+  })
+  .catch((error) => {
+    console.error("Error reading data:", error);
+  });
 
 // Instantiating formsg-sdk without parameters default to using the package's
 // production public signing key.
@@ -44,7 +50,7 @@ exports.handler = async function (event, context) {
   // Decrypt the data using the secret key
   const decryptedData = formsg.crypto.decrypt(formSecretKey, data.data);
 
-  console.log("This is the decrypted data");
+  console.log("Decrypted data");
   console.log(decryptedData);
 
   // Access the responses array
@@ -83,5 +89,7 @@ exports.handler = async function (event, context) {
     } catch (error) {
       console.error(error);
     }
+  } else {
+    console.log("something not found");
   }
 };
