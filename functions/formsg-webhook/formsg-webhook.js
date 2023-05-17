@@ -41,7 +41,7 @@ if (!admin.apps.length) {
 
 const db = admin.database();
 
-const testBooksRef = db.ref("books");
+const testBooksRef = ref(db, "books");
 
 testBooksRef
   .once("value")
