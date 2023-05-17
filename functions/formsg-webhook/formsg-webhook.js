@@ -9,17 +9,18 @@ const admin = require("firebase-admin");
 
 const config = {
   credential: admin.credential.cert({
-    type: process.env.FIREBASE_ADMIN_TYPE,
-    projectId: process.env.FIREBASE_ADMIN_PROJECT_ID,
+    type: "service_account",
+    projectId: "library-management-syste-ae450",
     private_key_id: process.env.FIREBASE_ADMIN_PRIVATE_KEY_ID,
     privat_key: process.env.FIREBASE_ADMIN_PRIVATE_KEY.replace(/\\n/g, "\n"),
     client_email: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
     client_id: process.env.FIREBASE_ADMIN_CLIENT_ID,
-    auth_uri: process.env.FIREBASE_ADMIN_AUTH_URI,
-    token_uri: process.env.FIREBASE_ADMIN_TOKEN_URI,
-    auth_provider_x509_cert_url: process.env.FIREBASE_ADMIN_AUTH_PROVIDER_X509_CERT_URL,
-    client_x509_cert_url: process.env.FIREBASE_ADMIN_CLIENT_X509_CERT_URL,
-    universe_domain: process.env.FIREBASE_CONFIG_UNIVERSE_DOMAIN
+    auth_uri: "https://accounts.google.com/o/oauth2/auth",
+    token_uri: "https://oauth2.googleapis.com/token",
+    auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
+    client_x509_cert_url:
+      "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-9qee5%40library-management-syste-ae450.iam.gserviceaccount.com",
+    universe_domain: "googleapis.com",
   }),
   databaseURL:
     "https://library-management-syste-ae450-default-rtdb.asia-southeast1.firebasedatabase.app", //replace with your own database URL
@@ -27,30 +28,11 @@ const config = {
 
 let firebaseAdminApp;
 
-if (!admin.apps.length) {
-  firebaseAdminApp = admin.initializeApp(config);
-} else {
-  firebaseAdminApp = admin.app();
-}
-
 // admin.initializeApp({
 //   credential: admin.credential.cert(serviceAccount),
 //   databaseURL:
 //     "https://library-management-syste-ae450-default-rtdb.asia-southeast1.firebasedatabase.app", //replace with your own database URL
 // });
-
-const db = admin.database();
-
-const testBooksRef = ref(db, "books");
-
-testBooksRef
-  .once("value")
-  .then((snapshot) => {
-    console.log(snapshot.val());
-  })
-  .catch((error) => {
-    console.error("Error reading data:", error);
-  });
 
 // Instantiating formsg-sdk without parameters default to using the package's
 // production public signing key.
@@ -71,6 +53,27 @@ exports.handler = async function (event, context) {
       body: JSON.stringify({ message: "Unauthorized" }),
     };
   }
+
+  const db = admin.database();
+
+  const testBooksRef = ref(db, "books");
+
+  if (!admin.apps.length) {
+    firebaseAdminApp = admin.initializeApp(config);
+    console.log("App is initialised with admin");
+  } else {
+    firebaseAdminApp = admin.app();
+    console.log("App is initialised normally");
+  }
+
+  testBooksRef
+    .once("value")
+    .then((snapshot) => {
+      console.log(snapshot.val());
+    })
+    .catch((error) => {
+      console.error("Error reading data:", error);
+    });
 
   // Parse the data from Formsg
   const data = JSON.parse(event.body);
