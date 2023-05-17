@@ -1,18 +1,47 @@
+// import admin, { app, AppOptions } from "firebase-admin";
+// import { FIREBASE_CONFIG_VAR } from "firebase-admin/lib/app/lifecycle";
+
 const admin = require("firebase-admin");
 
-const serviceAccount = JSON.parse(
-  Buffer.from(process.env.SERVICE_ACCOUNT_KEY, "base64").toString()
-);
+// const serviceAccount = JSON.parse(
+//   Buffer.from(process.env.SERVICE_ACCOUNT_KEY, "base64").toString()
+// );
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+const config = {
+  credential: admin.credential.cert({
+    type: process.env.FIREBASE_ADMIN_TYPE,
+    projectId: process.env.FIREBASE_ADMIN_PROJECT_ID,
+    private_key_id: process.env.FIREBASE_ADMIN_PRIVATE_KEY_ID,
+    privat_key: process.env.FIREBASE_ADMIN_PRIVATE_KEY.replace(/\\n/g, "\n"),
+    client_email: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
+    client_id: process.env.FIREBASE_ADMIN_CLIENT_ID,
+    auth_uri: process.env.FIREBASE_ADMIN_AUTH_URI,
+    token_uri: process.env.FIREBASE_ADMIN_TOKEN_URI,
+    auth_provider_x509_cert_url: process.env.FIREBASE_ADMIN_AUTH_PROVIDER_X509_CERT_URL,
+    client_x509_cert_url: process.env.FIREBASE_ADMIN_CLIENT_X509_CERT_URL,
+    universe_domain: process.env.FIREBASE_CONFIG_UNIVERSE_DOMAIN
+  }),
   databaseURL:
     "https://library-management-syste-ae450-default-rtdb.asia-southeast1.firebasedatabase.app", //replace with your own database URL
-});
+};
+
+let firebaseAdminApp;
+
+if (!admin.apps.length) {
+  firebaseAdminApp = admin.initializeApp(config);
+} else {
+  firebaseAdminApp = admin.app();
+}
+
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+//   databaseURL:
+//     "https://library-management-syste-ae450-default-rtdb.asia-southeast1.firebasedatabase.app", //replace with your own database URL
+// });
 
 const db = admin.database();
 
-const testBooksRef = db.ref("books");
+const testBooksRef = ref(db, "books");
 
 testBooksRef
   .once("value")
@@ -50,8 +79,8 @@ exports.handler = async function (event, context) {
   // Decrypt the data using the secret key
   const decryptedData = formsg.crypto.decrypt(formSecretKey, data.data);
 
-  console.log("Decrypted data");
-  console.log(decryptedData);
+  // console.log("Decrypted data");
+  // console.log(decryptedData);
 
   // Access the responses array
   const responses = decryptedData.responses;
@@ -72,6 +101,7 @@ exports.handler = async function (event, context) {
 
   // Query the Firebase database for a book with the specified title and author
   if (bookTitle && bookAuthor) {
+    console.log("Found");
     try {
       const booksRef = db.ref("books");
       booksRef
@@ -92,4 +122,6 @@ exports.handler = async function (event, context) {
   } else {
     console.log("something not found");
   }
+
+  console.log("reached the end");
 };
