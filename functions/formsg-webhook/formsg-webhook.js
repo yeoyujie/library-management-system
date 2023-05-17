@@ -11,6 +11,12 @@ admin.initializeApp({
 
 const db = admin.database();
 
+const testBooksRef = db.ref("books");
+
+testBooksRef.once("value", (snapshot) => {
+  console.log(snapshot.val());
+});
+
 // Instantiating formsg-sdk without parameters default to using the package's
 // production public signing key.
 const formsg = require("@opengovsg/formsg-sdk")();
@@ -34,7 +40,6 @@ exports.handler = async function (event, context) {
   // Parse the data from Formsg
   const data = JSON.parse(event.body);
   console.log(data);
-  console.log(data.encryptedContent);
 
   // Decrypt the data using the secret key
   const decryptedData = formsg.crypto.decrypt(formSecretKey, data.data);
@@ -67,9 +72,12 @@ exports.handler = async function (event, context) {
         .orderByChild("title_author")
         .equalTo(`${bookTitle}_${bookAuthor}`)
         .once("value", (snapshot) => {
+          console.log("Snapshot exists:", snapshot.exists()); // Log the result of the snapshot.exists() check
           if (snapshot.exists()) {
             const [bookId] = Object.keys(snapshot.val());
             db.ref(`books/${bookId}`).update({ isBorrowed: true });
+          } else {
+            console.log("The particular cannot be found");
           }
         });
     } catch (error) {
