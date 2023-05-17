@@ -14,7 +14,7 @@ const db = admin.database();
 
 const testBooksRef = db.ref("books");
 
-booksRef
+testBooksRef
   .once("value")
   .then((snapshot) => {
     console.log(snapshot.val());
