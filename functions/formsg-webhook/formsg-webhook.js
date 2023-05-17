@@ -1,9 +1,12 @@
 const admin = require("firebase-admin");
-const serviceAccount = JSON.parse(Buffer.from(process.env.SERVICE_ACCOUNT_KEY, 'base64').toString());
+const serviceAccount = JSON.parse(
+  Buffer.from(process.env.SERVICE_ACCOUNT_KEY, "base64").toString()
+);
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://library-management-syste-ae450-default-rtdb.asia-southeast1.firebasedatabase.app" // replace with your own database URL
+  databaseURL:
+    "https://library-management-syste-ae450-default-rtdb.asia-southeast1.firebasedatabase.app", // replace with your own database URL
 });
 
 const db = admin.database();
@@ -30,15 +33,11 @@ exports.handler = async function (event, context) {
 
   // Parse the data from Formsg
   const data = JSON.parse(event.body);
-
-  console.log("This is the data");
   console.log(data);
+  console.log(data.encryptedContent);
 
   // Decrypt the data using the secret key
-  const decryptedData = formsg.crypto.decrypt(
-    formSecretKey,
-    data.encryptedContent
-  );
+  const decryptedData = formsg.crypto.decrypt(formSecretKey, data.data);
 
   console.log("This is the decrypted data");
   console.log(decryptedData);
