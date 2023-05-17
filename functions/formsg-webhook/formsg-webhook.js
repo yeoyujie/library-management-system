@@ -2,6 +2,7 @@
 // import { FIREBASE_CONFIG_VAR } from "firebase-admin/lib/app/lifecycle";
 
 const admin = require("firebase-admin");
+const { privateKey } = JSON.parse(process.env.FIREBASE_PRIVATE_KEY)
 
 // const serviceAccount = JSON.parse(
 //   Buffer.from(process.env.SERVICE_ACCOUNT_KEY, "base64").toString()
@@ -12,7 +13,7 @@ const config = {
     type: "service_account",
     projectId: "library-management-syste-ae450",
     private_key_id: process.env.FIREBASE_ADMIN_PRIVATE_KEY_ID,
-    private_key: process.env.FIREBASE_ADMIN_PRIVATE_KEY.replace(/\\n/gm, "\n"),
+    private_key: privateKey,
     client_email: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
     client_id: process.env.FIREBASE_ADMIN_CLIENT_ID,
     auth_uri: "https://accounts.google.com/o/oauth2/auth",
