@@ -1,5 +1,4 @@
 const admin = require("firebase-admin");
-const { getDatabase, ref } = require("firebase/database");
 const { privateKey } = JSON.parse(process.env.FIREBASE_PRIVATE_KEY)
 
 // const serviceAccount = JSON.parse(
@@ -65,16 +64,16 @@ exports.handler = async function (event, context) {
 
   const db = admin.database();
 
-  const testBooksRef = ref(db, "books");
+  // const testBooksRef = ref(db, "books");
   
-  testBooksRef
-    .once("value")
-    .then((snapshot) => {
-      console.log(snapshot.val());
-    })
-    .catch((error) => {
-      console.error("Error reading data:", error);
-    });
+  // testBooksRef
+  //   .once("value")
+  //   .then((snapshot) => {
+  //     console.log(snapshot.val());
+  //   })
+  //   .catch((error) => {
+  //     console.error("Error reading data:", error);
+  //   });
 
   // Parse the data from Formsg
   const data = JSON.parse(event.body);
