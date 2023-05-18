@@ -3,22 +3,16 @@ const { privateKey } = JSON.parse(process.env.FIREBASE_PRIVATE_KEY);
 
 const config = {
   credential: admin.credential.cert({
-    type: "service_account",
     projectId: "library-management-syste-ae450",
-    private_key_id: process.env.FIREBASE_ADMIN_PRIVATE_KEY_ID,
     private_key: privateKey,
     client_email: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
     client_id: process.env.FIREBASE_ADMIN_CLIENT_ID,
-    auth_uri: "https://accounts.google.com/o/oauth2/auth",
-    token_uri: "https://oauth2.googleapis.com/token",
-    auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
-    client_x509_cert_url:
-      "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-9qee5%40library-management-syste-ae450.iam.gserviceaccount.com",
-    universe_domain: "googleapis.com",
   }),
   databaseURL:
     "https://library-management-syste-ae450-default-rtdb.asia-southeast1.firebasedatabase.app", //replace with your own database URL
 };
+
+console.log(process.env.FIREBASE_ADMIN_CLIENT_ID)
 
 // Instantiating formsg-sdk without parameters default to using the package's
 // production public signing key.
@@ -81,7 +75,7 @@ exports.handler = async function (event, context) {
   // Query the Firebase database for a book with the specified title and author
   if (bookTitle && bookAuthor) {
     try {
-      const booksRef = db.ref("books");
+      const booksRef = db.ref("boo");
       booksRef
         .once("value")
         .then((snapshot) => {
