@@ -13,6 +13,7 @@ const config = {
 };
 
 console.log(process.env.FIREBASE_ADMIN_CLIENT_ID)
+console.log(process.env.FIREBASE_ADMIN_PRIVATE_KEY_ID)
 
 // Instantiating formsg-sdk without parameters default to using the package's
 // production public signing key.
