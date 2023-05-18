@@ -65,7 +65,7 @@ exports.handler = async function (event, context) {
 
   const db = admin.database();
 
-  const testBooksRef = ref("books");
+  const testBooksRef = ref(db, "books");
   
   testBooksRef
     .once("value")
