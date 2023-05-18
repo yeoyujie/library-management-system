@@ -81,6 +81,11 @@ exports.handler = async function (event, context) {
   if (bookTitle && bookAuthor) {
     try {
       const booksRef = db.ref("books");
+      booksRef.once('value', (snapshot) => {
+        // Log the data to the console
+        console.log(snapshot.val());
+      });
+      console.log("Got here")
       booksRef
         .orderByChild("title_author")
         .equalTo(`${bookTitle}_${bookAuthor}`)
@@ -99,6 +104,9 @@ exports.handler = async function (event, context) {
           } else {
             console.log("The particular book cannot be found");
           }
+        })
+        .catch((error) => {
+          console.error("Error listening for value event:", error);
         });
     } catch (error) {
       console.error(error);
