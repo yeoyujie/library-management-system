@@ -1,9 +1,5 @@
 const admin = require("firebase-admin");
-const { privateKey } = JSON.parse(process.env.FIREBASE_PRIVATE_KEY)
-
-// const serviceAccount = JSON.parse(
-//   Buffer.from(process.env.SERVICE_ACCOUNT_KEY, "base64").toString()
-// );
+const { privateKey } = JSON.parse(process.env.FIREBASE_PRIVATE_KEY);
 
 const config = {
   credential: admin.credential.cert({
@@ -26,12 +22,6 @@ const config = {
 
 let firebaseAdminApp;
 
-// admin.initializeApp({
-//   credential: admin.credential.cert(serviceAccount),
-//   databaseURL:
-//     "https://library-management-syste-ae450-default-rtdb.asia-southeast1.firebasedatabase.app", //replace with your own database URL
-// });
-
 // Instantiating formsg-sdk without parameters default to using the package's
 // production public signing key.
 const formsg = require("@opengovsg/formsg-sdk")();
@@ -52,28 +42,13 @@ exports.handler = async function (event, context) {
     };
   }
 
-
-
   if (!admin.apps.length) {
     firebaseAdminApp = admin.initializeApp(config);
-    console.log("App is initialised with admin");
   } else {
     firebaseAdminApp = admin.app();
-    console.log("App is initialised normally");
   }
 
   const db = admin.database();
-
-  // const testBooksRef = ref(db, "books");
-  
-  // testBooksRef
-  //   .once("value")
-  //   .then((snapshot) => {
-  //     console.log(snapshot.val());
-  //   })
-  //   .catch((error) => {
-  //     console.error("Error reading data:", error);
-  //   });
 
   // Parse the data from Formsg
   const data = JSON.parse(event.body);
@@ -104,7 +79,6 @@ exports.handler = async function (event, context) {
 
   // Query the Firebase database for a book with the specified title and author
   if (bookTitle && bookAuthor) {
-    console.log("Found");
     try {
       const booksRef = db.ref("books");
       booksRef
@@ -114,9 +88,16 @@ exports.handler = async function (event, context) {
           console.log("Snapshot exists:", snapshot.exists()); // Log the result of the snapshot.exists() check
           if (snapshot.exists()) {
             const [bookId] = Object.keys(snapshot.val());
-            db.ref(`books/${bookId}`).update({ isBorrowed: true });
+            db.ref(`books/${bookId}`)
+              .update({ isBorrowed: true })
+              .then(() => {
+                console.log("Book status updated successfully");
+              })
+              .catch((error) => {
+                console.error("Error updating book status:", error);
+              });
           } else {
-            console.log("The particular cannot be found");
+            console.log("The particular book cannot be found");
           }
         });
     } catch (error) {
