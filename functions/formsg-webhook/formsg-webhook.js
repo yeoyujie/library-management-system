@@ -12,8 +12,8 @@ const config = {
     "https://library-management-syste-ae450-default-rtdb.asia-southeast1.firebasedatabase.app", //replace with your own database URL
 };
 
-console.log(process.env.FIREBASE_ADMIN_CLIENT_ID)
-console.log(process.env.FIREBASE_ADMIN_PRIVATE_KEY_ID)
+console.log(process.env.FIREBASE_ADMIN_CLIENT_ID);
+console.log(process.env.FIREBASE_ADMIN_PRIVATE_KEY_ID);
 
 // Instantiating formsg-sdk without parameters default to using the package's
 // production public signing key.
@@ -35,10 +35,16 @@ exports.handler = async function (event, context) {
     };
   }
 
-  if (!admin.apps.length) {
-    firebaseAdminApp = admin.initializeApp(config);
-  } else {
-    firebaseAdminApp = admin.app();
+  let firebaseAdminApp;
+  try {
+    if (!admin.apps.length) {
+      firebaseAdminApp = admin.initializeApp(config);
+    } else {
+      firebaseAdminApp = admin.app();
+    }
+  } catch (error) {
+    // Handle error
+    console.error("Error initializing Firebase Admin app:", error);
   }
 
   const db = admin.database();
@@ -76,8 +82,8 @@ exports.handler = async function (event, context) {
   // Query the Firebase database for a book with the specified title and author
   if (bookTitle && bookAuthor) {
     try {
-      const booksRef = db.ref("boo");
-      booksRef
+      const booksRef = db.ref("books");
+      booksRef  
         .once("value")
         .then((snapshot) => {
           // Log the data to the console
