@@ -20,8 +20,6 @@ const config = {
     "https://library-management-syste-ae450-default-rtdb.asia-southeast1.firebasedatabase.app", //replace with your own database URL
 };
 
-let firebaseAdminApp;
-
 // Instantiating formsg-sdk without parameters default to using the package's
 // production public signing key.
 const formsg = require("@opengovsg/formsg-sdk")();
@@ -52,11 +50,14 @@ exports.handler = async function (event, context) {
 
   // Parse the data from Formsg
   const data = JSON.parse(event.body);
+
+  // Log the form data
   console.log(data);
 
   // Decrypt the data using the secret key
   const decryptedData = formsg.crypto.decrypt(formSecretKey, data.data);
 
+  // Logg the decrypted form data
   // console.log("Decrypted data");
   // console.log(decryptedData);
 
@@ -81,33 +82,40 @@ exports.handler = async function (event, context) {
   if (bookTitle && bookAuthor) {
     try {
       const booksRef = db.ref("books");
-      booksRef.once('value', (snapshot) => {
-        // Log the data to the console
-        console.log(snapshot.val());
-      });
-      console.log("Got here")
       booksRef
-        .orderByChild("title_author")
-        .equalTo(`${bookTitle}_${bookAuthor}`)
-        .once("value", (snapshot) => {
-          console.log("Snapshot exists:", snapshot.exists()); // Log the result of the snapshot.exists() check
-          if (snapshot.exists()) {
-            const [bookId] = Object.keys(snapshot.val());
-            db.ref(`books/${bookId}`)
-              .update({ isBorrowed: true })
-              .then(() => {
-                console.log("Book status updated successfully");
-              })
-              .catch((error) => {
-                console.error("Error updating book status:", error);
-              });
-          } else {
-            console.log("The particular book cannot be found");
-          }
+        .once("value")
+        .then((snapshot) => {
+          // Log the data to the console
+          console.log(snapshot.val());
         })
         .catch((error) => {
-          console.error("Error listening for value event:", error);
+          // Log any errors that occur
+          console.error(error);
         });
+      console.log("Got here");
+
+      // booksRef
+      //   .orderByChild("title_author")
+      //   .equalTo(`${bookTitle}_${bookAuthor}`)
+      //   .once("value", (snapshot) => {
+      //     console.log("Snapshot exists:", snapshot.exists()); // Log the result of the snapshot.exists() check
+      //     if (snapshot.exists()) {
+      //       const [bookId] = Object.keys(snapshot.val());
+      //       db.ref(`books/${bookId}`)
+      //         .update({ isBorrowed: true })
+      //         .then(() => {
+      //           console.log("Book status updated successfully");
+      //         })
+      //         .catch((error) => {
+      //           console.error("Error updating book status:", error);
+      //         });
+      //     } else {
+      //       console.log("The particular book cannot be found");
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.error("Error listening for value event:", error);
+      //   });
     } catch (error) {
       console.error(error);
     }
