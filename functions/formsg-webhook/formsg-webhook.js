@@ -79,7 +79,6 @@ exports.handler = async function (event, context) {
 
   // Query the Firebase database for a book with the specified title and author
   if (bookTitle && bookAuthor) {
-    console.log("Found");
     try {
       const booksRef = db.ref("books");
       booksRef
@@ -89,9 +88,16 @@ exports.handler = async function (event, context) {
           console.log("Snapshot exists:", snapshot.exists()); // Log the result of the snapshot.exists() check
           if (snapshot.exists()) {
             const [bookId] = Object.keys(snapshot.val());
-            db.ref(`books/${bookId}`).update({ isBorrowed: true });
+            db.ref(`books/${bookId}`)
+              .update({ isBorrowed: true })
+              .then(() => {
+                console.log("Book status updated successfully");
+              })
+              .catch((error) => {
+                console.error("Error updating book status:", error);
+              });
           } else {
-            console.log("The particular cannot be found");
+            console.log("The particular book cannot be found");
           }
         });
     } catch (error) {
