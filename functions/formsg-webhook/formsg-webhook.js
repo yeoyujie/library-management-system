@@ -1,4 +1,5 @@
 const admin = require("firebase-admin");
+const { getDatabase, ref } = require("firebase/database");
 const { privateKey } = JSON.parse(process.env.FIREBASE_PRIVATE_KEY)
 
 // const serviceAccount = JSON.parse(
