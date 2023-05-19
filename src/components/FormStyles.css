@@ -159,6 +159,7 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+/* For the form on the left side of the website */
 .search-form {
   flex: 1;
   display: flex;
@@ -203,4 +204,36 @@ input:checked + .slider:before {
 
 .book-card h3 {
   margin-top: 0;
+}
+
+/* For the tabs in SearchBookForm */
+.tabs {
+  display: flex;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  position: relative;
+}
+
+.tab:hover {
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+}
+
+.tab.active {
+  font-weight: bold;
+}
+
+.tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: #15cdfc;
+  transition: all 0.3s ease-in-out;
 }

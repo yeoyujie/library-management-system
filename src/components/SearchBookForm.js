@@ -19,6 +19,7 @@ function SearchBookForm() {
   const [books, setBooks] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [activeTab, setActiveTab] = useState("A");
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -109,13 +110,36 @@ function SearchBookForm() {
     setSuccessMessage("Book borrowed successfully!");
   };
 
+  const filteredBooks = books.filter(
+    (book) => book.isBorrowed === (activeTab === "Borrowed")
+  );
+
+  const Tabs = ({ activeTab, onTabChange }) => {
+    return (
+      <div className="tabs">
+        <div
+          className={`tab ${activeTab === "Available" ? "active" : ""}`}
+          onClick={() => onTabChange("Available")}
+        >
+          Available
+        </div>
+        <div
+          className={`tab ${activeTab === "Borrowed" ? "active" : ""}`}
+          onClick={() => onTabChange("Borrowed")}
+        >
+          Borrowed
+        </div>
+      </div>
+    );
+  };
+
   return (
     <LayoutForm
       successMessage={successMessage}
       errorMessage={errorMessage}
       bookListContent={
         <>
-          {books.map((book) => (
+          {filteredBooks.map((book) => (
             <div className="book-card" key={book.id}>
               <h3>{book.title}</h3>
               <p>by {book.author}</p>
@@ -138,6 +162,7 @@ function SearchBookForm() {
         </>
       }
     >
+      <Tabs activeTab={activeTab} onTabChange={setActiveTab} />
       <Form
         handleSubmit={handleSubmit}
         inputs={[
