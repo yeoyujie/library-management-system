@@ -15,7 +15,6 @@ html,
 body {
   height: 100%;
   overflow: hidden;
-  
 }
 
 form {
@@ -50,11 +49,10 @@ input[type="submit"] {
   border: none;
   background-color: #15cdfc;
   color: white;
-  
 
   /* make the size of the submit button the same as the input boxes */
   width: calc(210px);
-  
+
   /* hover effect */
   transition: all 0.2s ease-in-out;
   &:hover {
@@ -122,8 +120,8 @@ input[type="submit"] {
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .slider:before {
@@ -134,16 +132,16 @@ input[type="submit"] {
   left: 4px;
   bottom: 4px;
   background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #2196f3;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  box-shadow: 0 0 1px #2196f3;
 }
 
 input:checked + .slider:before {
@@ -154,11 +152,11 @@ input:checked + .slider:before {
 
 /* Rounded sliders */
 .slider.round {
-    border-radius:34px
+  border-radius: 34px;
 }
 
 .slider.round:before {
-    border-radius:50%
+  border-radius: 50%;
 }
 
 .search-form {
@@ -169,7 +167,7 @@ input:checked + .slider:before {
 }
 
 .search-form-card {
-  background-color: #f2f2f2;
+  background-color: rgba(242, 242, 242, 0.9);
   border: 2px solid #ccc;
   border-radius: 20px;
   padding: 30px 50px 50px 50px;
@@ -200,7 +198,7 @@ input:checked + .slider:before {
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 20px;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .book-card h3 {
