@@ -114,6 +114,7 @@ function AddBookForm() {
             onChange: handleAuthorChange,
           },
         ]}
+        submitValue="Add"
       />
     </LayoutForm>
   );

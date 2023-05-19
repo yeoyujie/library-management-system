@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from "react";
 
-const Form = ({ handleSubmit, inputs }) => {
+const Form = ({ handleSubmit, inputs, submitValue }) => {
   const firstInputRef = useRef();
 
   useEffect(() => {
@@ -23,7 +23,7 @@ const Form = ({ handleSubmit, inputs }) => {
           <br />
         </React.Fragment>
       ))}
-      <input type="submit" value="Search" />
+      <input type="submit" value={submitValue} />
     </form>
   );
 };

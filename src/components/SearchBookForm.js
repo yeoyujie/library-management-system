@@ -152,6 +152,7 @@ function SearchBookForm() {
             onChange: handleAuthorChange,
           },
         ]}
+        submitValue="Search"
       />
     </LayoutForm>
   );
