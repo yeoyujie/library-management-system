@@ -223,11 +223,11 @@ input:checked + .slider:before {
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
 }
 
-.tab.active {
+.tab.active:not(.inactive) {
   font-weight: bold;
 }
 
-.tab.active::after {
+.tab.active:not(.inactive)::after {
   content: "";
   position: absolute;
   bottom: 0;

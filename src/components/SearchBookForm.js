@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   getDatabase,
   ref,
   query,
   orderByChild,
   equalTo,
+  onValue,
   get,
   update,
 } from "firebase/database";
@@ -19,7 +20,10 @@ function SearchBookForm() {
   const [books, setBooks] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [activeTab, setActiveTab] = useState("A");
+  const [activeTab, setActiveTab] = useState("");
+  const [availableBooks, setAvailableBooks] = useState([]);
+  const [borrowedBooks, setBorrowedBooks] = useState([]);
+  const [searchResults, setSearchResults] = useState(null);
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -63,6 +67,8 @@ function SearchBookForm() {
           ...childSnapshot.val(),
         });
       });
+
+      setSearchResults(booksArray);
 
       setBooks(booksArray);
 
@@ -110,21 +116,46 @@ function SearchBookForm() {
     setSuccessMessage("Book borrowed successfully!");
   };
 
-  const filteredBooks = books.filter(
-    (book) => book.isBorrowed === (activeTab === "Borrowed")
-  );
+  // reset searchResults when the active tab changes
+  useEffect(() => {
+    setSearchResults(null);
+  }, [activeTab]);
+
+  useEffect(() => {
+    const db = getDatabase(app);
+    const booksRef = ref(db, "books");
+    onValue(booksRef, (snapshot) => {
+      const books = snapshot.val();
+      setAvailableBooks(
+        Object.values(books).filter((book) => !book.isBorrowed)
+      );
+      setBorrowedBooks(Object.values(books).filter((book) => book.isBorrowed));
+    });
+  }, []);
+
+  const filteredBooks = searchResults
+    ? searchResults
+    : activeTab === "Available"
+    ? availableBooks
+    : borrowedBooks;
 
   const Tabs = ({ activeTab, onTabChange }) => {
+    const isTabActive = searchResults ? false : activeTab;
+    const isInactive = !!searchResults;
     return (
       <div className="tabs">
         <div
-          className={`tab ${activeTab === "Available" ? "active" : ""}`}
+          className={`tab ${isTabActive === "Available" ? "active" : ""} ${
+            isInactive ? "inactive" : ""
+          }`}
           onClick={() => onTabChange("Available")}
         >
           Available
         </div>
         <div
-          className={`tab ${activeTab === "Borrowed" ? "active" : ""}`}
+          className={`tab ${isTabActive === "Borrowed" ? "active" : ""} ${
+            isInactive ? "inactive" : ""
+          }`}
           onClick={() => onTabChange("Borrowed")}
         >
           Borrowed
