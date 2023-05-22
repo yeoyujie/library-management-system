@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { getDatabase, ref, push, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, update, get } from "firebase/database";
 import { app } from "../firebase_setup/firebase.js";
 import Form from "./Form";
 import LayoutForm from "./LayoutForm";
-import { useTransition } from "react-spring";
+import { useTransition, animated } from "react-spring";
 
 function BorrowBookForm() {
   const [title, setTitle] = useState("");
@@ -13,7 +13,7 @@ function BorrowBookForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [titleOptions, setTitleOptions] = useState([]);
   const [availableBooks, setAvailableBooks] = useState([]);
-  const [recentlyAddedBooks, setRecentlyAddedBooks] = useState([]);
+  const [recentlyBorrowedBooks, setRecentlyBorrowedBooks] = useState([]);
 
   useEffect(() => {
     // Fetch available books from Firebase Realtime Database
@@ -37,6 +37,10 @@ function BorrowBookForm() {
       const uniqueTitles = [
         ...new Set(availableBooks.map((book) => book.title)),
       ];
+
+      // Sort uniqueTitles lexicographically
+      uniqueTitles.sort();
+
       setTitleOptions(uniqueTitles);
     });
   }, []);
@@ -44,10 +48,10 @@ function BorrowBookForm() {
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
 
-    // Auto-complete author field if there is only one matching book
     const matchingBooks = availableBooks.filter(
       (book) => book.title === event.target.value
     );
+
     setAuthor(matchingBooks[0].author);
   };
 
@@ -59,9 +63,38 @@ function BorrowBookForm() {
     setEmail(event.target.value);
   };
 
+  const borrowBook = (title, author) => {
+    // Find the book with the matching title and author
+    let borrowedBookId = null;
+    const db = getDatabase(app);
+    const booksRef = ref(db, "books");
+  
+    get(booksRef, "value").then((snapshot) => {
+      const books = snapshot.val();
+      for (let id in books) {
+        if (books[id].title === title && books[id].author === author && !books[id].isBorrowed) {
+          // Update the isBorrowed property of the book in the Firebase Realtime Database
+          const bookRef = ref(db, `books/${id}`);
+          update(bookRef, { isBorrowed: true });
+  
+          // Set the borrowedBookId variable to the ID of the borrowed book
+          borrowedBookId = id;
+  
+          // Add the borrowed book to the list of recently borrowed books
+          setRecentlyBorrowedBooks((prevBooks) => [
+            { id: borrowedBookId, title, author },
+            ...prevBooks,
+          ]);
+          break;
+        }
+      }
+    });
+    return borrowedBookId;
+  };
+  
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    const db = getDatabase(app);
 
     setSuccessMessage("");
 
@@ -79,33 +112,15 @@ function BorrowBookForm() {
       return;
     }
 
-    const emailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const emailRegex =
+      /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if (!emailRegex.test(email)) {
       setErrorMessage("Please enter a valid email address.");
       return;
     }
 
-    // Create a new field that combines the title and author values
-    const title_author = `${title}_${author}`;
-
-    // Set the isBorrowed status to false by default
-    const isBorrowed = false;
-
-    // Update the realtime database in Firebase
-    const newBookRef = push(ref(db, "books"), {
-      title,
-      author,
-      title_author,
-      isBorrowed,
-      email,
-    });
-    console.log(`Book borrowed. ID: ${newBookRef.key}`);
-
-    // Add the new book to the list of recently added books
-    setRecentlyAddedBooks((prevBooks) => [
-      { id: newBookRef.key, title, author },
-      ...prevBooks,
-    ]);
+    // Borrow the book based on its title and author
+    const borrowedBookId = borrowBook(title, author);
 
     setSuccessMessage(
       <>
@@ -115,7 +130,7 @@ function BorrowBookForm() {
         <br />
         Author: <strong style={{ fontSize: "18px" }}>{author}</strong>
         <br />
-        ID: {newBookRef.key}
+        ID: {borrowedBookId}
       </>
     );
     setErrorMessage("");
@@ -126,14 +141,28 @@ function BorrowBookForm() {
   };
 
   // useTransition hook to animate the mounting and unmounting of book cards
-  const transitions = useTransition(recentlyAddedBooks, {
+  const transitions = useTransition(recentlyBorrowedBooks, {
     from: { opacity: 0, transform: "translate3d(-25%,0,0)" },
     enter: { opacity: 1, transform: "translate3d(0%,0,0)" },
     leave: { opacity: 0 },
   });
 
   return (
-    <LayoutForm successMessage={successMessage} errorMessage={errorMessage}>
+    <LayoutForm
+      successMessage={successMessage}
+      errorMessage={errorMessage}
+      bookListContent={
+        <>
+          {transitions((style, book) => (
+            <animated.div style={style} className="book-card" key={book.id}>
+              <h3>{book.title}</h3>
+              <p>by {book.author}</p>
+              <p>Book ID: {book.id}</p>
+            </animated.div>
+          ))}
+        </>
+      }
+    >
       <Form
         handleSubmit={handleSubmit}
         inputs={[

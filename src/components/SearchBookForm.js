@@ -138,9 +138,15 @@ function SearchBookForm() {
     onValue(booksRef, (snapshot) => {
       const books = snapshot.val();
       setAvailableBooks(
-        Object.values(books).filter((book) => !book.isBorrowed)
+        Object.entries(books)
+          .filter(([id, book]) => !book.isBorrowed)
+          .map(([id, book]) => ({ ...book, id }))
       );
-      setBorrowedBooks(Object.values(books).filter((book) => book.isBorrowed));
+      setBorrowedBooks(
+        Object.entries(books)
+          .filter(([id, book]) => book.isBorrowed)
+          .map(([id, book]) => ({ ...book, id }))
+      );
     });
   }, []);
 
