@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { app } from "../firebase_setup/firebase.js";
 import {
   getDatabase,
   ref,
@@ -9,10 +10,8 @@ import {
   get,
   update,
 } from "firebase/database";
-import { app } from "../firebase_setup/firebase.js";
-import "./FormStyles.css";
-import LayoutForm from "./LayoutForm";
 import Form from "./Form";
+import LayoutForm from "./LayoutForm";
 
 function SearchBookForm() {
   const [title, setTitle] = useState("");
