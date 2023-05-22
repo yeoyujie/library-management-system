@@ -11,29 +11,31 @@ const Form = ({ handleSubmit, inputs, submitValue }) => {
     <form onSubmit={handleSubmit}>
       {inputs.map(({ label, type, value, onChange, options }, index) => (
         <React.Fragment key={index}>
-          <label>
-            {label}:
-            {type === "select" ? (
-              <select
-                value={value}
-                onChange={onChange}
-                ref={index === 0 ? firstInputRef : null}
-              >
-                {options.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <input
-                type="text"
-                value={value}
-                onChange={onChange}
-                ref={index === 0 ? firstInputRef : null}
-              />
-            )}
-          </label>
+          <div style={{ width: "300px" }}>
+            <label>
+              {label}:
+              {type === "select" ? (
+                <select
+                  value={value}
+                  onChange={onChange}
+                  ref={index === 0 ? firstInputRef : null}
+                >
+                  {options.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  type="text"
+                  value={value}
+                  onChange={onChange}
+                  ref={index === 0 ? firstInputRef : null}
+                />
+              )}
+            </label>
+          </div>
           <br />
         </React.Fragment>
       ))}
