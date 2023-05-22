@@ -43,13 +43,18 @@ function AddBookForm() {
     // Set the isBorrowed status to false by default
     const isBorrowed = false;
 
+    // Set the isBorrowed status to false by default
+    const borrowerEmail = "";
+
     // Update the realtime database in Firebase
     const newBookRef = push(ref(db, "books"), {
       title,
       author,
       title_author,
       isBorrowed,
+      borrowerEmail
     });
+
     console.log(`New book added with ID: ${newBookRef.key}`);
 
     // Add the new book to the list of recently added books
@@ -70,7 +75,6 @@ function AddBookForm() {
         ID: {newBookRef.key}
       </>
     );
-    setErrorMessage("");
 
     // Clears the input field
     setTitle("");
