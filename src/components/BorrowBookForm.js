@@ -20,39 +20,36 @@ function BorrowBookForm() {
     const db = getDatabase(app);
     const booksRef = ref(db, "books");
     onValue(booksRef, (snapshot) => {
-    const books = snapshot.val();
-    const availableBooks = [];
-    for (let id in books) {
-    if (!books[id].isBorrowed) {
-    availableBooks.push({
-    id,
-    title: books[id].title,
-    author: books[id].author,
+      const books = snapshot.val();
+      const availableBooks = [];
+      for (let id in books) {
+        if (!books[id].isBorrowed) {
+          availableBooks.push({
+            id,
+            title: books[id].title,
+            author: books[id].author,
+          });
+        }
+      }
+      setAvailableBooks(availableBooks);
+
+      // Remove duplicate book titles from the title input field options
+      const uniqueTitles = [
+        ...new Set(availableBooks.map((book) => book.title)),
+      ];
+      setTitleOptions(uniqueTitles);
     });
-    }
-    }
-    setAvailableBooks(availableBooks);
-   
-    // Remove duplicate book titles from the title input field options
-    const uniqueTitles = [...new Set(availableBooks.map((book) => book.title))];
-    setTitleOptions(uniqueTitles);
-    });
-   }, []);
+  }, []);
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
-   
+
     // Auto-complete author field if there is only one matching book
     const matchingBooks = availableBooks.filter(
-    (book) => book.title === event.target.value
+      (book) => book.title === event.target.value
     );
-    if (matchingBooks.length === 1) {
     setAuthor(matchingBooks[0].author);
-    } else {
-    setAuthor("");
-    }
-   };
-   
+  };
 
   const handleAuthorChange = (event) => {
     setAuthor(event.target.value);
@@ -79,6 +76,13 @@ function BorrowBookForm() {
       return;
     } else if (!email) {
       setErrorMessage("Please enter your email.");
+      return;
+    }
+
+    const emailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    if (!emailRegex.test(email)) {
+      setErrorMessage("Please enter a valid email address.");
+      return;
     }
 
     // Create a new field that combines the title and author values
@@ -95,7 +99,7 @@ function BorrowBookForm() {
       isBorrowed,
       email,
     });
-    console.log(`New book added with ID: ${newBookRef.key}`);
+    console.log(`Book borrowed. ID: ${newBookRef.key}`);
 
     // Add the new book to the list of recently added books
     setRecentlyAddedBooks((prevBooks) => [
@@ -105,7 +109,7 @@ function BorrowBookForm() {
 
     setSuccessMessage(
       <>
-        Book added successfully!
+        Book borrowed successfully!
         <br />
         Title: <strong style={{ fontSize: "18px" }}>{title}</strong>
         <br />

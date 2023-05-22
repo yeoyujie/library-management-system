@@ -119,6 +119,17 @@ function SearchBookForm() {
   // reset searchResults when the active tab changes
   useEffect(() => {
     setSearchResults(null);
+    setErrorMessage("");
+    switch (activeTab) {
+      case "Available":
+        setSuccessMessage("Showing all available book");
+        break;
+      case "Borrowed":
+        setSuccessMessage("Showing all books on loan");
+        break;
+      default:
+        setSuccessMessage("");
+    }
   }, [activeTab]);
 
   useEffect(() => {
