@@ -5,10 +5,11 @@ import {
   ref,
   query,
   orderByChild,
-  equalTo,
   onValue,
   get,
   update,
+  startAt,
+  endAt
 } from "firebase/database";
 import Form from "./Form";
 import LayoutForm from "./LayoutForm";
@@ -44,16 +45,27 @@ function SearchBookForm() {
       booksQuery = query(
         booksRef,
         orderByChild("title_author"),
-        equalTo(`${title}_${author}`)
+        startAt(`${title}_${author}`),
+        endAt(`${title}_${author}\uf8ff`)
       );
       searchType = "title and author";
     } else if (title) {
       // Use the title field only to query for books with a specific title
-      booksQuery = query(booksRef, orderByChild("title"), equalTo(title));
+      booksQuery = query(
+        booksRef,
+        orderByChild("title"),
+        startAt(title),
+        endAt(title + "\uf8ff")
+      );
       searchType = "title";
     } else if (author) {
       // Use the author field only to query for books by a specific author
-      booksQuery = query(booksRef, orderByChild("author"), equalTo(author));
+      booksQuery = query(
+        booksRef,
+        orderByChild("author"),
+        startAt(author),
+        endAt(author + "\uf8ff")
+      );
       searchType = "author";
     }
 

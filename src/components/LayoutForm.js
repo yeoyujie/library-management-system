@@ -1,6 +1,5 @@
 import React from "react";
-import bgPhoto from "../assets/bgPhoto.jpg";
-import Lottie from "react-lottie";
+import Lottie from "lottie-react";
 import animationData from "../assets/animation.json";
 
 const LayoutForm = ({
@@ -9,19 +8,13 @@ const LayoutForm = ({
   errorMessage,
   bookListContent,
 }) => {
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: animationData,
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
-    },
-  };
   return (
     <div className="container">
       <div className="search-form" style={{ position: "relative" }}>
         <Lottie
-          options={defaultOptions}
+          animationData={animationData}
+          loop={true}
+          autoplay={true}
           style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }}
         />
         <div className="search-form-card" style={{ zIndex: 1 }}>
