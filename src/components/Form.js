@@ -19,6 +19,7 @@ const Form = ({ handleSubmit, inputs, submitValue }) => {
                   value={value}
                   onChange={onChange}
                   ref={index === 0 ? firstInputRef : null}
+                  disabled={label === "Author" && options && options.length === 1}
                 >
                   {options.map((option) => (
                     <option key={option} value={option}>
@@ -32,6 +33,7 @@ const Form = ({ handleSubmit, inputs, submitValue }) => {
                   value={value}
                   onChange={onChange}
                   ref={index === 0 ? firstInputRef : null}
+                  disabled={label === "Author" && options && options.length === 1}
                 />
               )}
             </label>
