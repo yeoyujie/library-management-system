@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef, useEffect } from "react";
 
 const Form = ({ handleSubmit, inputs, submitValue }) => {
   const firstInputRef = useRef();
@@ -9,16 +9,30 @@ const Form = ({ handleSubmit, inputs, submitValue }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      {inputs.map(({ label, value, onChange }, index) => (
+      {inputs.map(({ label, type, value, onChange, options }, index) => (
         <React.Fragment key={index}>
           <label>
             {label}:
-            <input
-              type="text"
-              value={value}
-              onChange={onChange}
-              ref={index === 0 ? firstInputRef : null}
-            />
+            {type === "select" ? (
+              <select
+                value={value}
+                onChange={onChange}
+                ref={index === 0 ? firstInputRef : null}
+              >
+                {options.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type="text"
+                value={value}
+                onChange={onChange}
+                ref={index === 0 ? firstInputRef : null}
+              />
+            )}
           </label>
           <br />
         </React.Fragment>

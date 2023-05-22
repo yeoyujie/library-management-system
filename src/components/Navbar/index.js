@@ -21,6 +21,9 @@ const Navbar = ({ setView, view, isAdmin, setIsAdmin }) => {
           <NavLink onClick={() => setView('search')} view={view} expectedView='search'>
             Search Book
           </NavLink>
+          <NavLink onClick={() => setView('borrow')} view={view} expectedView='borrow'>
+            Borrow Book
+          </NavLink>
           {isAdmin && (
             <>
               <NavLink onClick={() => setView('add')} view={view} expectedView='add'>
