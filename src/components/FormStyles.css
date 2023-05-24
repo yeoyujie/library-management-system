@@ -44,7 +44,8 @@ select {
   width: 100%;
 }
 
-input[type="submit"] {
+input[type="submit"],
+button {
   font-size: 16px;
   padding: 10px;
   border-radius: 5px;
@@ -206,6 +207,12 @@ input:checked + .slider:before {
 
 .book-card h3 {
   margin-top: 0;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 /* For the tabs in SearchBookForm */

@@ -68,18 +68,22 @@ function BorrowBookForm() {
     let borrowedBookId = null;
     const db = getDatabase(app);
     const booksRef = ref(db, "books");
-  
+
     get(booksRef, "value").then((snapshot) => {
       const books = snapshot.val();
       for (let id in books) {
-        if (books[id].title === title && books[id].author === author && !books[id].isBorrowed) {
+        if (
+          books[id].title === title &&
+          books[id].author === author &&
+          !books[id].isBorrowed
+        ) {
           // Update the isBorrowed property of the book in the Firebase Realtime Database
           const bookRef = ref(db, `books/${id}`);
           update(bookRef, { isBorrowed: true });
-  
+
           // Set the borrowedBookId variable to the ID of the borrowed book
           borrowedBookId = id;
-  
+
           // Add the borrowed book to the list of recently borrowed books
           setRecentlyBorrowedBooks((prevBooks) => [
             { id: borrowedBookId, title, author },
@@ -91,7 +95,6 @@ function BorrowBookForm() {
     });
     return borrowedBookId;
   };
-  
 
   const handleSubmit = (event) => {
     event.preventDefault();

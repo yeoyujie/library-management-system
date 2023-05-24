@@ -9,7 +9,7 @@ import {
   get,
   update,
   startAt,
-  endAt
+  endAt,
 } from "firebase/database";
 import Form from "./Form";
 import LayoutForm from "./LayoutForm";
@@ -133,10 +133,18 @@ function SearchBookForm() {
     setErrorMessage("");
     switch (activeTab) {
       case "Available":
-        setSuccessMessage("Showing all available book");
+        setSuccessMessage(
+          <span>
+            Showing all <b style={{ fontSize: "larger" }}>AVAILABLE</b> books
+          </span>
+        );
         break;
       case "Borrowed":
-        setSuccessMessage("Showing all books on loan");
+        setSuccessMessage(
+          <span>
+            Showing all books <b style={{ fontSize: "larger" }}>ON LOAN</b>
+          </span>
+        );
         break;
       default:
         setSuccessMessage("");
@@ -165,7 +173,9 @@ function SearchBookForm() {
     ? searchResults
     : activeTab === "Available"
     ? availableBooks
-    : borrowedBooks;
+    : activeTab === "Borrowed"
+    ? borrowedBooks
+    : [];
 
   const Tabs = ({ activeTab, onTabChange }) => {
     const isTabActive = searchResults ? false : activeTab;

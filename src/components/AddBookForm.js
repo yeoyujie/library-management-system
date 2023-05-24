@@ -4,6 +4,8 @@ import { app } from "../firebase_setup/firebase.js";
 import { getDatabase, ref, push } from "firebase/database";
 import Form from "./Form";
 import LayoutForm from "./LayoutForm";
+import "./FormStyles.css";
+
 
 function AddBookForm() {
   const [title, setTitle] = useState("");
