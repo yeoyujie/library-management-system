@@ -11,6 +11,8 @@ function EditBookForm() {
   const [book, setBook] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [slideDown, setSlideDown] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const handlebookIdChange = (event) => {
     setBookId(event.target.value);
@@ -22,6 +24,10 @@ function EditBookForm() {
 
   const handleAuthorChange = (event) => {
     setAuthor(event.target.value);
+  };
+
+  const handleEditClick = () => {
+    setIsEditing(true);
   };
 
   const handleSubmit = async (event) => {
@@ -42,8 +48,8 @@ function EditBookForm() {
         author: snapshot.val().author,
         isBorrowed: snapshot.val().isBorrowed,
       });
-      setTitle(book.title);
-      setAuthor(book.author);
+      setTitle(snapshot.val().title);
+      setAuthor(snapshot.val().author);
       setSuccessMessage("Books found");
       setErrorMessage("");
     } else {
@@ -53,6 +59,20 @@ function EditBookForm() {
   };
 
   const handleEditSubmit = async () => {
+    // Check if title or author are empty
+    if (!title || !author) {
+      setErrorMessage("Title and author cannot be empty!");
+      setSuccessMessage("");
+      return;
+    }
+
+    // Check if title or author have changed
+    if (title === book.title && author === book.author) {
+      setErrorMessage("No fields are changed!");
+      setSuccessMessage("");
+      return;
+    }
+
     // Update book data in the database
     try {
       const db = getDatabase();
@@ -63,6 +83,7 @@ function EditBookForm() {
       });
       setSuccessMessage("Book updated successfully!");
       setErrorMessage("");
+      setSlideDown(true);
     } catch (error) {
       setErrorMessage("Failed to update book!");
       setSuccessMessage("");
@@ -87,10 +108,23 @@ function EditBookForm() {
       errorMessage={errorMessage}
       bookListContent={
         book && (
-          <div className="book-card" key={book.id}>
-            <input type="text" value={title} onChange={handleTitleChange} />
+          <div
+            className={`book-card ${slideDown ? "slide-down" : ""}`}
+            key={book.id}
+          >
+            <input
+              type="text"
+              value={title}
+              onChange={handleTitleChange}
+              disabled={!isEditing}
+            />
             <p>by</p>
-            <input type="text" value={author} onChange={handleAuthorChange} />
+            <input
+              type="text"
+              value={author}
+              onChange={handleAuthorChange}
+              disabled={!isEditing}
+            />
             <p>Book ID: {book.id}</p>
             <span
               style={{
@@ -111,7 +145,11 @@ function EditBookForm() {
               </label>
               <br />
               <div className="button-container">
-                <button onClick={handleEditSubmit}>Edit</button>
+                {!isEditing ? (
+                  <button onClick={handleEditClick}>Edit</button>
+                ) : (
+                  <button onClick={handleEditSubmit}>Save</button>
+                )}
               </div>
             </div>
           </div>

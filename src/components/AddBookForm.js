@@ -10,6 +10,8 @@ import "./FormStyles.css";
 function AddBookForm() {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [recentlyAddedBooks, setRecentlyAddedBooks] = useState([]);
@@ -52,6 +54,8 @@ function AddBookForm() {
     const newBookRef = push(ref(db, "books"), {
       title,
       author,
+      firstName,
+      lastName,
       title_author,
       isBorrowed,
       borrowerEmail

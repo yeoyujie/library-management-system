@@ -17,7 +17,6 @@ import LayoutForm from "./LayoutForm";
 function SearchBookForm() {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
-  const [books, setBooks] = useState([]);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [activeTab, setActiveTab] = useState("");
@@ -80,8 +79,6 @@ function SearchBookForm() {
       });
 
       setSearchResults(booksArray);
-
-      setBooks(booksArray);
 
       if (booksArray.length > 0) {
         let successMessage;
