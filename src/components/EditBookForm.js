@@ -52,6 +52,8 @@ function EditBookForm() {
       setAuthor(snapshot.val().author);
       setSuccessMessage("Books found");
       setErrorMessage("");
+      setSlideDown(false);
+      setIsEditing(false);
     } else {
       setErrorMessage("Book not found!");
       setSuccessMessage("");
@@ -112,19 +114,27 @@ function EditBookForm() {
             className={`book-card ${slideDown ? "slide-down" : ""}`}
             key={book.id}
           >
-            <input
-              type="text"
-              value={title}
-              onChange={handleTitleChange}
-              disabled={!isEditing}
-            />
+            {isEditing ? (
+              <input
+                type="text"
+                value={title}
+                onChange={handleTitleChange}
+                disabled={!isEditing}
+              />
+            ) : (
+              <p>{title}</p>
+            )}
             <p>by</p>
-            <input
-              type="text"
-              value={author}
-              onChange={handleAuthorChange}
-              disabled={!isEditing}
-            />
+            {isEditing ? (
+              <input
+                type="text"
+                value={author}
+                onChange={handleAuthorChange}
+                disabled={!isEditing}
+              />
+            ) : (
+              <p>{author}</p>
+            )}
             <p>Book ID: {book.id}</p>
             <span
               style={{
