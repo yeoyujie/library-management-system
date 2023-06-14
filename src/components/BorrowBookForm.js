@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { animated, useTransition } from "react-spring";
 import { app } from "../firebase_setup/firebase.js";
 import { getDatabase, ref, onValue, update, get } from "firebase/database";
@@ -156,6 +156,7 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
     }
   }, [selectedBook]);
 
+
   // useTransition hook to animate the mounting and unmounting of selectedBook cards
   const transitions = useTransition(recentlyBorrowedBooks, {
     from: { opacity: 0, transform: "translate3d(-25%,0,0)" },
@@ -170,7 +171,7 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
       bookListContent={
         <>
           {transitions((style, selectedBook) => (
-            <animated.div style={style} className="selectedBook-card" key={selectedBook.id}>
+            <animated.div style={style} className="book-card" key={selectedBook.id}>
               <h3>{selectedBook.title}</h3>
               <p>by {selectedBook.author}</p>
               <p>Book ID: {selectedBook.id}</p>

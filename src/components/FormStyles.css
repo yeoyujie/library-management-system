@@ -35,6 +35,7 @@ label {
 }
 
 input[type="text"],
+input[type="email"],
 select {
   font-size: 16px;
   padding: 5px;
@@ -74,7 +75,8 @@ input[type="submit"],
   }
 }
 
-button.copy-to-clipboard-button {
+button.copy-to-clipboard-button,
+.save-button {
   font-size: 14px;
   margin-left: 20px;
   padding: 8px;
@@ -230,11 +232,6 @@ input:checked + .slider:before {
   border-radius: 20px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
   transition: all 0.5s ease-in-out;
-}
-
-.book-card.slide-down {
-  transform: translateY(200px);
-  opacity: 0;
 }
 
 .book-card h3 {

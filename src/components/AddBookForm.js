@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useTransition, animated } from "react-spring";
 import { app } from "../firebase_setup/firebase.js";
 import { getDatabase, ref, push } from "firebase/database";

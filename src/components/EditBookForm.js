@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { app } from "../firebase_setup/firebase.js";
 import { getDatabase, ref, get, update } from "firebase/database";
 import Form from "./Form";
@@ -8,11 +8,22 @@ function EditBookForm({ isAdmin, selectedBook }) {
   const [bookId, setBookId] = useState("");
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [borrowerEmail, setBorrowerEmail] = useState("");
   const [book, setBook] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [slideDown, setSlideDown] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [focusedField, setFocusedField] = useState(null);
+
+  const titleRef = useRef(null);
+  const authorRef = useRef(null);
+  const firstNameRef = useRef(null);
+  const lastNameRef = useRef(null);
+  const borrowerEmailRef = useRef(null);
+
+
 
   const handlebookIdChange = (event) => {
     setBookId(event.target.value);
@@ -24,6 +35,18 @@ function EditBookForm({ isAdmin, selectedBook }) {
 
   const handleAuthorChange = (event) => {
     setAuthor(event.target.value);
+  };
+
+  const handleFirstNameChange = (event) => {
+    setFirstName(event.target.value);
+  };
+
+  const handleLastNameChange = (event) => {
+    setLastName(event.target.value);
+  };
+
+  const handleBorrowEmailChange = (event) => {
+    setBorrowerEmail(event.target.value);
   };
 
   const handleEditClick = () => {
@@ -47,12 +70,17 @@ function EditBookForm({ isAdmin, selectedBook }) {
         title: snapshot.val().title,
         author: snapshot.val().author,
         isBorrowed: snapshot.val().isBorrowed,
+        borrowerEmail: snapshot.val().borrowerEmail,
+        firstName: snapshot.val().firstName,
+        lastName: snapshot.val().lastName,
       });
       setTitle(snapshot.val().title);
       setAuthor(snapshot.val().author);
-      setSuccessMessage("Books found");
+      setBorrowerEmail(snapshot.val().borrowerEmail);
+      setFirstName(snapshot.val().firstName);
+      setLastName(snapshot.val().lastName);
+      setSuccessMessage("Book found");
       setErrorMessage("");
-      setSlideDown(false);
       setIsEditing(false);
     } else {
       setErrorMessage("Book not found!");
@@ -68,13 +96,6 @@ function EditBookForm({ isAdmin, selectedBook }) {
       return;
     }
 
-    // Check if title or author have changed
-    if (title === book.title && author === book.author) {
-      setErrorMessage("No fields are changed!");
-      setSuccessMessage("");
-      return;
-    }
-
     // Update book data in the database
     try {
       const db = getDatabase();
@@ -82,10 +103,13 @@ function EditBookForm({ isAdmin, selectedBook }) {
       await update(bookRef, {
         title: title,
         author: author,
+        borrowerEmail: borrowerEmail,
+        firstName: firstName,
+        lastName: lastName,
       });
       setSuccessMessage("Book updated successfully!");
       setErrorMessage("");
-      setSlideDown(true);
+      setIsEditing(false);
     } catch (error) {
       setErrorMessage("Failed to update book!");
       setSuccessMessage("");
@@ -101,6 +125,7 @@ function EditBookForm({ isAdmin, selectedBook }) {
       const isBorrowed = snapshot.val().isBorrowed;
       update(bookRef, { isBorrowed: !isBorrowed });
       setBook((prevBook) => ({ ...prevBook, isBorrowed: !isBorrowed }));
+      setSuccessMessage(`Book updated successfully! The book is now ${!isBorrowed ? 'borrowed' : 'available'}.`);
     }
   };
 
@@ -110,6 +135,46 @@ function EditBookForm({ isAdmin, selectedBook }) {
     }
   }, [selectedBook]);
 
+  const fields = [
+    {
+      label: "Title",
+      value: title,
+      onChange: handleTitleChange,
+      ref: titleRef,
+    },
+    {
+      label: "Author",
+      value: author,
+      onChange: handleAuthorChange,
+      ref: authorRef,
+    },
+    {
+      label: "First Name",
+      value: firstName,
+      onChange: handleFirstNameChange,
+      ref: firstNameRef,
+    },
+    {
+      label: "Last Name",
+      value: lastName,
+      onChange: handleLastNameChange,
+      ref: lastNameRef,
+    },
+    {
+      label: "Borrower Email",
+      value: borrowerEmail,
+      onChange: handleBorrowEmailChange,
+      ref: borrowerEmailRef,
+    },
+  ];
+
+  useEffect(() => {
+    if (isEditing && focusedField && focusedField.current) {
+      focusedField.current.focus();
+    }
+  }, [isEditing, focusedField]);
+
+
   return (
     isAdmin && (
       <LayoutForm
@@ -118,30 +183,35 @@ function EditBookForm({ isAdmin, selectedBook }) {
         bookListContent={
           book && (
             <div
-              className={`book-card ${slideDown ? "slide-down" : ""}`}
+              className="book-card"
               key={book.id}
+
             >
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={title}
-                  onChange={handleTitleChange}
-                  disabled={!isEditing}
-                />
-              ) : (
-                <p>{title}</p>
-              )}
-              <p>by</p>
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={author}
-                  onChange={handleAuthorChange}
-                  disabled={!isEditing}
-                />
-              ) : (
-                <p>{author}</p>
-              )}
+              {fields.map((field) => (
+                <>
+                  <label>{field.label}:</label>
+                  {isEditing ? (
+                    <input
+                      type={field.label === "Borrower Email" ? "email" : "text"}
+                      value={field.value}
+                      onChange={field.onChange}
+                      disabled={!isEditing}
+                      placeholder={field.label}
+                      ref={field.ref}
+                    />
+                  ) : (
+                    <p
+                      onClick={() => {
+                        setIsEditing(true);
+                        setFocusedField(field.ref);
+                      }}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {field.value}
+                    </p>
+                  )}
+                </>
+              ))}
               <p>Book ID: {book.id}</p>
               <span
                 style={{
@@ -162,10 +232,8 @@ function EditBookForm({ isAdmin, selectedBook }) {
                 </label>
                 <br />
                 <div className="button-container">
-                  {!isEditing ? (
-                    <button onClick={handleEditClick}>Edit</button>
-                  ) : (
-                    <button onClick={handleEditSubmit}>Save</button>
+                  {isEditing && (
+                    <button className="save-button" onClick={handleEditSubmit}>Save</button>
                   )}
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { app } from "../firebase_setup/firebase.js";
 import {
   getDatabase,
