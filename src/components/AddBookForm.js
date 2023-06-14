@@ -1,13 +1,16 @@
 import React, { useState } from "react";
-import { getDatabase, ref, push } from "firebase/database";
+import { useTransition, animated } from "react-spring";
 import { app } from "../firebase_setup/firebase.js";
+import { getDatabase, ref, push } from "firebase/database";
 import Form from "./Form";
 import LayoutForm from "./LayoutForm";
-import { useTransition, animated } from "react-spring";
+import "./FormStyles.css";
 
 function AddBookForm() {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [recentlyAddedBooks, setRecentlyAddedBooks] = useState([]);
@@ -20,36 +23,53 @@ function AddBookForm() {
     setAuthor(event.target.value);
   };
 
+  const handleFirstNameChange = (event) => {
+    setFirstName(event.target.value);
+  };
+
+  const handleLastNameChange = (event) => {
+    setLastName(event.target.value);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const db = getDatabase(app);
 
     setSuccessMessage("");
 
-    if (!title && !author) {
-      setErrorMessage("Please enter both the title and the author.");
-      return;
-    } else if (!title) {
+    if (!title) {
       setErrorMessage("Please enter the title.");
       return;
-    } else if (!author) {
-      setErrorMessage("Please enter the author.");
+    } else if (!author && !firstName && !lastName) {
+      setErrorMessage(
+        "Please enter either the author or the first name and last name."
+      );
+      return;
+    } else if (!author && (!firstName || !lastName)) {
+      setErrorMessage("Please enter both the first name and last name.");
       return;
     }
 
     // Create a new field that combines the title and author values
-    const title_author = `${title}_${author}`;
+    const title_author = `${title}_${author || firstName + " " + lastName}`;
 
     // Set the isBorrowed status to false by default
     const isBorrowed = false;
+
+    // Set the isBorrowed status to false by default
+    const borrowerEmail = "";
 
     // Update the realtime database in Firebase
     const newBookRef = push(ref(db, "books"), {
       title,
       author,
+      firstName,
+      lastName,
       title_author,
       isBorrowed,
+      borrowerEmail,
     });
+
     console.log(`New book added with ID: ${newBookRef.key}`);
 
     // Add the new book to the list of recently added books
@@ -65,16 +85,20 @@ function AddBookForm() {
         <br />
         Title: <strong style={{ fontSize: "18px" }}>{title}</strong>
         <br />
-        Author: <strong style={{ fontSize: "18px" }}>{author}</strong>
+        Author:{" "}
+        <strong style={{ fontSize: "18px" }}>
+          {author || firstName + " " + lastName}
+        </strong>
         <br />
         ID: {newBookRef.key}
       </>
     );
-    setErrorMessage("");
 
-    // Clears the input field
+    // Clears the input fields
     setTitle("");
     setAuthor("");
+    setFirstName("");
+    setLastName("");
   };
 
   // useTransition hook to animate the mounting and unmounting of book cards
@@ -112,8 +136,22 @@ function AddBookForm() {
             label: "Author",
             value: author,
             onChange: handleAuthorChange,
+            disabled: firstName || lastName,
+          },
+          {
+            label: "First Name",
+            value: firstName,
+            onChange: handleFirstNameChange,
+            disabled: author,
+          },
+          {
+            label: "Last Name",
+            value: lastName,
+            onChange: handleLastNameChange,
+            disabled: author,
           },
         ]}
+        submitValue="Add"
       />
     </LayoutForm>
   );

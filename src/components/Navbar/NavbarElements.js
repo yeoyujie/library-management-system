@@ -1,6 +1,6 @@
-import { FaBars } from 'react-icons/fa';
-import { NavLink as Link } from 'react-router-dom';
-import styled from 'styled-components';
+import { FaBars } from "react-icons/fa";
+import { NavLink as Link } from "react-router-dom";
+import styled from "styled-components";
 
 export const Nav = styled.nav`
   background: #000;
@@ -15,7 +15,7 @@ export const Nav = styled.nav`
 `;
 
 export const NavLink = styled(Link)`
-  color: ${(props) => (props.view === props.expectedView ? '#15cdfc' : '#fff')};
+  color: ${(props) => (props.view === props.expectedView ? "#15cdfc" : "#fff")};
   display: flex;
   align-items: center;
   text-decoration: none;

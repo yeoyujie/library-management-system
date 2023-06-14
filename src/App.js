@@ -1,8 +1,8 @@
 import './App.css';
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import AddBookForm from './components/AddBookForm';
-import DeleteBook from './components/DeleteBook';
+import BorrowBookForm from './components/BorrowBookForm';
 import EditBookForm from './components/EditBookForm';
 import SearchBookForm from './components/SearchBookForm';
 import Navbar from './components/Navbar';
@@ -17,8 +17,8 @@ function App() {
     <Router>
       <Navbar setView={setView} view={view} isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
       {view === 'search' && <SearchBookForm />}
+      {view === 'borrow' && <BorrowBookForm />}
       {view === 'add' && isAdmin && <AddBookForm />}
-      {view === 'delete' && isAdmin && <DeleteBook />}
       {view === 'edit' && isAdmin && <EditBookForm />}
     </Router>
   );
