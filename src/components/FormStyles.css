@@ -99,7 +99,7 @@ button.copy-to-clipboard-button,
   }
 }
 
-
+/* ---------------------------Success and Error Messages---------------------------------- */
 .success-message,
 .error-message {
   position: relative;
@@ -130,6 +130,8 @@ button.copy-to-clipboard-button,
   cursor: pointer;
 }
 
+
+/* -------------------------Switch component------------------------------ */
 .switch {
   position: relative;
   display: inline-block;
@@ -244,7 +246,7 @@ input:checked + .slider:before {
   width: 100%;
 }
 
-/* For the tabs in SearchBookForm */
+/* ------------------- Tabs in SearchBookForm---------------------- */
 .tabs {
   display: flex;
 }
