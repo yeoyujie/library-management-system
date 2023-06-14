@@ -5,15 +5,17 @@ import Form from "./Form";
 import LayoutForm from "./LayoutForm";
 
 function EditBookForm({ isAdmin, selectedBook }) {
+  const [book, setBook] = useState("");
   const [bookId, setBookId] = useState("");
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [borrowerEmail, setBorrowerEmail] = useState("");
-  const [book, setBook] = useState("");
+
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
   const [isEditing, setIsEditing] = useState(false);
   const [focusedField, setFocusedField] = useState(null);
 
@@ -22,8 +24,6 @@ function EditBookForm({ isAdmin, selectedBook }) {
   const firstNameRef = useRef(null);
   const lastNameRef = useRef(null);
   const borrowerEmailRef = useRef(null);
-
-
 
   const handlebookIdChange = (event) => {
     setBookId(event.target.value);
@@ -47,10 +47,6 @@ function EditBookForm({ isAdmin, selectedBook }) {
 
   const handleBorrowEmailChange = (event) => {
     setBorrowerEmail(event.target.value);
-  };
-
-  const handleEditClick = () => {
-    setIsEditing(true);
   };
 
   const handleSubmit = async (event) => {
@@ -79,9 +75,8 @@ function EditBookForm({ isAdmin, selectedBook }) {
       setBorrowerEmail(snapshot.val().borrowerEmail);
       setFirstName(snapshot.val().firstName);
       setLastName(snapshot.val().lastName);
-      setSuccessMessage("Book found");
+      setSuccessMessage("Book found!");
       setErrorMessage("");
-      setIsEditing(false);
     } else {
       setErrorMessage("Book not found!");
       setSuccessMessage("");
@@ -100,6 +95,21 @@ function EditBookForm({ isAdmin, selectedBook }) {
     try {
       const db = getDatabase();
       const bookRef = ref(db, `books/${book.id}`);
+
+      const updatedFields = [];
+      if (title !== book.title) updatedFields.push("title");
+      if (author !== book.author) updatedFields.push("author");
+      if (borrowerEmail !== book.borrowerEmail)
+        updatedFields.push("borrowerEmail");
+      if (firstName !== book.firstName) updatedFields.push("firstName");
+      if (lastName !== book.lastName) updatedFields.push("lastName");
+
+      if (!updatedFields.length) {
+        setErrorMessage("No changes detected!");
+        setSuccessMessage("");
+        return;
+      }
+
       await update(bookRef, {
         title: title,
         author: author,
@@ -107,9 +117,21 @@ function EditBookForm({ isAdmin, selectedBook }) {
         firstName: firstName,
         lastName: lastName,
       });
-      setSuccessMessage("Book updated successfully!");
+
+      setSuccessMessage(
+        `Book updated successfully! Updated fields: ${updatedFields.join(", ")}`
+      );
       setErrorMessage("");
-      setIsEditing(false);
+
+      // Update book state variable with updated fields
+      setBook((prevBook) => ({
+        ...prevBook,
+        title: title,
+        author: author,
+        borrowerEmail: borrowerEmail,
+        firstName: firstName,
+        lastName: lastName,
+      }));
     } catch (error) {
       setErrorMessage("Failed to update book!");
       setSuccessMessage("");
