@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { app } from "../firebase_setup/firebase.js";
 import { getDatabase, ref, get, update } from "firebase/database";
 import Form from "./Form";
 import LayoutForm from "./LayoutForm";
 
-function EditBookForm() {
+function EditBookForm({ isAdmin, selectedBook }) {
   const [bookId, setBookId] = useState("");
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
@@ -104,80 +104,89 @@ function EditBookForm() {
     }
   };
 
+  useEffect(() => {
+    if (selectedBook) {
+      setBookId(selectedBook.id);
+    }
+  }, [selectedBook]);
+
   return (
-    <LayoutForm
-      successMessage={successMessage}
-      errorMessage={errorMessage}
-      bookListContent={
-        book && (
-          <div
-            className={`book-card ${slideDown ? "slide-down" : ""}`}
-            key={book.id}
-          >
-            {isEditing ? (
-              <input
-                type="text"
-                value={title}
-                onChange={handleTitleChange}
-                disabled={!isEditing}
-              />
-            ) : (
-              <p>{title}</p>
-            )}
-            <p>by</p>
-            {isEditing ? (
-              <input
-                type="text"
-                value={author}
-                onChange={handleAuthorChange}
-                disabled={!isEditing}
-              />
-            ) : (
-              <p>{author}</p>
-            )}
-            <p>Book ID: {book.id}</p>
-            <span
-              style={{
-                fontWeight: "bold",
-                color: book.isBorrowed ? "red" : "green",
-              }}
+    isAdmin && (
+      <LayoutForm
+        successMessage={successMessage}
+        errorMessage={errorMessage}
+        bookListContent={
+          book && (
+            <div
+              className={`book-card ${slideDown ? "slide-down" : ""}`}
+              key={book.id}
             >
-              {book.isBorrowed ? " On Loan" : " Available"}
-            </span>
-            <div>
-              <label className="switch">
+              {isEditing ? (
                 <input
-                  type="checkbox"
-                  checked={book.isBorrowed}
-                  onChange={() => handleToggleIsBorrowed(book.id)}
+                  type="text"
+                  value={title}
+                  onChange={handleTitleChange}
+                  disabled={!isEditing}
                 />
-                <span className="slider round"></span>
-              </label>
-              <br />
-              <div className="button-container">
-                {!isEditing ? (
-                  <button onClick={handleEditClick}>Edit</button>
-                ) : (
-                  <button onClick={handleEditSubmit}>Save</button>
-                )}
+              ) : (
+                <p>{title}</p>
+              )}
+              <p>by</p>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={author}
+                  onChange={handleAuthorChange}
+                  disabled={!isEditing}
+                />
+              ) : (
+                <p>{author}</p>
+              )}
+              <p>Book ID: {book.id}</p>
+              <span
+                style={{
+                  fontWeight: "bold",
+                  color: book.isBorrowed ? "red" : "green",
+                }}
+              >
+                {book.isBorrowed ? " On Loan" : " Available"}
+              </span>
+              <div>
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={book.isBorrowed}
+                    onChange={() => handleToggleIsBorrowed(book.id)}
+                  />
+                  <span className="slider round"></span>
+                </label>
+                <br />
+                <div className="button-container">
+                  {!isEditing ? (
+                    <button onClick={handleEditClick}>Edit</button>
+                  ) : (
+                    <button onClick={handleEditSubmit}>Save</button>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        )
-      }
-    >
-      <Form
-        handleSubmit={handleSubmit}
-        inputs={[
-          {
-            label: "Book ID",
-            value: bookId,
-            onChange: handlebookIdChange,
-          },
-        ]}
-        submitValue="Search"
-      />
-    </LayoutForm>
+          )
+        }
+      >
+        <Form
+          handleSubmit={handleSubmit}
+          inputs={[
+            {
+              label: "Book ID",
+              value: bookId,
+              onChange: handlebookIdChange,
+              id: "bookId",
+            },
+          ]}
+          submitValue="Search"
+        />
+      </LayoutForm>
+    )
   );
 }
 

@@ -6,7 +6,7 @@ import Form from "./Form";
 import LayoutForm from "./LayoutForm";
 import "./FormStyles.css";
 
-function AddBookForm() {
+function AddBookForm({ isAdmin }) {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -109,52 +109,58 @@ function AddBookForm() {
   });
 
   return (
-    <LayoutForm
-      successMessage={successMessage}
-      errorMessage={errorMessage}
-      bookListContent={
-        <>
-          {transitions((style, book) => (
-            <animated.div style={style} className="book-card" key={book.id}>
-              <h3>{book.title}</h3>
-              <p>by {book.author}</p>
-              <p>Book ID: {book.id}</p>
-            </animated.div>
-          ))}
-        </>
-      }
-    >
-      <Form
-        handleSubmit={handleSubmit}
-        inputs={[
-          {
-            label: "Title",
-            value: title,
-            onChange: handleTitleChange,
-          },
-          {
-            label: "Author",
-            value: author,
-            onChange: handleAuthorChange,
-            disabled: firstName || lastName,
-          },
-          {
-            label: "First Name",
-            value: firstName,
-            onChange: handleFirstNameChange,
-            disabled: author,
-          },
-          {
-            label: "Last Name",
-            value: lastName,
-            onChange: handleLastNameChange,
-            disabled: author,
-          },
-        ]}
-        submitValue="Add"
-      />
-    </LayoutForm>
-  );
+    isAdmin && (
+      <LayoutForm
+        successMessage={successMessage}
+        errorMessage={errorMessage}
+        bookListContent={
+          <>
+            {transitions((style, book) => (
+              <animated.div style={style} className="book-card" key={book.id}>
+                <h3>{book.title}</h3>
+                <p>by {book.author}</p>
+                <p>Book ID: {book.id}</p>
+              </animated.div>
+            ))}
+          </>
+        }
+      >
+        <Form
+          handleSubmit={handleSubmit}
+          inputs={[
+            {
+              label: "Title",
+              value: title,
+              onChange: handleTitleChange,
+              id: "title",
+            },
+            {
+              label: "Author",
+              value: author,
+              onChange: handleAuthorChange,
+              disabled: firstName || lastName,
+              id: "author",
+            },
+            {
+              label: "First Name",
+              value: firstName,
+              onChange: handleFirstNameChange,
+              disabled: author,
+              id: "firstName",
+            },
+            {
+              label: "Last Name",
+              value: lastName,
+              onChange: handleLastNameChange,
+              disabled: author,
+              id: "lastName",
+            },
+          ]}
+          submitValue="Add"
+        />
+      </LayoutForm>
+    )
+  )
 }
 
 export default AddBookForm;

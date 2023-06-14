@@ -5,7 +5,7 @@ import { getDatabase, ref, onValue, update, get } from "firebase/database";
 import Form from "./Form";
 import LayoutForm from "./LayoutForm";
 
-function BorrowBookForm({ isAdmin, book }) {
+function BorrowBookForm({ isAdmin, selectedBook }) {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [email, setEmail] = useState("");
@@ -33,9 +33,9 @@ function BorrowBookForm({ isAdmin, book }) {
       }
       setAvailableBooks(availableBooks);
 
-      // Remove duplicate book titles from the title input field options
+      // Remove duplicate selectedBook titles from the title input field options
       const uniqueTitles = [
-        ...new Set(availableBooks.map((book) => book.title)),
+        ...new Set(availableBooks.map((selectedBook) => selectedBook.title)),
       ];
 
       // Sort uniqueTitles lexicographically
@@ -49,7 +49,7 @@ function BorrowBookForm({ isAdmin, book }) {
     setTitle(event.target.value);
 
     const matchingBooks = availableBooks.filter(
-      (book) => book.title === event.target.value
+      (selectedBook) => selectedBook.title === event.target.value
     );
 
     setAuthor(matchingBooks[0].author);
@@ -64,7 +64,7 @@ function BorrowBookForm({ isAdmin, book }) {
   };
 
   const borrowBook = (title, author) => {
-    // Find the book with the matching title and author
+    // Find the selectedBook with the matching title and author
     let borrowedBookId = null;
     const db = getDatabase(app);
     const booksRef = ref(db, "books");
@@ -77,14 +77,14 @@ function BorrowBookForm({ isAdmin, book }) {
           books[id].author === author &&
           !books[id].isBorrowed
         ) {
-          // Update the isBorrowed property of the book in the Firebase Realtime Database
+          // Update the isBorrowed property of the selectedBook in the Firebase Realtime Database
           const bookRef = ref(db, `books/${id}`);
           update(bookRef, { isBorrowed: true });
 
-          // Set the borrowedBookId variable to the ID of the borrowed book
+          // Set the borrowedBookId variable to the ID of the borrowed selectedBook
           borrowedBookId = id;
 
-          // Add the borrowed book to the list of recently borrowed books
+          // Add the borrowed selectedBook to the list of recently borrowed books
           setRecentlyBorrowedBooks((prevBooks) => [
             { id: borrowedBookId, title, author },
             ...prevBooks,
@@ -128,7 +128,7 @@ function BorrowBookForm({ isAdmin, book }) {
       return;
     }
 
-    // Borrow the book based on its title and author
+    // Borrow the selectedBook based on its title and author
     const borrowedBookId = borrowBook(title, author);
 
     setSuccessMessage(
@@ -150,13 +150,13 @@ function BorrowBookForm({ isAdmin, book }) {
   };
 
   useEffect(() => {
-    if (book) {
-      setTitle(book.title);
-      setAuthor(book.author);
+    if (selectedBook) {
+      setTitle(selectedBook.title);
+      setAuthor(selectedBook.author);
     }
-  }, [book]);
+  }, [selectedBook]);
 
-  // useTransition hook to animate the mounting and unmounting of book cards
+  // useTransition hook to animate the mounting and unmounting of selectedBook cards
   const transitions = useTransition(recentlyBorrowedBooks, {
     from: { opacity: 0, transform: "translate3d(-25%,0,0)" },
     enter: { opacity: 1, transform: "translate3d(0%,0,0)" },
@@ -169,11 +169,11 @@ function BorrowBookForm({ isAdmin, book }) {
       errorMessage={errorMessage}
       bookListContent={
         <>
-          {transitions((style, book) => (
-            <animated.div style={style} className="book-card" key={book.id}>
-              <h3>{book.title}</h3>
-              <p>by {book.author}</p>
-              <p>Book ID: {book.id}</p>
+          {transitions((style, selectedBook) => (
+            <animated.div style={style} className="selectedBook-card" key={selectedBook.id}>
+              <h3>{selectedBook.title}</h3>
+              <p>by {selectedBook.author}</p>
+              <p>Book ID: {selectedBook.id}</p>
             </animated.div>
           ))}
         </>
@@ -188,24 +188,27 @@ function BorrowBookForm({ isAdmin, book }) {
             options: titleOptions,
             value: title,
             onChange: handleTitleChange,
+            id: "title",
           },
           {
             label: "Author",
             type:
-              availableBooks.filter((book) => book.title === title).length > 1
+              availableBooks.filter((selectedBook) => selectedBook.title === title).length > 1
                 ? "select"
                 : "text",
             options: availableBooks
-              .filter((book) => book.title === title)
-              .map((book) => book.author),
+              .filter((selectedBook) => selectedBook.title === title)
+              .map((selectedBook) => selectedBook.author),
             value: author,
             onChange: handleAuthorChange,
+            id: "author",
           },
           {
             label: "Email",
             type: "email",
             value: email,
             onChange: handleEmailChange,
+            id: "email",
           },
         ]}
         submitValue="Borrow"

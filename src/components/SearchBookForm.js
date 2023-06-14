@@ -7,14 +7,13 @@ import {
   orderByChild,
   onValue,
   get,
-  update,
   startAt,
   endAt,
 } from "firebase/database";
 import Form from "./Form";
 import LayoutForm from "./LayoutForm";
 
-function SearchBookForm({ isAdmin, onSelectBook }) {
+function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -115,13 +114,6 @@ function SearchBookForm({ isAdmin, onSelectBook }) {
         setSuccessMessage("");
       }
     }
-  };
-
-  const handleBorrowBook = async (bookId) => {
-    const db = getDatabase(app);
-    const bookRef = ref(db, `books/${bookId}`);
-    await update(bookRef, { isBorrowed: true });
-    setSuccessMessage("Book borrowed successfully!");
   };
 
   const handleCopyToClipboard = (text) => {
@@ -229,16 +221,26 @@ function SearchBookForm({ isAdmin, onSelectBook }) {
               >
                 {book.isBorrowed ? 'Borrowed' : 'Available'}
               </p>
-              {!book.isBorrowed && (
-                <button
-                  className="borrow-button"
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {!book.isBorrowed && (
+                  <button
+                    className="borrow-button"
+                    onClick={() => {
+                      onBorrowBook(book);
+                    }}
+                  >
+                    Borrow Book
+                  </button>
+                )}
+                {isAdmin && <button
+                  className="edit-button"
                   onClick={() => {
-                    onSelectBook(book);
+                    onEditBook(book);
                   }}
                 >
-                  Borrow Book
-                </button>
-              )}
+                  Edit Book
+                </button>}
+              </div>
             </div>
           ))}
         </>
@@ -252,11 +254,13 @@ function SearchBookForm({ isAdmin, onSelectBook }) {
             label: "Title",
             value: title,
             onChange: handleTitleChange,
+            id: "title",
           },
           {
             label: "Author",
             value: author,
             onChange: handleAuthorChange,
+            id: "author",
           },
         ]}
         submitValue="Search"

@@ -45,9 +45,11 @@ select {
 }
 
 input[type="submit"],
-.borrow-button {
+.borrow-button,
+.edit-button {
   font-size: 16px;
   padding: 10px;
+  margin-top: 10px;
   border-radius: 5px;
   border: none;
   background-color: #15cdfc;

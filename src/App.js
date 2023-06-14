@@ -23,9 +23,14 @@ function App() {
     }
   };
 
-  const handleSelectBook = (book) => {
+  const handleBorrowBook = (book) => {
     setSelectedBook(book);
     setView('borrow');
+  };
+
+  const handleEditBook = (book) => {
+    setSelectedBook(book);
+    setView('edit');
   };
 
 
@@ -47,10 +52,10 @@ function App() {
   return (
     <Router>
       <Navbar setView={setView} view={view} isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
-      {view === 'search' && <SearchBookForm isAdmin={isAdmin} onSelectBook={handleSelectBook}/>}
-      {view === 'borrow' && <BorrowBookForm isAdmin={isAdmin} book={selectedBook} />}
-      {view === 'add' && isAdmin && <AddBookForm />}
-      {view === 'edit' && isAdmin && <EditBookForm />}
+      {view === 'search' && <SearchBookForm isAdmin={isAdmin} onBorrowBook={handleBorrowBook} onEditBook={handleEditBook}/>}
+      {view === 'borrow' && <BorrowBookForm isAdmin={isAdmin} selectedBook={selectedBook} />}
+      {view === 'add' && isAdmin && <AddBookForm isAdmin={isAdmin}/>}
+      {view === 'edit' && isAdmin && <EditBookForm isAdmin={isAdmin} selectedBook={selectedBook}/>}
     </Router>
   );
 }
