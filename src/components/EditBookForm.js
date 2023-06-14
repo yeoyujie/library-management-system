@@ -77,6 +77,7 @@ function EditBookForm({ isAdmin, selectedBook }) {
       setLastName(snapshot.val().lastName);
       setSuccessMessage("Book found!");
       setErrorMessage("");
+      setIsEditing(false);
     } else {
       setErrorMessage("Book not found!");
       setSuccessMessage("");
@@ -132,6 +133,7 @@ function EditBookForm({ isAdmin, selectedBook }) {
         firstName: firstName,
         lastName: lastName,
       }));
+      setIsEditing(false);
     } catch (error) {
       setErrorMessage("Failed to update book!");
       setSuccessMessage("");

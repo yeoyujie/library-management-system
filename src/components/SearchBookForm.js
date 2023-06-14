@@ -16,6 +16,8 @@ import LayoutForm from "./LayoutForm";
 function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [activeTab, setActiveTab] = useState("");
@@ -31,6 +33,14 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
     setAuthor(event.target.value);
   };
 
+  const handleFirstNameChange = (event) => {
+    setFirstName(event.target.value);
+  };
+
+  const handleLastNameChange = (event) => {
+    setLastName(event.target.value);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const db = getDatabase(app);
@@ -38,13 +48,16 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
     let booksQuery;
     let searchType;
 
-    if (title && author) {
+    if ((title && author) || (firstName && lastName && title)) {
       // Use the title_author field to query for books with a specific title and author
+
+      const authorName = author || (firstName + " " + lastName);
+
       booksQuery = query(
         booksRef,
         orderByChild("title_author"),
-        startAt(`${title}_${author}`),
-        endAt(`${title}_${author}\uf8ff`)
+        startAt(`${title}_${authorName}`),
+        endAt(`${title}_${authorName}\uf8ff`)
       );
       searchType = "title and author";
     } else if (title) {
@@ -56,15 +69,35 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
         endAt(title + "\uf8ff")
       );
       searchType = "title";
-    } else if (author) {
-      // Use the author field only to query for books by a specific author
+    } else if (author || (firstName && lastName)) {
+
+      const authorName = author || (firstName + " " + lastName);
+
       booksQuery = query(
         booksRef,
         orderByChild("author"),
-        startAt(author),
-        endAt(author + "\uf8ff")
+        startAt(authorName),
+        endAt(authorName + "\uf8ff")
       );
       searchType = "author";
+    } else if (firstName) {
+
+      booksQuery = query(
+        booksRef,
+        orderByChild("firstName"),
+        startAt(firstName),
+        endAt(firstName + "\uf8ff")
+      );
+      searchType = "First Name";
+    } else if (lastName) {
+      // Use the lastName field only to query for books
+      booksQuery = query(
+        booksRef,
+        orderByChild("lastName"),
+        startAt(lastName),
+        endAt(lastName + "\uf8ff")
+      );
+      searchType = "Last Name";
     }
 
     if (booksQuery) {
@@ -260,7 +293,22 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
             label: "Author",
             value: author,
             onChange: handleAuthorChange,
+            disabled: firstName || lastName,
             id: "author",
+          },
+          {
+            label: "First Name",
+            value: firstName,
+            onChange: handleFirstNameChange,
+            disabled: author,
+            id: "firstName",
+          },
+          {
+            label: "Last Name",
+            value: lastName,
+            onChange: handleLastNameChange,
+            disabled: author,
+            id: "lastName",
           },
         ]}
         submitValue="Search"

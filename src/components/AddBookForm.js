@@ -50,14 +50,16 @@ function AddBookForm({ isAdmin }) {
       return;
     }
 
-    // Create a new field that combines the title and author values
-    const title_author = `${title}_${author || firstName + " " + lastName}`;
-
     // Set the isBorrowed status to false by default
     const isBorrowed = false;
 
     // Set the isBorrowed status to false by default
     const borrowerEmail = "";
+
+    const authorName = author || (firstName + " " + lastName);
+
+    // Create a new field that combines the title and author values
+    const title_author = `${title}_${authorName}`;
 
     // Update the realtime database in Firebase
     const newBookRef = push(ref(db, "books"), {
@@ -138,21 +140,18 @@ function AddBookForm({ isAdmin }) {
               label: "Author",
               value: author,
               onChange: handleAuthorChange,
-              disabled: firstName || lastName,
               id: "author",
             },
             {
               label: "First Name",
               value: firstName,
               onChange: handleFirstNameChange,
-              disabled: author,
               id: "firstName",
             },
             {
               label: "Last Name",
               value: lastName,
               onChange: handleLastNameChange,
-              disabled: author,
               id: "lastName",
             },
           ]}
