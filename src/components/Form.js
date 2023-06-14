@@ -9,7 +9,7 @@ const Form = ({ handleSubmit, inputs, submitValue }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      {inputs.map(({ label, type, value, onChange, options, id }, index) => (
+      {inputs.map(({ label, type, value, onChange, options, disabled, id }, index) => (
         <React.Fragment key={index}>
           <div style={{ width: "300px" }}>
             <label>
@@ -19,7 +19,6 @@ const Form = ({ handleSubmit, inputs, submitValue }) => {
                   value={value}
                   onChange={onChange}
                   ref={index === 0 ? firstInputRef : null}
-                  disabled={label === "Author" && options && options.length === 1}
                   id={id}
                 >
                   {options.map((option) => (
@@ -34,7 +33,7 @@ const Form = ({ handleSubmit, inputs, submitValue }) => {
                   value={value}
                   onChange={onChange}
                   ref={index === 0 ? firstInputRef : null}
-                  disabled={label === "Author" && options && options.length === 1}
+                  disabled={disabled}
                   id={id}
                 />
               )}
