@@ -14,7 +14,7 @@ import {
 import Form from "./Form";
 import LayoutForm from "./LayoutForm";
 
-function SearchBookForm({ isAdmin }) {
+function SearchBookForm({ isAdmin, onSelectBook }) {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -229,8 +229,13 @@ function SearchBookForm({ isAdmin }) {
               >
                 {book.isBorrowed ? 'Borrowed' : 'Available'}
               </p>
-              {!book.isBorrowed && isAdmin && (
-                <button className="borrow-button" onClick={() => handleBorrowBook(book.id)}>
+              {!book.isBorrowed && (
+                <button
+                  className="borrow-button"
+                  onClick={() => {
+                    onSelectBook(book);
+                  }}
+                >
                   Borrow Book
                 </button>
               )}

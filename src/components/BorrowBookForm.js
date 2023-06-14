@@ -5,7 +5,7 @@ import { getDatabase, ref, onValue, update, get } from "firebase/database";
 import Form from "./Form";
 import LayoutForm from "./LayoutForm";
 
-function BorrowBookForm({ isAdmin }) {
+function BorrowBookForm({ isAdmin, book }) {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [email, setEmail] = useState("");
@@ -122,6 +122,12 @@ function BorrowBookForm({ isAdmin }) {
       return;
     }
 
+    // specify the doman you want the email to be from
+    if (!email.endsWith('.sg')) {
+      setErrorMessage("Please enter your xxx domain email.");
+      return;
+    }
+
     // Borrow the book based on its title and author
     const borrowedBookId = borrowBook(title, author);
 
@@ -142,6 +148,13 @@ function BorrowBookForm({ isAdmin }) {
     setTitle("");
     setAuthor("");
   };
+
+  useEffect(() => {
+    if (book) {
+      setTitle(book.title);
+      setAuthor(book.author);
+    }
+  }, [book]);
 
   // useTransition hook to animate the mounting and unmounting of book cards
   const transitions = useTransition(recentlyBorrowedBooks, {

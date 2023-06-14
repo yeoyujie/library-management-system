@@ -22,3 +22,32 @@ h1, h2 {
   margin: 0 auto;
   text-align: center;
 }
+
+input {
+  padding: 5px;
+  border-radius: 5px;
+  width: 11%;
+}
+
+.auth-button {
+  font-size: 16px;
+  padding: 8px;
+  margin-top: 12px;
+  border-radius: 5px;
+  border: none;
+  background-color: #15cdfc;
+  color: white;
+
+  /* make the size of the submit button the same as the input boxes */
+  width: calc(210px);
+
+  /* hover effect */
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 14px 28px,
+      rgba(0, 0, 0, 0.1) 0px 10px 6px; /* add shadow */
+    background-color: #17a2b8; /* change color */
+  }
+}

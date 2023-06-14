@@ -12,6 +12,7 @@ function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
+  const [selectedBook, setSelectedBook] = useState(null);
 
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
@@ -21,6 +22,12 @@ function App() {
       alert('Incorrect password');
     }
   };
+
+  const handleSelectBook = (book) => {
+    setSelectedBook(book);
+    setView('borrow');
+  };
+
 
   if (!authenticated) {
     return (
@@ -32,7 +39,7 @@ function App() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button type="submit">Submit</button>
+        <button className="auth-button" type="submit">Submit</button>
       </form>
     );
   }
@@ -40,8 +47,8 @@ function App() {
   return (
     <Router>
       <Navbar setView={setView} view={view} isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
-      {view === 'search' && <SearchBookForm isAdmin={isAdmin} />}
-      {view === 'borrow' && <BorrowBookForm isAdmin={isAdmin} />}
+      {view === 'search' && <SearchBookForm isAdmin={isAdmin} onSelectBook={handleSelectBook}/>}
+      {view === 'borrow' && <BorrowBookForm isAdmin={isAdmin} book={selectedBook} />}
       {view === 'add' && isAdmin && <AddBookForm />}
       {view === 'edit' && isAdmin && <EditBookForm />}
     </Router>
