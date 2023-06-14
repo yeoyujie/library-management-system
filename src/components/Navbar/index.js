@@ -7,9 +7,15 @@ import {
   NavBtn,
   NavBtnLink
 } from './NavbarElements';
-import LoginPage from '../auth/LoginPage';
+import LoginButton from '../auth/LoginButton';
 
 const Navbar = ({ setView, view, isAdmin, setIsAdmin }) => {
+
+  const handleLogout = () => {
+    setIsAdmin(false);
+    alert('Logout Successful');
+  };
+
   return (
     <>
       <Nav>
@@ -36,7 +42,11 @@ const Navbar = ({ setView, view, isAdmin, setIsAdmin }) => {
           )}
         </NavMenu>
         <NavBtn>
-          <LoginPage Button={NavBtnLink} setIsAdmin={setIsAdmin} />
+          {isAdmin ? (
+            <NavBtnLink onClick={handleLogout}>Log out</NavBtnLink>
+          ) : (
+            <LoginButton Button={NavBtnLink} setIsAdmin={setIsAdmin} />
+          )}
         </NavBtn>
       </Nav>
     </>

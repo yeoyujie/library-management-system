@@ -1,7 +1,6 @@
 import React from 'react';
 
-const LoginPage = ({ Button, setIsAdmin }) => {
-
+const LoginAsAdmin = ({ Button, setIsAdmin, isAdmin }) => {
   const handleButtonClick = () => {
     const password = window.prompt('Please enter the password:');
 
@@ -23,9 +22,13 @@ const LoginPage = ({ Button, setIsAdmin }) => {
 
   return (
     <>
-      <Button onClick={handleButtonClick}>Log in as admin</Button>
+      {isAdmin ? (
+        <p>You are already logged in as an admin</p>
+      ) : (
+        <Button onClick={handleButtonClick}>Log in as admin</Button>
+      )}
     </>
   );
 };
 
-export default LoginPage;
+export default LoginAsAdmin;

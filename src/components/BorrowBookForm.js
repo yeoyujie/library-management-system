@@ -5,7 +5,7 @@ import { getDatabase, ref, onValue, update, get } from "firebase/database";
 import Form from "./Form";
 import LayoutForm from "./LayoutForm";
 
-function BorrowBookForm() {
+function BorrowBookForm({ isAdmin }) {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [email, setEmail] = useState("");

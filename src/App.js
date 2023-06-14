@@ -9,15 +9,39 @@ import Navbar from './components/Navbar';
 
 function App() {
   const [view, setView] = useState('search');
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
 
-  //set to true for testing in dev mode
-  const [isAdmin, setIsAdmin] = useState(true);
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    if (password === process.env.REACT_APP_AUTH_PASSWORD) {
+      setAuthenticated(true);
+    } else {
+      alert('Incorrect password');
+    }
+  };
+
+  if (!authenticated) {
+    return (
+      <form onSubmit={handlePasswordSubmit}>
+        <label htmlFor="password">Enter password:</label>
+        <input
+          type="password"
+          id="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit">Submit</button>
+      </form>
+    );
+  }
 
   return (
     <Router>
       <Navbar setView={setView} view={view} isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
-      {view === 'search' && <SearchBookForm />}
-      {view === 'borrow' && <BorrowBookForm />}
+      {view === 'search' && <SearchBookForm isAdmin={isAdmin} />}
+      {view === 'borrow' && <BorrowBookForm isAdmin={isAdmin} />}
       {view === 'add' && isAdmin && <AddBookForm />}
       {view === 'edit' && isAdmin && <EditBookForm />}
     </Router>

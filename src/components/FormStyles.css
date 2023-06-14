@@ -45,7 +45,7 @@ select {
 }
 
 input[type="submit"],
-button {
+.borrow-button {
   font-size: 16px;
   padding: 10px;
   border-radius: 5px;
@@ -71,6 +71,30 @@ button {
     transform: translateY(2px);
   }
 }
+
+button.copy-to-clipboard-button {
+  font-size: 14px;
+  margin-left: 20px;
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  width: auto;
+
+  &:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 14px 28px,
+      rgba(0, 0, 0, 0.1) 0px 10px 6px; /* add shadow */
+  }
+
+  /* active (clicked) effect */
+  &:active {
+    transform: translateY(2px);
+  }
+}
+
 
 .success-message,
 .error-message {

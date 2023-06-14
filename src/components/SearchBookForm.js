@@ -14,7 +14,7 @@ import {
 import Form from "./Form";
 import LayoutForm from "./LayoutForm";
 
-function SearchBookForm() {
+function SearchBookForm({ isAdmin }) {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -124,6 +124,11 @@ function SearchBookForm() {
     setSuccessMessage("Book borrowed successfully!");
   };
 
+  const handleCopyToClipboard = (text) => {
+    navigator.clipboard.writeText(text);
+    alert('Copied to clipboard');
+  };
+
   // reset searchResults when the active tab changes
   useEffect(() => {
     setSearchResults(null);
@@ -169,10 +174,10 @@ function SearchBookForm() {
   const filteredBooks = searchResults
     ? searchResults
     : activeTab === "Available"
-    ? availableBooks
-    : activeTab === "Borrowed"
-    ? borrowedBooks
-    : [];
+      ? availableBooks
+      : activeTab === "Borrowed"
+        ? borrowedBooks
+        : [];
 
   const Tabs = ({ activeTab, onTabChange }) => {
     const isTabActive = searchResults ? false : activeTab;
@@ -180,17 +185,15 @@ function SearchBookForm() {
     return (
       <div className="tabs">
         <div
-          className={`tab ${isTabActive === "Available" ? "active" : ""} ${
-            isInactive ? "inactive" : ""
-          }`}
+          className={`tab ${isTabActive === "Available" ? "active" : ""} ${isInactive ? "inactive" : ""
+            }`}
           onClick={() => onTabChange("Available")}
         >
           Available
         </div>
         <div
-          className={`tab ${isTabActive === "Borrowed" ? "active" : ""} ${
-            isInactive ? "inactive" : ""
-          }`}
+          className={`tab ${isTabActive === "Borrowed" ? "active" : ""} ${isInactive ? "inactive" : ""
+            }`}
           onClick={() => onTabChange("Borrowed")}
         >
           Borrowed
@@ -209,17 +212,25 @@ function SearchBookForm() {
             <div className="book-card" key={book.id}>
               <h3>{book.title}</h3>
               <p>by {book.author}</p>
-              <p>Book ID: {book.id}</p>
+              <p>
+                Book ID: {book.id}{' '}
+                <button
+                  className="copy-to-clipboard-button"
+                  onClick={() => handleCopyToClipboard(book.id)}
+                >
+                  Copy to clipboard
+                </button>
+              </p>
               <p
                 style={{
-                  fontWeight: "bold",
-                  color: book.isBorrowed ? "red" : "green",
+                  fontWeight: 'bold',
+                  color: book.isBorrowed ? 'red' : 'green',
                 }}
               >
-                {book.isBorrowed ? "Borrowed" : "Available"}
+                {book.isBorrowed ? 'Borrowed' : 'Available'}
               </p>
-              {!book.isBorrowed && (
-                <button onClick={() => handleBorrowBook(book.id)}>
+              {!book.isBorrowed && isAdmin && (
+                <button className="borrow-button" onClick={() => handleBorrowBook(book.id)}>
                   Borrow Book
                 </button>
               )}
