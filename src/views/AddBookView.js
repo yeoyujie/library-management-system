@@ -12,8 +12,10 @@ function AddBookForm({ isAdmin }) {
   const [author, setAuthor] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
   const [recentlyAddedBooks, setRecentlyAddedBooks] = useState([]);
 
   const handleTitleChange = (event) => {
@@ -72,7 +74,7 @@ function AddBookForm({ isAdmin }) {
 
     // Add the new book to the list of recently added books
     setRecentlyAddedBooks((prevBooks) => [
-      { id: newBookRef.key, title, author },
+      { id: newBookRef.key, title, author: authorName },
       ...prevBooks,
     ]);
     setErrorMessage("");

@@ -10,8 +10,10 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [email, setEmail] = useState("");
+
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  
   const [titleOptions, setTitleOptions] = useState([]);
   const [availableBooks, setAvailableBooks] = useState([]);
   const [recentlyBorrowedBooks, setRecentlyBorrowedBooks] = useState([]);
@@ -123,7 +125,7 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
       return;
     }
 
-    // specify the doman you want the email to be from
+    // specify the domain you want the email to be from
     if (!email.endsWith('.sg')) {
       setErrorMessage("Please enter your xxx domain email.");
       return;
