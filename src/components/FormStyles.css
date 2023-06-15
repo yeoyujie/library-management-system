@@ -79,6 +79,7 @@ input[type="submit"] {
 /* Styles specific to the borrow-button and edit-button */
 input[type="submit"],
 .borrow-button,
+.return-button,
 .edit-button {
   background-color: #15cdfc;
 

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import DeleteBookButton from './DeleteBookButton';
+import ReturnBookButton from './ReturnBookButton';
 
 function DetailedBookCard({ isAdmin, book, handleCopyToClipboard, onReturnBookClick, onBorrowBookAdminClick,
     onBorrowBookClick, onEditBookClick, setSuccessMessage, setErrorMessage }) {
@@ -54,14 +55,10 @@ function DetailedBookCard({ isAdmin, book, handleCopyToClipboard, onReturnBookCl
                 {book.isBorrowed ? 'Borrowed' : 'Available'}
             </p>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {book.isBorrowed ? isAdmin && <button
-                    className="borrow-button"
-                    onClick={() => {
-                        onReturnBookClick(book);
-                    }}
-                >
-                    Return Book
-                </button> : (
+                {book.isBorrowed ? isAdmin && <ReturnBookButton
+                    book={book}
+                    onSuccess={(message) => setSuccessMessage(message)}
+                    onError={(message) => setErrorMessage(message)} /> : (
                     <button
                         className="borrow-button"
                         onClick={() => {

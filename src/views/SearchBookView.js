@@ -98,7 +98,7 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
       );
       searchType = "First Name";
     } else if (lastName) {
-      // Use the lastName field only to query for books
+      
       booksQuery = query(
         booksRef,
         orderByChild("lastName"),
