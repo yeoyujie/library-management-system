@@ -1,10 +1,10 @@
 import './App.css';
 import { useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import AddBookForm from './components/AddBookForm';
-import BorrowBookForm from './components/BorrowBookForm';
-import EditBookForm from './components/EditBookForm';
-import SearchBookForm from './components/SearchBookForm';
+import AddBookView from './views/AddBookView';
+import BorrowBookView from './views/BorrowBookView';
+import EditBookView from './views/EditBookView';
+import SearchBookView from './views/SearchBookView';
 import Navbar from './components/Navbar';
 
 function App() {
@@ -52,10 +52,10 @@ function App() {
   return (
     <Router>
       <Navbar setView={setView} view={view} isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
-      {view === 'search' && <SearchBookForm isAdmin={isAdmin} onBorrowBook={handleBorrowBook} onEditBook={handleEditBook}/>}
-      {view === 'borrow' && <BorrowBookForm isAdmin={isAdmin} selectedBook={selectedBook} />}
-      {view === 'add' && isAdmin && <AddBookForm isAdmin={isAdmin}/>}
-      {view === 'edit' && isAdmin && <EditBookForm isAdmin={isAdmin} selectedBook={selectedBook}/>}
+      {view === 'search' && <SearchBookView isAdmin={isAdmin} onBorrowBook={handleBorrowBook} onEditBook={handleEditBook}/>}
+      {view === 'borrow' && <BorrowBookView isAdmin={isAdmin} selectedBook={selectedBook} />}
+      {view === 'add' && isAdmin && <AddBookView isAdmin={isAdmin}/>}
+      {view === 'edit' && isAdmin && <EditBookView isAdmin={isAdmin} selectedBook={selectedBook}/>}
     </Router>
   );
 }

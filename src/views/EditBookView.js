@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { app } from "../firebase_setup/firebase.js";
 import { getDatabase, ref, get, update } from "firebase/database";
-import Form from "./Form";
-import LayoutForm from "./LayoutForm";
+import Form from "../components/Form.js";
+import LayoutForm from "../components/LayoutForm.js";
 
 function EditBookForm({ isAdmin, selectedBook }) {
   const [book, setBook] = useState("");

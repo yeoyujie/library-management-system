@@ -12,21 +12,25 @@ import {
   startAt,
   endAt,
 } from "firebase/database";
-import Form from "./Form";
-import LayoutForm from "./LayoutForm";
-import { DeleteBookButton } from "./DeleteBookButton.js";
+import Form from "../components/Form.js";
+import LayoutForm from "../components/LayoutForm.js";
+import { DeleteBookButton } from "../components/DeleteBookButton.js";
 
 function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
   const [activeTab, setActiveTab] = useState("");
   const [availableBooks, setAvailableBooks] = useState([]);
   const [borrowedBooks, setBorrowedBooks] = useState([]);
   const [searchResults, setSearchResults] = useState(null);
+
+  const [showMore, setShowMore] = useState(false);
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -42,6 +46,10 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
 
   const handleLastNameChange = (event) => {
     setLastName(event.target.value);
+  };
+
+  const handleViewMore = () => {
+    setShowMore(!showMore);
   };
 
   const handleSubmit = async (event) => {
@@ -193,6 +201,17 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
     alert('Copied to clipboard');
   };
 
+  const ViewMoreButton = ({ book }) => {
+    return (
+      <button
+        className="view-more-button"
+        onClick={handleViewMore}
+      >
+        View More
+      </button>
+    );
+  };
+
   // reset searchResults when the active tab changes
   useEffect(() => {
     setSearchResults(null);
@@ -276,8 +295,13 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
             <div className="book-card" key={book.id}>
               <h2>{book.title}</h2>
               <h3>by {book.author}</h3>
-              <p>First Name: {book.firstName}</p>
-              <p>Last Name: {book.lastName}</p>
+              <ViewMoreButton book={book} />
+              {showMore && (
+                <div>
+                  <p>First Name: {book.firstName}</p>
+                  <p>Last Name: {book.lastName}</p>
+                </div>
+              )}
               <p>Number of times borrowed: {book.borrowCount}</p>
               {book.isBorrowed && <p>Borrowed by: {book.borrowerEmail}</p>}
               <p>

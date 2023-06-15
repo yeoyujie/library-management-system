@@ -2,9 +2,10 @@ import { useState } from "react";
 import { useTransition, animated } from "react-spring";
 import { app } from "../firebase_setup/firebase.js";
 import { getDatabase, ref, push } from "firebase/database";
-import Form from "./Form";
-import LayoutForm from "./LayoutForm";
-import "./FormStyles.css";
+import Form from "../components/Form.js";
+import LayoutForm from "../components/LayoutForm.js";
+import BookCard from "../components/BookCard.js";
+import "../components/FormStyles.css"
 
 function AddBookForm({ isAdmin }) {
   const [title, setTitle] = useState("");
@@ -113,10 +114,8 @@ function AddBookForm({ isAdmin }) {
         bookListContent={
           <>
             {transitions((style, book) => (
-              <animated.div style={style} className="book-card" key={book.id}>
-                <h3>{book.title}</h3>
-                <p>by {book.author}</p>
-                <p>Book ID: {book.id}</p>
+              <animated.div style={style}>
+                <BookCard book={book} />
               </animated.div>
             ))}
           </>

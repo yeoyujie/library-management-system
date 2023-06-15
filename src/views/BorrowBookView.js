@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { animated, useTransition } from "react-spring";
 import { app } from "../firebase_setup/firebase.js";
 import { getDatabase, ref, onValue, update, get } from "firebase/database";
-import Form from "./Form";
-import LayoutForm from "./LayoutForm";
+import Form from "../components/Form.js";
+import LayoutForm from "../components/LayoutForm.js";
+import BookCard from "../components/BookCard.js";
 
 function BorrowBookForm({ isAdmin, selectedBook }) {
   const [title, setTitle] = useState("");
@@ -170,14 +171,12 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
       errorMessage={errorMessage}
       bookListContent={
         <>
-          {transitions((style, selectedBook) => (
-            <animated.div style={style} className="book-card" key={selectedBook.id}>
-              <h3>{selectedBook.title}</h3>
-              <p>by {selectedBook.author}</p>
-              <p>Book ID: {selectedBook.id}</p>
-            </animated.div>
-          ))}
-        </>
+        {transitions((style, book) => (
+          <animated.div style={style}>
+            <BookCard book={book} />
+          </animated.div>
+        ))}
+      </>
       }
     >
       <Form
