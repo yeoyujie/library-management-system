@@ -276,11 +276,12 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
             <div className="book-card" key={book.id}>
               <h2>{book.title}</h2>
               <h3>by {book.author}</h3>
-              <p>First Name {book.firstName}</p>
-              <p>Last Name {book.lastName}</p>
+              <p>First Name: {book.firstName}</p>
+              <p>Last Name: {book.lastName}</p>
               <p>Number of times borrowed: {book.borrowCount}</p>
+              {book.isBorrowed && <p>Borrowed by: {book.borrowerEmail}</p>}
               <p>
-                Book ID: {book.id}{' '}
+                Book ID: {book.id}
                 <button
                   className="copy-to-clipboard-button"
                   onClick={() => handleCopyToClipboard(book.id)}

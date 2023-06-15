@@ -50,30 +50,21 @@ function AddBookForm({ isAdmin }) {
       return;
     }
 
-    // Set the isBorrowed status to false by default
-    const isBorrowed = false;
-
-    // Set the isBorrowed status to false by default
-    const borrowerEmail = "";
-
     const authorName = author || (firstName + " " + lastName);
 
     // Create a new field that combines the title and author values
     const title_author = `${title}_${authorName}`;
 
-    // Initialize the borrowCount to 0
-    const borrowCount = 0;
-
     // Update the realtime database in Firebase
     const newBookRef = push(ref(db, "books"), {
       title,
-      author,
+      author: authorName,
       firstName,
       lastName,
       title_author,
-      isBorrowed,
-      borrowerEmail,
-      borrowCount
+      isBorrowed: false,
+      borrowerEmail: "",
+      borrowCount: 0
     });
 
     console.log(`New book added with ID: ${newBookRef.key}`);

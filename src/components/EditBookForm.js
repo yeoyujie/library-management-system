@@ -260,7 +260,9 @@ function EditBookForm({ isAdmin, selectedBook }) {
                   )}
                 </>
               ))}
-              <p>Book ID: {book.id}</p>
+              <br />
+              <br />
+              <h3>Book ID: {book.id}</h3>
               <span
                 style={{
                   fontWeight: "bold",
