@@ -14,6 +14,7 @@ import {
 } from "firebase/database";
 import Form from "./Form";
 import LayoutForm from "./LayoutForm";
+import { DeleteBookButton } from "./DeleteBookButton.js";
 
 function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
   const [title, setTitle] = useState("");
@@ -114,6 +115,8 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
 
       setSearchResults(booksArray);
 
+
+      //Success message for search showing type of search
       if (booksArray.length > 0) {
         let successMessage;
         switch (searchType) {
@@ -271,8 +274,11 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
         <>
           {filteredBooks.map((book) => (
             <div className="book-card" key={book.id}>
-              <h3>{book.title}</h3>
-              <p>by {book.author}</p>
+              <h2>{book.title}</h2>
+              <h3>by {book.author}</h3>
+              <p>First Name {book.firstName}</p>
+              <p>Last Name {book.lastName}</p>
+              <p>Number of times borrowed: {book.borrowCount}</p>
               <p>
                 Book ID: {book.id}{' '}
                 <button
@@ -316,6 +322,13 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
                 >
                   Edit Book
                 </button>}
+                {isAdmin && (
+                  <DeleteBookButton
+                    book={book}
+                    onSuccess={(message) => setSuccessMessage(message)}
+                    onError={(message) => setErrorMessage(message)}
+                  />
+                )}
               </div>
             </div>
           ))}

@@ -45,16 +45,14 @@ select {
   width: 100%;
 }
 
-/* Style submit, borrow-button, and edit-button elements */
+/* Common styles for both edit-button and delete-button */
 input[type="submit"],
-.borrow-button,
-.edit-button {
+button {
   font-size: 16px;
   padding: 10px;
   margin-top: 10px;
   border-radius: 5px;
   border: none;
-  background-color: #15cdfc;
   color: white;
 
   /* make the size of the submit button the same as the input boxes */
@@ -66,8 +64,8 @@ input[type="submit"],
   &:hover {
     transform: scale(1.05);
     cursor: pointer;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px14px28px, rgba(0, 0, 0, 0.1) 0px10px6px; /* add shadow */
-    background-color: #17a2b8; /* change color */
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 14px 28px,
+      rgba(0, 0, 0, 0.1) 0px 10px 6px; 
   }
 
   /* active (clicked) effect */
@@ -76,23 +74,34 @@ input[type="submit"],
   }
 }
 
-button.copy-to-clipboard-button,
+/* Styles specific to the borrow-button and edit-button */
+input[type="submit"],
+.borrow-button,
+.edit-button {
+  background-color: #15cdfc;
+
+  &:hover {
+    background-color: #17a2b8;
+  }
+}
+
+/* Styles specific to the delete-button */
+.delete-button {
+  background-color: #e63946;
+
+  &:hover {
+    background-color: #ff0000;
+  }
+}
+
+.copy-to-clipboard-button,
 .save-button {
   font-size: 14px;
   margin-left: 20px;
-  padding: 8px;
-  border-radius: 5px;
   border: none;
   background-color: #4caf50;
   color: white;
   width: auto;
-
-  &:hover {
-    transform: scale(1.05);
-    cursor: pointer;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 14px 28px,
-      rgba(0, 0, 0, 0.1) 0px 10px 6px; /* add shadow */
-  }
 
   /* active (clicked) effect */
   &:active {
@@ -234,6 +243,11 @@ input:checked + .slider:before {
   border-radius: 20px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
   transition: all 0.5s ease-in-out;
+}
+
+.book-card h2 {
+  margin-top: 8px;
+  text-align: left;
 }
 
 .book-card h3 {
