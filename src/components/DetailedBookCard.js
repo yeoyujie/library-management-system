@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import DeleteBookButton from './DeleteBookButton';
 
-function DetailedBookCard({ isAdmin, book, handleCopyToClipboard, handleReturnBook, handleBorrowBook,
-    onBorrowBook, onEditBook, setSuccessMessage, setErrorMessage }) {
+function DetailedBookCard({ isAdmin, book, handleCopyToClipboard, onReturnBookClick, onBorrowBookAdminClick,
+    onBorrowBookClick, onEditBookClick, setSuccessMessage, setErrorMessage }) {
 
     const [showMore, setShowMore] = useState(false);
 
@@ -25,8 +25,8 @@ function DetailedBookCard({ isAdmin, book, handleCopyToClipboard, handleReturnBo
 
     return (
         <div className="book-card" key={book.id}>
-            <h3>{book.title}</h3>
-            <p>by {book.author}</p>
+            <h2>{book.title}</h2>
+            <h3>by {book.author}</h3>
             <ViewMoreButton book={book} />
             {showMore && (
                 <div>
@@ -57,7 +57,7 @@ function DetailedBookCard({ isAdmin, book, handleCopyToClipboard, handleReturnBo
                 {book.isBorrowed ? isAdmin && <button
                     className="borrow-button"
                     onClick={() => {
-                        handleReturnBook(book);
+                        onReturnBookClick(book);
                     }}
                 >
                     Return Book
@@ -65,7 +65,7 @@ function DetailedBookCard({ isAdmin, book, handleCopyToClipboard, handleReturnBo
                     <button
                         className="borrow-button"
                         onClick={() => {
-                            isAdmin ? handleBorrowBook(book) : onBorrowBook(book);
+                            isAdmin ? onBorrowBookAdminClick(book) : onBorrowBookClick(book);
                         }}
                     >
                         Borrow Book
@@ -74,7 +74,7 @@ function DetailedBookCard({ isAdmin, book, handleCopyToClipboard, handleReturnBo
                 {isAdmin && <button
                     className="edit-button"
                     onClick={() => {
-                        onEditBook(book);
+                        onEditBookClick(book);
                     }}
                 >
                     Edit Book

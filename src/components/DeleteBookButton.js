@@ -4,6 +4,7 @@ import { app } from '../firebase_setup/firebase.js';
 
 export function DeleteBookButton({ book, onSuccess, onError }) {
   const handleDelete = async () => {
+    
     // Show a confirmation prompt before deleting the book
     if (window.confirm('Are you sure you want to delete this book? This action cannot be undone.')) {
       try {

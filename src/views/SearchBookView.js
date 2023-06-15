@@ -158,7 +158,7 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
     }
   };
 
-  const handleBorrowBook = (book) => {
+  const handleBorrowBookAdmin = (book) => {
     const db = getDatabase(app);
     const booksRef = ref(db, "books");
 
@@ -283,10 +283,10 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
               showMore={showMore}
               setShowMore={setShowMore}
               handleCopyToClipboard={handleCopyToClipboard}
-              handleReturnBook={handleReturnBook}
-              handleBorrowBook={handleBorrowBook}
-              onBorrowBook={onBorrowBook}
-              onEditBook={onEditBook}
+              onReturnBookClick={handleReturnBook}
+              onBorrowBookAdminClick={handleBorrowBookAdmin}
+              onBorrowBookClick={onBorrowBook}
+              onEditBookClick={onEditBook}
               setSuccessMessage={setSuccessMessage}
               setErrorMessage={setErrorMessage}
             />
