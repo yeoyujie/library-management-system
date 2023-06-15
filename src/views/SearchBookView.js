@@ -9,6 +9,7 @@ import {
   get,
   update,
   child,
+  increment,
   startAt,
   endAt,
 } from "firebase/database";
@@ -169,6 +170,7 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
     update(bookRef, {
       isBorrowed: true,
       borrowerEmail: "JTCA",
+      borrowCount: increment(1)
     });
 
     setSuccessMessage("Book borrowed by JTCA successfully!");

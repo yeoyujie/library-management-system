@@ -1,5 +1,3 @@
-import React from 'react';
-
 const LoginAsAdmin = ({ Button, setIsAdmin, isAdmin }) => {
   const handleButtonClick = () => {
     const password = window.prompt('Please enter the password:');

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { animated, useTransition } from "react-spring";
 import { app } from "../firebase_setup/firebase.js";
-import { getDatabase, ref, onValue, update, get } from "firebase/database";
+import { getDatabase, ref, onValue, update, get, increment } from "firebase/database";
 import Form from "../components/Form.js";
 import LayoutForm from "../components/LayoutForm.js";
 import BookCard from "../components/BookCard.js";
@@ -13,13 +13,14 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
 
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  
+
   const [titleOptions, setTitleOptions] = useState([]);
   const [availableBooks, setAvailableBooks] = useState([]);
   const [recentlyBorrowedBooks, setRecentlyBorrowedBooks] = useState([]);
 
   useEffect(() => {
     // Fetch available books from Firebase Realtime Database
+
     const db = getDatabase(app);
     const booksRef = ref(db, "books");
     onValue(booksRef, (snapshot) => {
@@ -67,42 +68,71 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
   };
 
   const borrowBook = (title, author) => {
-    // Find the selectedBook with the matching title and author
-    let borrowedBookId = null;
-    const db = getDatabase(app);
-    const booksRef = ref(db, "books");
 
-    get(booksRef, "value").then((snapshot) => {
-      const books = snapshot.val();
-      for (let id in books) {
-        if (
-          books[id].title === title &&
-          books[id].author === author &&
-          !books[id].isBorrowed
-        ) {
-          // Update the isBorrowed property of the selectedBook in the Firebase Realtime Database
-          const bookRef = ref(db, `books/${id}`);
-          update(bookRef, { isBorrowed: true });
+    return new Promise((resolve, reject) => {
+      // Find the selectedBook with the matching title and author
+      let borrowedBookId = null;
+      const db = getDatabase(app);
+      const booksRef = ref(db, "books");
 
-          // Set the borrowedBookId variable to the ID of the borrowed selectedBook
-          borrowedBookId = id;
+      get(booksRef, "value")
+        .then((snapshot) => {
+          const books = snapshot.val();
+          for (let id in books) {
+            if (
+              books[id].title === title &&
+              books[id].author === author &&
+              !books[id].isBorrowed
+            ) {
+              // Update the isBorrowed property of the selectedBook in the Firebase Realtime Database
+              const bookRef = ref(db, `books/${id}`);
+              update(bookRef, { isBorrowed: true, borrowCount: increment(1)})
+                .then(() => {
+                  // Set the borrowedBookId variable to the ID of the borrowed selectedBook
+                  borrowedBookId = id;
 
-          // Add the borrowed selectedBook to the list of recently borrowed books
-          setRecentlyBorrowedBooks((prevBooks) => [
-            { id: borrowedBookId, title, author },
-            ...prevBooks,
-          ]);
-          break;
-        }
-      }
+                  // Add the borrowed selectedBook to the list of recently borrowed books
+                  setRecentlyBorrowedBooks((prevBooks) => [
+                    { id: borrowedBookId, title, author },
+                    ...prevBooks,
+                  ]);
+
+                  // Resolve the Promise with the ID of the borrowed book
+                  resolve(borrowedBookId);
+                })
+                .catch((error) => {
+                  // Reject the Promise with an error message if the update fails
+                  reject(`Failed to update book: ${error.message}`);
+                });
+              break;
+            }
+          }
+
+          // Wait for all update operations to complete before checking if a book was borrowed
+          Promise.allSettled(
+            Object.values(books).map((book) =>
+              update(ref(db, `books/${book.id}`), { isBorrowed: book.isBorrowed })
+            )
+          ).then(() => {
+            // Reject the Promise with an error message if no matching book is found
+            if (!borrowedBookId) {
+              reject("No matching book found");
+            }
+          });
+        })
+        .catch((error) => {
+          // Reject the Promise with an error message if the get operation fails
+          reject(`Failed to get books: ${error.message}`);
+        });
     });
-    return borrowedBookId;
   };
+
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
     setSuccessMessage("");
+    setErrorMessage("");
 
     if (!title && !author) {
       setErrorMessage("Please enter both the title and the author.");
@@ -131,21 +161,24 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
       return;
     }
 
-    // Borrow the selectedBook based on its title and author
-    const borrowedBookId = borrowBook(title, author);
-
-    setSuccessMessage(
-      <>
-        Book borrowed successfully!
-        <br />
-        Title: <strong style={{ fontSize: "18px" }}>{title}</strong>
-        <br />
-        Author: <strong style={{ fontSize: "18px" }}>{author}</strong>
-        <br />
-        ID: {borrowedBookId}
-      </>
-    );
-    setErrorMessage("");
+    // Borrow the selected book based on its title and author
+    borrowBook(title, author)
+      .then((borrowedBookId) => {
+        setSuccessMessage(
+          <>
+            Book borrowed successfully!
+            <br />
+            Title: <strong style={{ fontSize: "18px" }}>{title}</strong>
+            <br />
+            Author: <strong style={{ fontSize: "18px" }}>{author}</strong>
+            <br />
+            ID: {borrowedBookId}
+          </>
+        );
+      })
+      .catch((error) => {
+        setErrorMessage(error);
+      });
 
     // Clears the input field
     setTitle("");
@@ -164,7 +197,6 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
   const transitions = useTransition(recentlyBorrowedBooks, {
     from: { opacity: 0, transform: "translate3d(-25%,0,0)" },
     enter: { opacity: 1, transform: "translate3d(0%,0,0)" },
-    leave: { opacity: 0 },
   });
 
   return (
@@ -173,12 +205,12 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
       errorMessage={errorMessage}
       bookListContent={
         <>
-        {transitions((style, book) => (
-          <animated.div style={style}>
-            <BookCard book={book} />
-          </animated.div>
-        ))}
-      </>
+          {transitions((style, book) => (
+            <animated.div style={style}>
+              <BookCard book={book} />
+            </animated.div>
+          ))}
+        </>
       }
     >
       <Form
@@ -203,6 +235,8 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
               .map((selectedBook) => selectedBook.author),
             value: author,
             onChange: handleAuthorChange,
+            disabled:
+              availableBooks.filter((selectedBook) => selectedBook.title === title).length === 1,
             id: "author",
           },
           {
