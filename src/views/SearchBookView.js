@@ -285,7 +285,6 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
               showMore={showMore}
               setShowMore={setShowMore}
               handleCopyToClipboard={handleCopyToClipboard}
-              onReturnBookClick={handleReturnBook}
               onBorrowBookAdminClick={handleBorrowBookAdmin}
               onBorrowBookClick={onBorrowBook}
               onEditBookClick={onEditBook}

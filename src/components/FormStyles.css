@@ -76,15 +76,23 @@ input[type="submit"] {
   width: calc(300px);
 }
 
-/* Styles specific to the borrow-button and edit-button */
+/* Styles specific to the edit-button */
 input[type="submit"],
-.borrow-button,
-.return-button,
 .edit-button {
   background-color: #15cdfc;
 
   &:hover {
     background-color: #17a2b8;
+  }
+}
+
+/* Styles specific to the return-button and borrow-button*/
+.return-button,
+.borrow-button {
+  background-color: #57cc99;
+
+  &:hover {
+    background-color: #2d998e;
   }
 }
 
@@ -97,8 +105,19 @@ input[type="submit"],
   }
 }
 
+.copy-to-clipboard-button,
 .view-more-button {
   color: black;
+
+  &:hover {
+    /* No styles applied on hover */
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+.copy-to-clipboard-button {
+  margin-left: 20px;
 
   &:hover {
     /* No styles applied on hover */
@@ -106,13 +125,8 @@ input[type="submit"],
     cursor: initial;
     box-shadow: initial;
   }
-
-  &:active {
-    transform: initial;
-  }
 }
 
-.copy-to-clipboard-button,
 .save-button {
   font-size: 14px;
   margin-left: 20px;

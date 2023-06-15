@@ -6,7 +6,6 @@ export function ReturnBookButton({ book, onSuccess, onError }) {
     try {
       const db = getDatabase(app);
       const bookRef = ref(db, `books/${book.id}`);
-      console.log("here")
 
       // Update the isBorrowed status and borrowerEmail of the book in the database
       await update(bookRef, {

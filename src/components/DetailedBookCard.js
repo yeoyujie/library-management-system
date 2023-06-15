@@ -2,7 +2,7 @@ import { useState } from 'react';
 import DeleteBookButton from './DeleteBookButton';
 import ReturnBookButton from './ReturnBookButton';
 
-function DetailedBookCard({ isAdmin, book, handleCopyToClipboard, onReturnBookClick, onBorrowBookAdminClick,
+function DetailedBookCard({ isAdmin, book, handleCopyToClipboard, onBorrowBookAdminClick,
     onBorrowBookClick, onEditBookClick, setSuccessMessage, setErrorMessage }) {
 
     const [showMore, setShowMore] = useState(false);
