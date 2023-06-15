@@ -46,17 +46,14 @@ select {
 }
 
 /* Common styles for both edit-button and delete-button */
-input[type="submit"],
-button {
+button,
+input[type="submit"] {
   font-size: 16px;
   padding: 10px;
   margin-top: 10px;
   border-radius: 5px;
   border: none;
   color: white;
-
-  /* make the size of the submit button the same as the input boxes */
-  width: calc(210px);
 
   /* hover effect */
   transition: all 0.2s ease-in-out;
@@ -65,13 +62,18 @@ button {
     transform: scale(1.05);
     cursor: pointer;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 14px 28px,
-      rgba(0, 0, 0, 0.1) 0px 10px 6px; 
+      rgba(0, 0, 0, 0.1) 0px 10px 6px;
   }
 
   /* active (clicked) effect */
   &:active {
     transform: translateY(2px);
   }
+}
+
+/* Common styles for both edit-button and delete-button */
+input[type="submit"] {
+  width: calc(300px);
 }
 
 /* Styles specific to the borrow-button and edit-button */
@@ -91,6 +93,21 @@ input[type="submit"],
 
   &:hover {
     background-color: #ff0000;
+  }
+}
+
+.view-more-button {
+  color: black;
+
+  &:hover {
+    /* No styles applied on hover */
+    transform: initial;
+    cursor: initial;
+    box-shadow: initial;
+  }
+
+  &:active {
+    transform: initial;
   }
 }
 

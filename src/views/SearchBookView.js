@@ -14,7 +14,7 @@ import {
 } from "firebase/database";
 import Form from "../components/Form.js";
 import LayoutForm from "../components/LayoutForm.js";
-import { DeleteBookButton } from "../components/DeleteBookButton.js";
+import DetailedBookCard from "../components/DetailedBookCard.js";
 
 function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
   const [title, setTitle] = useState("");
@@ -46,10 +46,6 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
 
   const handleLastNameChange = (event) => {
     setLastName(event.target.value);
-  };
-
-  const handleViewMore = () => {
-    setShowMore(!showMore);
   };
 
   const handleSubmit = async (event) => {
@@ -201,17 +197,6 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
     alert('Copied to clipboard');
   };
 
-  const ViewMoreButton = ({ book }) => {
-    return (
-      <button
-        className="view-more-button"
-        onClick={handleViewMore}
-      >
-        View More
-      </button>
-    );
-  };
-
   // reset searchResults when the active tab changes
   useEffect(() => {
     setSearchResults(null);
@@ -292,70 +277,19 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
       bookListContent={
         <>
           {filteredBooks.map((book) => (
-            <div className="book-card" key={book.id}>
-              <h2>{book.title}</h2>
-              <h3>by {book.author}</h3>
-              <ViewMoreButton book={book} />
-              {showMore && (
-                <div>
-                  <p>First Name: {book.firstName}</p>
-                  <p>Last Name: {book.lastName}</p>
-                </div>
-              )}
-              <p>Number of times borrowed: {book.borrowCount}</p>
-              {book.isBorrowed && <p>Borrowed by: {book.borrowerEmail}</p>}
-              <p>
-                Book ID: {book.id}
-                <button
-                  className="copy-to-clipboard-button"
-                  onClick={() => handleCopyToClipboard(book.id)}
-                >
-                  Copy to clipboard
-                </button>
-              </p>
-              <p
-                style={{
-                  fontWeight: 'bold',
-                  color: book.isBorrowed ? 'red' : 'green',
-                }}
-              >
-                {book.isBorrowed ? 'Borrowed' : 'Available'}
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {book.isBorrowed ? isAdmin && <button
-                  className="borrow-button"
-                  onClick={() => {
-                    handleReturnBook(book);
-                  }}
-                >
-                  Return Book
-                </button> : (
-                  <button
-                    className="borrow-button"
-                    onClick={() => {
-                      isAdmin ? handleBorrowBook(book) : onBorrowBook(book);
-                    }}
-                  >
-                    Borrow Book
-                  </button>
-                )}
-                {isAdmin && <button
-                  className="edit-button"
-                  onClick={() => {
-                    onEditBook(book);
-                  }}
-                >
-                  Edit Book
-                </button>}
-                {isAdmin && (
-                  <DeleteBookButton
-                    book={book}
-                    onSuccess={(message) => setSuccessMessage(message)}
-                    onError={(message) => setErrorMessage(message)}
-                  />
-                )}
-              </div>
-            </div>
+            <DetailedBookCard
+              isAdmin={isAdmin}
+              book={book}
+              showMore={showMore}
+              setShowMore={setShowMore}
+              handleCopyToClipboard={handleCopyToClipboard}
+              handleReturnBook={handleReturnBook}
+              handleBorrowBook={handleBorrowBook}
+              onBorrowBook={onBorrowBook}
+              onEditBook={onEditBook}
+              setSuccessMessage={setSuccessMessage}
+              setErrorMessage={setErrorMessage}
+            />
           ))}
         </>
       }

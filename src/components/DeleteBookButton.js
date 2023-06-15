@@ -28,3 +28,5 @@ export function DeleteBookButton({ book, onSuccess, onError }) {
 
   return <button className="delete-button" onClick={handleDelete}>Delete Book</button>;
 }
+
+export default DeleteBookButton;
