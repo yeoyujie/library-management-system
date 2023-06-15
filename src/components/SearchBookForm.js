@@ -294,7 +294,7 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
                 {book.isBorrowed ? isAdmin && <button
                   className="borrow-button"
                   onClick={() => {
-                    handleBorrowBook(book);
+                    handleReturnBook(book);
                   }}
                 >
                   Return Book

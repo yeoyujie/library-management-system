@@ -11,6 +11,7 @@ function EditBookForm({ isAdmin, selectedBook }) {
   const [author, setAuthor] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [borrowCount, setBorrowCount] = useState(0);
   const [borrowerEmail, setBorrowerEmail] = useState("");
 
   const [successMessage, setSuccessMessage] = useState("");
@@ -23,6 +24,7 @@ function EditBookForm({ isAdmin, selectedBook }) {
   const authorRef = useRef(null);
   const firstNameRef = useRef(null);
   const lastNameRef = useRef(null);
+  const borrowCountRef = useRef(null);
   const borrowerEmailRef = useRef(null);
 
   const handlebookIdChange = (event) => {
@@ -43,6 +45,10 @@ function EditBookForm({ isAdmin, selectedBook }) {
 
   const handleLastNameChange = (event) => {
     setLastName(event.target.value);
+  };
+
+  const handleBorrowCountChange = (event) => {
+    setBorrowCount(event.target.value);
   };
 
   const handleBorrowEmailChange = (event) => {
@@ -69,12 +75,14 @@ function EditBookForm({ isAdmin, selectedBook }) {
         borrowerEmail: snapshot.val().borrowerEmail,
         firstName: snapshot.val().firstName,
         lastName: snapshot.val().lastName,
+        borrowCount: snapshot.val().borrowCount,
       });
       setTitle(snapshot.val().title);
       setAuthor(snapshot.val().author);
       setBorrowerEmail(snapshot.val().borrowerEmail);
       setFirstName(snapshot.val().firstName);
       setLastName(snapshot.val().lastName);
+      setBorrowCount(snapshot.val().borrowCount);
       setSuccessMessage("Book found!");
       setErrorMessage("");
       setIsEditing(false);
@@ -86,8 +94,15 @@ function EditBookForm({ isAdmin, selectedBook }) {
 
   const handleEditSubmit = async () => {
     // Check if title or author are empty
-    if (!title || !author) {
-      setErrorMessage("Title and author cannot be empty!");
+    if (!title) {
+      setErrorMessage("Title cannot be empty!");
+      setSuccessMessage("");
+      return;
+    }
+
+    // Check if both firstName and lastName are empty
+    if (! ((firstName && lastName) || author)) {
+      setErrorMessage("Either first name and last name OR author must be entered!");
       setSuccessMessage("");
       return;
     }
@@ -104,6 +119,7 @@ function EditBookForm({ isAdmin, selectedBook }) {
         updatedFields.push("borrowerEmail");
       if (firstName !== book.firstName) updatedFields.push("firstName");
       if (lastName !== book.lastName) updatedFields.push("lastName");
+      if (borrowCount !== book.borrowCount) updatedFields.push("borrowCount");
 
       if (!updatedFields.length) {
         setErrorMessage("No changes detected!");
@@ -117,6 +133,7 @@ function EditBookForm({ isAdmin, selectedBook }) {
         borrowerEmail: borrowerEmail,
         firstName: firstName,
         lastName: lastName,
+        borrowCount: borrowCount,
       });
 
       setSuccessMessage(
@@ -132,6 +149,7 @@ function EditBookForm({ isAdmin, selectedBook }) {
         borrowerEmail: borrowerEmail,
         firstName: firstName,
         lastName: lastName,
+        borrowCount: borrowCount,
       }));
       setIsEditing(false);
     } catch (error) {
@@ -183,6 +201,12 @@ function EditBookForm({ isAdmin, selectedBook }) {
       value: lastName,
       onChange: handleLastNameChange,
       ref: lastNameRef,
+    },
+    {
+      label: "Borrow Count",
+      value: borrowCount,
+      onChange: handleBorrowCountChange,
+      ref: borrowCountRef,
     },
     {
       label: "Borrower Email",

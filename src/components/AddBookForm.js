@@ -61,6 +61,9 @@ function AddBookForm({ isAdmin }) {
     // Create a new field that combines the title and author values
     const title_author = `${title}_${authorName}`;
 
+    // Initialize the borrowCount to 0
+    const borrowCount = 0;
+
     // Update the realtime database in Firebase
     const newBookRef = push(ref(db, "books"), {
       title,
@@ -70,6 +73,7 @@ function AddBookForm({ isAdmin }) {
       title_author,
       isBorrowed,
       borrowerEmail,
+      borrowCount
     });
 
     console.log(`New book added with ID: ${newBookRef.key}`);
