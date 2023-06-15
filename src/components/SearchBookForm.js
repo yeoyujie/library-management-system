@@ -7,6 +7,8 @@ import {
   orderByChild,
   onValue,
   get,
+  update,
+  child,
   startAt,
   endAt,
 } from "firebase/database";
@@ -149,6 +151,40 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
     }
   };
 
+  const handleBorrowBook = (book) => {
+    const db = getDatabase(app);
+    const booksRef = ref(db, "books");
+
+    // Create a reference to the book entry using its id
+    const bookRef = child(booksRef, book.id);
+
+    // Update the isBorrowed status and borrowerEmail of the book in the database
+    update(bookRef, {
+      isBorrowed: true,
+      borrowerEmail: "JTCA",
+    });
+
+    setSuccessMessage("Book borrowed by JTCA successfully!");
+    setErrorMessage("");
+  };
+
+  const handleReturnBook = (book) => {
+    const db = getDatabase(app);
+    const booksRef = ref(db, "books");
+
+    // Create a reference to the book entry using its id
+    const bookRef = child(booksRef, book.id);
+
+    // Update the isBorrowed status and borrowerEmail of the book in the database
+    update(bookRef, {
+      isBorrowed: false,
+      borrowerEmail: "",
+    });
+
+    setSuccessMessage("Book returned successfully!");
+    setErrorMessage("");
+  };
+
   const handleCopyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
     alert('Copied to clipboard');
@@ -255,11 +291,18 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
                 {book.isBorrowed ? 'Borrowed' : 'Available'}
               </p>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {!book.isBorrowed && (
+                {book.isBorrowed ? isAdmin && <button
+                  className="borrow-button"
+                  onClick={() => {
+                    handleBorrowBook(book);
+                  }}
+                >
+                  Return Book
+                </button> : (
                   <button
                     className="borrow-button"
                     onClick={() => {
-                      onBorrowBook(book);
+                      isAdmin ? handleBorrowBook(book) : onBorrowBook(book);
                     }}
                   >
                     Borrow Book

@@ -1,12 +1,9 @@
-body {
-  margin: 0;
-  padding: 0;
-}
-
+/* Set box-sizing to border-box for all elements */
 * {
   box-sizing: border-box;
 }
 
+/* Flex container */
 .container {
   display: flex;
 }
@@ -17,6 +14,7 @@ body {
   overflow: hidden;
 }
 
+/* Style form element */
 form {
   display: flex;
   flex-direction: column;
@@ -26,6 +24,7 @@ form {
   padding-top: 50px; /* adjust this value to control the space between the navbar and the input fields */
 }
 
+/* Style label element */
 label {
   font-size: 18px;
   margin-bottom: 10px;
@@ -34,6 +33,7 @@ label {
   align-items: center;
 }
 
+/* Style text, email, and select input elements */
 input[type="text"],
 input[type="email"],
 select {
@@ -45,6 +45,7 @@ select {
   width: 100%;
 }
 
+/* Style submit, borrow-button, and edit-button elements */
 input[type="submit"],
 .borrow-button,
 .edit-button {
@@ -61,11 +62,11 @@ input[type="submit"],
 
   /* hover effect */
   transition: all 0.2s ease-in-out;
+
   &:hover {
     transform: scale(1.05);
     cursor: pointer;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 14px 28px,
-      rgba(0, 0, 0, 0.1) 0px 10px 6px; /* add shadow */
+    box-shadow: rgba(0, 0, 0, 0.1) 0px14px28px, rgba(0, 0, 0, 0.1) 0px10px6px; /* add shadow */
     background-color: #17a2b8; /* change color */
   }
 
@@ -82,7 +83,7 @@ button.copy-to-clipboard-button,
   padding: 8px;
   border-radius: 5px;
   border: none;
-  background-color: #4CAF50;
+  background-color: #4caf50;
   color: white;
   width: auto;
 
@@ -129,7 +130,6 @@ button.copy-to-clipboard-button,
   line-height: 1;
   cursor: pointer;
 }
-
 
 /* -------------------------Switch component------------------------------ */
 .switch {
@@ -257,6 +257,8 @@ input:checked + .slider:before {
   padding: 10px;
   cursor: pointer;
   position: relative;
+  font-size: large;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
 }
 
 .tab:hover {
