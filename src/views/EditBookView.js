@@ -101,7 +101,7 @@ function EditBookForm({ isAdmin, selectedBook }) {
     }
 
     // Check if both firstName and lastName are empty
-    if (! ((firstName && lastName) || author)) {
+    if (!((firstName && lastName) || author)) {
       setErrorMessage("Either first name and last name OR author must be entered!");
       setSuccessMessage("");
       return;
@@ -246,6 +246,7 @@ function EditBookForm({ isAdmin, selectedBook }) {
                       disabled={!isEditing}
                       placeholder={field.label}
                       ref={field.ref}
+                      style={{ cursor: "pointer",  borderRadius: "4px", padding: "12px", margin: "2px"}}
                     />
                   ) : (
                     <p
@@ -253,15 +254,13 @@ function EditBookForm({ isAdmin, selectedBook }) {
                         setIsEditing(true);
                         setFocusedField(field.ref);
                       }}
-                      style={{ cursor: "pointer" }}
+                      style={{ cursor: "pointer", border: "0.5px solid", borderRadius: "4px", padding: "3px"}}
                     >
                       {field.value}
                     </p>
                   )}
                 </>
               ))}
-              <br />
-              <br />
               <h3>Book ID: {book.id}</h3>
               <span
                 style={{
