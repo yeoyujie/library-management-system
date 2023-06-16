@@ -15,7 +15,7 @@ import {
 } from "firebase/database";
 import Form from "../components/Form.js";
 import LayoutForm from "../components/LayoutForm.js";
-import DetailedBookCard from "../components/DetailedBookCard.js";
+import DetailedBookCard from "../components/BookCard/DetailedBookCard.js";
 
 function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
   const [title, setTitle] = useState("");
@@ -59,7 +59,7 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
     if ((title && author) || (firstName && lastName && title)) {
       // Use the title_author field to query for books with a specific title and author
 
-      const authorName = author || (firstName + " " + lastName);
+      const authorName = author || firstName + " " + lastName;
 
       booksQuery = query(
         booksRef,
@@ -78,8 +78,7 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
       );
       searchType = "title";
     } else if (author || (firstName && lastName)) {
-
-      const authorName = author || (firstName + " " + lastName);
+      const authorName = author || firstName + " " + lastName;
 
       booksQuery = query(
         booksRef,
@@ -89,7 +88,6 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
       );
       searchType = "author";
     } else if (firstName) {
-
       booksQuery = query(
         booksRef,
         orderByChild("firstName"),
@@ -98,7 +96,6 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
       );
       searchType = "First Name";
     } else if (lastName) {
-      
       booksQuery = query(
         booksRef,
         orderByChild("lastName"),
@@ -119,7 +116,6 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
       });
 
       setSearchResults(booksArray);
-
 
       //Success message for search showing type of search
       if (booksArray.length > 0) {
@@ -170,7 +166,7 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
     update(bookRef, {
       isBorrowed: true,
       borrowerEmail: "JTCA",
-      borrowCount: increment(1)
+      borrowCount: increment(1),
     });
 
     setSuccessMessage("Book borrowed by JTCA successfully!");
@@ -196,7 +192,7 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
 
   const handleCopyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
-    alert('Copied to clipboard');
+    alert("Copied to clipboard");
   };
 
   // reset searchResults when the active tab changes
@@ -244,10 +240,10 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
   const filteredBooks = searchResults
     ? searchResults
     : activeTab === "Available"
-      ? availableBooks
-      : activeTab === "Borrowed"
-        ? borrowedBooks
-        : [];
+    ? availableBooks
+    : activeTab === "Borrowed"
+    ? borrowedBooks
+    : [];
 
   const Tabs = ({ activeTab, onTabChange }) => {
     const isTabActive = searchResults ? false : activeTab;
@@ -255,15 +251,17 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
     return (
       <div className="tabs">
         <div
-          className={`tab ${isTabActive === "Available" ? "active" : ""} ${isInactive ? "inactive" : ""
-            }`}
+          className={`tab ${isTabActive === "Available" ? "active" : ""} ${
+            isInactive ? "inactive" : ""
+          }`}
           onClick={() => onTabChange("Available")}
         >
           Available
         </div>
         <div
-          className={`tab ${isTabActive === "Borrowed" ? "active" : ""} ${isInactive ? "inactive" : ""
-            }`}
+          className={`tab ${isTabActive === "Borrowed" ? "active" : ""} ${
+            isInactive ? "inactive" : ""
+          }`}
           onClick={() => onTabChange("Borrowed")}
         >
           Borrowed

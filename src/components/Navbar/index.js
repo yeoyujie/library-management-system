@@ -1,41 +1,74 @@
-import React from 'react';
+import { useState, useRef, useEffect } from "react";
 import {
   Nav,
   NavLink,
   Bars,
   NavMenu,
   NavBtn,
-  NavBtnLink
-} from './NavbarElements';
-import LoginButton from '../auth/LoginButton';
+  NavBtnLink,
+} from "./NavbarElements";
+import LoginButton from "../auth/LoginButton";
 
 const Navbar = ({ setView, view, isAdmin, setIsAdmin }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const navRef = useRef(null);
 
   const handleLogout = () => {
     setIsAdmin(false);
-    alert('Logout Successful');
+    alert("Logout Successful");
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (navRef.current && !navRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
-      <Nav>
-        <NavLink to='/'>
+      <Nav ref={navRef}>
+        <NavLink to="/">
           {/* <img src={require('../../images/logo.svg')} alt='logo' /> */}
         </NavLink>
-        <Bars />
-        <NavMenu>
-          <NavLink onClick={() => setView('search')} view={view} expectedview='search'>
+        <Bars onClick={() => setIsOpen(!isOpen)} />
+        <NavMenu isOpen={isOpen}>
+          <NavLink
+            onClick={() => setView("search")}
+            view={view}
+            expectedview="search"
+          >
             Search Book
           </NavLink>
-          <NavLink onClick={() => setView('borrow')} view={view} expectedview='borrow'>
+          <NavLink
+            onClick={() => setView("borrow")}
+            view={view}
+            expectedview="borrow"
+          >
             Borrow Book
           </NavLink>
           {isAdmin && (
             <>
-              <NavLink onClick={() => setView('add')} view={view} expectedview='add'>
+              <NavLink
+                onClick={() => setView("add")}
+                view={view}
+                expectedview="add"
+              >
                 Add Book
               </NavLink>
-              <NavLink onClick={() => setView('edit')} view={view} expectedview='edit'>
+              <NavLink
+                onClick={() => setView("edit")}
+                view={view}
+                expectedview="edit"
+              >
                 Edit Book
               </NavLink>
             </>

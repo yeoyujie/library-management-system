@@ -1,10 +1,17 @@
 import { useState, useEffect } from "react";
 import { animated, useTransition } from "react-spring";
 import { app } from "../firebase_setup/firebase.js";
-import { getDatabase, ref, onValue, update, get, increment } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  onValue,
+  update,
+  get,
+  increment,
+} from "firebase/database";
 import Form from "../components/Form.js";
 import LayoutForm from "../components/LayoutForm.js";
-import BookCard from "../components/BookCard.js";
+import BookCard from "../components/BookCard/BookCard.js";
 
 function BorrowBookForm({ isAdmin, selectedBook }) {
   const [title, setTitle] = useState("");
@@ -68,7 +75,6 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
   };
 
   const borrowBook = (title, author) => {
-
     return new Promise((resolve, reject) => {
       // Find the selectedBook with the matching title and author
       let borrowedBookId = null;
@@ -86,7 +92,7 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
             ) {
               // Update the isBorrowed property of the selectedBook in the Firebase Realtime Database
               const bookRef = ref(db, `books/${id}`);
-              update(bookRef, { isBorrowed: true, borrowCount: increment(1)})
+              update(bookRef, { isBorrowed: true, borrowCount: increment(1) })
                 .then(() => {
                   // Set the borrowedBookId variable to the ID of the borrowed selectedBook
                   borrowedBookId = id;
@@ -111,7 +117,9 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
           // Wait for all update operations to complete before checking if a book was borrowed
           Promise.allSettled(
             Object.values(books).map((book) =>
-              update(ref(db, `books/${book.id}`), { isBorrowed: book.isBorrowed })
+              update(ref(db, `books/${book.id}`), {
+                isBorrowed: book.isBorrowed,
+              })
             )
           ).then(() => {
             // Reject the Promise with an error message if no matching book is found
@@ -126,7 +134,6 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
         });
     });
   };
-
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -156,7 +163,7 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
     }
 
     // specify the domain you want the email to be from
-    if (!email.endsWith('.sg')) {
+    if (!email.endsWith(".sg")) {
       setErrorMessage("Please enter your xxx domain email.");
       return;
     }
@@ -192,7 +199,6 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
     }
   }, [selectedBook]);
 
-
   // useTransition hook to animate the mounting and unmounting of selectedBook cards
   const transitions = useTransition(recentlyBorrowedBooks, {
     from: { opacity: 0, transform: "translate3d(-25%,0,0)" },
@@ -227,7 +233,9 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
           {
             label: "Author",
             type:
-              availableBooks.filter((selectedBook) => selectedBook.title === title).length > 1
+              availableBooks.filter(
+                (selectedBook) => selectedBook.title === title
+              ).length > 1
                 ? "select"
                 : "text",
             options: availableBooks
@@ -236,7 +244,9 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
             value: author,
             onChange: handleAuthorChange,
             disabled:
-              availableBooks.filter((selectedBook) => selectedBook.title === title).length === 1,
+              availableBooks.filter(
+                (selectedBook) => selectedBook.title === title
+              ).length === 1,
             id: "author",
           },
           {

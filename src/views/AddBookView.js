@@ -4,8 +4,8 @@ import { app } from "../firebase_setup/firebase.js";
 import { getDatabase, ref, push } from "firebase/database";
 import Form from "../components/Form.js";
 import LayoutForm from "../components/LayoutForm.js";
-import BookCard from "../components/BookCard.js";
-import "../components/FormStyles.css"
+import BookCard from "../components/BookCard/BookCard.js";
+import "../components/FormStyles.css";
 
 function AddBookForm({ isAdmin }) {
   const [title, setTitle] = useState("");
@@ -53,7 +53,7 @@ function AddBookForm({ isAdmin }) {
       return;
     }
 
-    const authorName = author || (firstName + " " + lastName);
+    const authorName = author || firstName + " " + lastName;
 
     // Create a new field that combines the title and author values
     const title_author = `${title}_${authorName}`;
@@ -67,7 +67,7 @@ function AddBookForm({ isAdmin }) {
       title_author,
       isBorrowed: false,
       borrowerEmail: "",
-      borrowCount: 0
+      borrowCount: 0,
     });
 
     console.log(`New book added with ID: ${newBookRef.key}`);
@@ -155,7 +155,7 @@ function AddBookForm({ isAdmin }) {
         />
       </LayoutForm>
     )
-  )
+  );
 }
 
 export default AddBookForm;

@@ -9,6 +9,7 @@ export const Nav = styled.nav`
   justify-content: space-between;
   padding: 0.5rem calc((100vw - 1000px) / 2);
   z-index: 10;
+  position: relative;
 
   /* Third Nav */
   /* justify-content: flex-start; */
@@ -44,15 +45,17 @@ export const NavMenu = styled.div`
   align-items: center;
   margin-right: -24px;
 
-  /* Second Nav */
-  /* margin-right: 24px; */
-
-  /* Third Nav */
-  /* width: 100vw;
-  white-space: nowrap; */
-
   @media screen and (max-width: 768px) {
-    display: none;
+    border-bottom: 10px solid;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    background-color: #000;
+    width: 100%;
+    max-height: ${(props) => (props.isOpen ? "500px" : "0")};
+    overflow: hidden;
+    transition: max-height 0.2s ease-in-out;
   }
 `;
 

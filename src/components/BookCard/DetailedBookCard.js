@@ -1,6 +1,6 @@
 import { useState } from "react";
-import DeleteBookButton from "./Buttons/DeleteBookButton";
-import ReturnBookButton from "./Buttons/ReturnBookButton";
+import DeleteBookButton from "../Buttons/DeleteBookButton";
+import ReturnBookButton from "../Buttons/ReturnBookButton";
 
 function DetailedBookCard({
   isAdmin,
