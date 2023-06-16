@@ -1,11 +1,14 @@
-import { getDatabase, ref, remove } from 'firebase/database';
-import { app } from '../firebase_setup/firebase.js';
+import { getDatabase, ref, remove } from "firebase/database";
+import { app } from "../../firebase_setup/firebase.js";
 
 export function DeleteBookButton({ book, onSuccess, onError }) {
   const handleDelete = async () => {
-
     // Show a confirmation prompt before deleting the book
-    if (window.confirm('Are you sure you want to delete this book? This action cannot be undone.')) {
+    if (
+      window.confirm(
+        "Are you sure you want to delete this book? This action cannot be undone."
+      )
+    ) {
       try {
         const db = getDatabase(app);
         const bookRef = ref(db, `books/${book.id}`);
@@ -15,18 +18,22 @@ export function DeleteBookButton({ book, onSuccess, onError }) {
 
         // Call the onSuccess callback with a success message
         if (onSuccess) {
-          onSuccess('Book deleted successfully!');
+          onSuccess("Book deleted successfully!");
         }
       } catch (error) {
         // Call the onError callback with an error message
         if (onError) {
-          onError('An error occurred while deleting the book.');
+          onError("An error occurred while deleting the book.");
         }
       }
     }
   };
 
-  return <button className="delete-button" onClick={handleDelete}>Delete Book</button>;
+  return (
+    <button className="delete-button" onClick={handleDelete}>
+      Delete Book
+    </button>
+  );
 }
 
 export default DeleteBookButton;
