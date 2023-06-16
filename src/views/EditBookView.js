@@ -3,6 +3,7 @@ import { app } from "../firebase_setup/firebase.js";
 import { getDatabase, ref, get, update } from "firebase/database";
 import Form from "../components/Form.js";
 import LayoutForm from "../components/LayoutForm.js";
+import EditableBookCard from "../components/BookCard/EditableBookCard.js";
 
 function EditBookForm({ isAdmin, selectedBook }) {
   const [book, setBook] = useState("");
@@ -102,7 +103,9 @@ function EditBookForm({ isAdmin, selectedBook }) {
 
     // Check if both firstName and lastName are empty
     if (!((firstName && lastName) || author)) {
-      setErrorMessage("Either first name and last name OR author must be entered!");
+      setErrorMessage(
+        "Either first name and last name OR author must be entered!"
+      );
       setSuccessMessage("");
       return;
     }
@@ -167,7 +170,11 @@ function EditBookForm({ isAdmin, selectedBook }) {
       const isBorrowed = snapshot.val().isBorrowed;
       update(bookRef, { isBorrowed: !isBorrowed });
       setBook((prevBook) => ({ ...prevBook, isBorrowed: !isBorrowed }));
-      setSuccessMessage(`Book updated successfully! The book is now ${!isBorrowed ? 'borrowed' : 'available'}.`);
+      setSuccessMessage(
+        `Book updated successfully! The book is now ${
+          !isBorrowed ? "borrowed" : "available"
+        }.`
+      );
     }
   };
 
@@ -222,7 +229,6 @@ function EditBookForm({ isAdmin, selectedBook }) {
     }
   }, [isEditing, focusedField]);
 
-
   return (
     isAdmin && (
       <LayoutForm
@@ -230,63 +236,15 @@ function EditBookForm({ isAdmin, selectedBook }) {
         errorMessage={errorMessage}
         bookListContent={
           book && (
-            <div
-              className="book-card"
-              key={book.id}
-
-            >
-              {fields.map((field) => (
-                <>
-                  <label>{field.label}:</label>
-                  {isEditing ? (
-                    <input
-                      type={field.label === "Borrower Email" ? "email" : "text"}
-                      value={field.value}
-                      onChange={field.onChange}
-                      disabled={!isEditing}
-                      placeholder={field.label}
-                      ref={field.ref}
-                      style={{ cursor: "pointer",  borderRadius: "4px", padding: "12px", margin: "2px"}}
-                    />
-                  ) : (
-                    <p
-                      onClick={() => {
-                        setIsEditing(true);
-                        setFocusedField(field.ref);
-                      }}
-                      style={{ cursor: "pointer", border: "0.5px solid", borderRadius: "4px", padding: "3px"}}
-                    >
-                      {field.value}
-                    </p>
-                  )}
-                </>
-              ))}
-              <h3>Book ID: {book.id}</h3>
-              <span
-                style={{
-                  fontWeight: "bold",
-                  color: book.isBorrowed ? "red" : "green",
-                }}
-              >
-                {book.isBorrowed ? " On Loan" : " Available"}
-              </span>
-              <div>
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    checked={book.isBorrowed}
-                    onChange={() => handleToggleIsBorrowed(book.id)}
-                  />
-                  <span className="slider round"></span>
-                </label>
-                <br />
-                <div className="button-container">
-                  {isEditing && (
-                    <button className="save-button" onClick={handleEditSubmit}>Save</button>
-                  )}
-                </div>
-              </div>
-            </div>
+            <EditableBookCard
+              book={book}
+              fields={fields}
+              isEditing={isEditing}
+              setIsEditing={setIsEditing}
+              setFocusedField={setFocusedField}
+              handleToggleIsBorrowed={handleToggleIsBorrowed}
+              handleEditSubmit={handleEditSubmit}
+            />
           )
         }
       >
