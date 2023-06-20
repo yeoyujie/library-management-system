@@ -74,7 +74,7 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
     setEmail(event.target.value);
   };
 
-  const borrowBook = (title, author) => {
+  const borrowBook = (title, author, email) => {
     return new Promise((resolve, reject) => {
       // Find the selectedBook with the matching title and author
       let borrowedBookId = null;
@@ -92,7 +92,11 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
             ) {
               // Update the isBorrowed property of the selectedBook in the Firebase Realtime Database
               const bookRef = ref(db, `books/${id}`);
-              update(bookRef, { isBorrowed: true, borrowCount: increment(1) })
+              update(bookRef, {
+                isBorrowed: true,
+                borrowCount: increment(1),
+                borrowerEmail: email,
+              })
                 .then(() => {
                   // Set the borrowedBookId variable to the ID of the borrowed selectedBook
                   borrowedBookId = id;
@@ -169,7 +173,7 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
     }
 
     // Borrow the selected book based on its title and author
-    borrowBook(title, author)
+    borrowBook(title, author, email)
       .then((borrowedBookId) => {
         setSuccessMessage(
           <>
@@ -178,6 +182,8 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
             Title: <strong style={{ fontSize: "18px" }}>{title}</strong>
             <br />
             Author: <strong style={{ fontSize: "18px" }}>{author}</strong>
+            <br />
+            Borrowed by: <strong style={{ fontSize: "18px" }}>{email}</strong>
             <br />
             ID: {borrowedBookId}
           </>
