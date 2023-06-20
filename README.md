@@ -1,5 +1,3 @@
-Sure, here is an updated version of the README with additional sections:
-
 # Library Management System
 
 Our Library Management System (LMS) is a lightweight and compact solution for managing your library's books and users. Built using React and Firebase, our LMS is easy to set up and use, and can be customized to fit your specific needs.
