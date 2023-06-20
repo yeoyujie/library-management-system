@@ -6,12 +6,21 @@ Our Library Management System (LMS) is a lightweight and compact solution for ma
 
 ## Table of Contents
 
+- [Motivation](#motivation)
 - [Features](#features)
 - [Getting Started](#getting-started)
 - [Purpose](#purpose)
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
+
+## Motivation
+
+This Library Management System was created as a side project to gain experience in building well-structured projects and writing high-quality code. By adhering to best practices and principles such as abstraction, DRY (Don't Repeat Yourself), and modularity, this project allowed me to improve my skills and knowledge in software development.
+
+In addition to gaining technical experience, this project also provided an opportunity to learn more about project management and collaboration. By working on this project, I was able to practice planning, organizing, and executing a software development project from start to finish.
+
+Overall, the motivation behind this project was to gain valuable experience and knowledge in software development, while also creating a useful and practical tool for managing libraries. I hope that this project can serve as a learning experience or guide for other beginners looking to improve their skills and take on similar projects.
 
 ## Features
 
