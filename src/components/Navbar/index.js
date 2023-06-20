@@ -7,7 +7,7 @@ import {
   NavBtn,
   NavBtnLink,
 } from "./NavbarElements";
-import LoginButton from "../Auth/LoginButton";
+import LoginAsAdmin from "../Auth/LoginAsAdmin";
 
 const Navbar = ({ setView, view, isAdmin, setIsAdmin }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -78,7 +78,7 @@ const Navbar = ({ setView, view, isAdmin, setIsAdmin }) => {
           {isAdmin ? (
             <NavBtnLink onClick={handleLogout}>Log out</NavBtnLink>
           ) : (
-            <LoginButton Button={NavBtnLink} setIsAdmin={setIsAdmin} />
+            <LoginAsAdmin Button={NavBtnLink} setIsAdmin={setIsAdmin} />
           )}
         </NavBtn>
       </Nav>
