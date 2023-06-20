@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTransition, animated } from "react-spring";
-import { app } from "../firebase_setup/firebase.js";
+import { app } from "../firebase/firebase.js";
 import { getDatabase, ref, push } from "firebase/database";
 import Form from "../components/Form.js";
 import LayoutForm from "../components/LayoutForm.js";

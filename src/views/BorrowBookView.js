@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { animated, useTransition } from "react-spring";
-import { app } from "../firebase_setup/firebase.js";
+import { app } from "../firebase/firebase.js";
 import {
   getDatabase,
   ref,

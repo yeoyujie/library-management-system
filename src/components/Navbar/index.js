@@ -7,7 +7,7 @@ import {
   NavBtn,
   NavBtnLink,
 } from "./NavbarElements";
-import LoginButton from "../auth/LoginButton";
+import LoginButton from "../Auth/LoginButton";
 
 const Navbar = ({ setView, view, isAdmin, setIsAdmin }) => {
   const [isOpen, setIsOpen] = useState(false);

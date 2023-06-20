@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { app } from "../firebase_setup/firebase.js";
+import { app } from "../firebase/firebase.js";
 import { getDatabase, ref, get, update } from "firebase/database";
 import Form from "../components/Form.js";
 import LayoutForm from "../components/LayoutForm.js";

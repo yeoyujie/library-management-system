@@ -1,5 +1,5 @@
 import { getDatabase, ref, remove } from "firebase/database";
-import { app } from "../../firebase_setup/firebase.js";
+import { app } from "../../firebase/firebase.js";
 
 export function DeleteBookButton({ book, onSuccess, onError }) {
   const handleDelete = async () => {

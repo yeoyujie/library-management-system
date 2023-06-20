@@ -1,5 +1,5 @@
 import { getDatabase, ref, update } from "firebase/database";
-import { app } from "../../firebase_setup/firebase.js";
+import { app } from "../../firebase/firebase.js";
 
 export function ReturnBookButton({ book, onSuccess, onError }) {
   const handleReturn = async () => {
