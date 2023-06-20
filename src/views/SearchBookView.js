@@ -55,7 +55,6 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
     const db = getDatabase(app);
     const booksRef = ref(db, "books");
     let booksQuery;
-    let searchType;
 
     setSuccessMessage("");
     setErrorMessage("");
@@ -86,7 +85,6 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
         startAt(firstName),
         endAt(firstName + "\uf8ff")
       );
-      searchType = "first name";
     } else if (lastName) {
       booksQuery = query(
         booksRef,
