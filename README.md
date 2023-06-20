@@ -27,7 +27,13 @@ Overall, the motivation behind this project was to gain valuable experience and 
 
 ## Getting Started
 
-To get started with our LMS, simply follow these steps:
+To access the hosted app on Netlify, click [here](https://master--dainty-jelly-1fe535.netlify.app/) (password: 123). Please note that this authentication method is not intended to be a standard protocol as we are not focused on authentication in this project. If you're interested in implementing standard web authentication methods, some popular options include:
+
+- OAuth 2.0
+- JSON Web Tokens (JWT)
+- OpenID Connect (OIDC)
+
+Or if you run it locally, you can get started by following these steps:
 
 1. Clone or download the repository.
 2. Install the required dependencies by running `npm install`.
@@ -35,6 +41,9 @@ To get started with our LMS, simply follow these steps:
 4. Start the LMS by running `npm start`.
 
 That's it! You can now start using our LMS to manage your library's books and users.
+
+> **Note:** It is safe to share your Firebase API keys in general, as they are not meant to be private keys but just identifiers. However, if you want to link the LMS to your own Firebase project, you should change the Firebase configuration in the `src/firebase/firebase.js` file.
+> If you encounter any issues or have questions regarding Firebase, please refer to the [Firebase documentation](https://firebase.google.com/docs) for guidance.
 
 ## Purpose
 
@@ -47,8 +56,6 @@ We welcome contributions from the community! If you would like to contribute to 
 ## License
 
 Our Library Management System is released under the MIT license. This means that you are free to use, modify, and distribute it as you see fit.
-
-Sure, here is a Contact section that includes links to your LinkedIn profile and email address:
 
 ## Contact
 
