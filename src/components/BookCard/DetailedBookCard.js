@@ -35,21 +35,26 @@ function DetailedBookCard({
       <ViewMoreButton book={book} />
       {showMore && (
         <div>
-          <p>First Name: {book.firstName}</p>
-          <p>Last Name: {book.lastName}</p>
+          {book.firstName && <p>First Name: {book.firstName}</p>}
+          {book.lastName && <p>Last Name: {book.lastName}</p>}
+          <p>
+            Book ID: {book.id}
+            <button
+              className="copy-to-clipboard-button"
+              onClick={() => handleCopyToClipboard(book.id)}
+            >
+              Copy to clipboard
+            </button>
+          </p>
         </div>
       )}
-      <p>Number of times borrowed: {book.borrowCount}</p>
-      {book.isBorrowed && <p>Borrowed by: {book.borrowerEmail}</p>}
       <p>
-        Book ID: {book.id}
-        <button
-          className="copy-to-clipboard-button"
-          onClick={() => handleCopyToClipboard(book.id)}
-        >
-          Copy to clipboard
-        </button>
+        Number of times borrowed:{" "}
+        <span style={{ fontWeight: "bold", fontSize: "larger" }}>
+          {book.borrowCount}
+        </span>
       </p>
+      {book.isBorrowed && <p>Borrowed by: {book.borrowerEmail}</p>}
       <p
         style={{
           fontWeight: "bold",
