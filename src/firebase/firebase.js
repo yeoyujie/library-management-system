@@ -9,6 +9,8 @@ import { getAnalytics } from "firebase/analytics";
 const firebaseConfig = {
   apiKey: "AIzaSyBxdtCW4-SZZI_fwyEiYAGfcVtzovlOmP8",
   authDomain: "library-management-syste-2902d.firebaseapp.com",
+  databaseURL:
+    "https://library-management-syste-2902d-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "library-management-syste-2902d",
   storageBucket: "library-management-syste-2902d.appspot.com",
   messagingSenderId: "460392849894",
@@ -19,4 +21,5 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+
 export { app };
