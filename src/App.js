@@ -25,7 +25,7 @@ function App() {
   };
 
   if (!authenticated) {
-    return <Auth onAuthenticate={setAuthenticated} />;
+    return <LoginPage onAuthenticate={setAuthenticated} />;
   }
 
   return (
