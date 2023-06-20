@@ -55,16 +55,12 @@ function AddBookForm({ isAdmin }) {
 
     const authorName = author || firstName + " " + lastName;
 
-    // Create a new field that combines the title and author values
-    const title_author = `${title}_${authorName}`;
-
     // Update the realtime database in Firebase
     const newBookRef = push(ref(db, "books"), {
       title,
       author: authorName,
       firstName,
       lastName,
-      title_author,
       isBorrowed: false,
       borrowerEmail: "",
       borrowCount: 0,

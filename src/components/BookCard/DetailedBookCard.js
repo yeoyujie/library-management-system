@@ -53,6 +53,7 @@ function DetailedBookCard({
       <p
         style={{
           fontWeight: "bold",
+          fontSize: "1.1rem",
           color: book.isBorrowed ? "red" : "green",
         }}
       >

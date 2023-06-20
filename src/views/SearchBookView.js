@@ -12,6 +12,7 @@ import {
   increment,
   startAt,
   endAt,
+  set,
 } from "firebase/database";
 import Form from "../components/Form.js";
 import LayoutForm from "../components/LayoutForm.js";
@@ -56,27 +57,19 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
     let booksQuery;
     let searchType;
 
-    if ((title && author) || (firstName && lastName && title)) {
-      // Use the title_author field to query for books with a specific title and author
+    setSuccessMessage("");
+    setErrorMessage("");
 
-      const authorName = author || firstName + " " + lastName;
-
-      booksQuery = query(
-        booksRef,
-        orderByChild("title_author"),
-        startAt(`${title}_${authorName}`),
-        endAt(`${title}_${authorName}\uf8ff`)
-      );
-      searchType = "title and author";
-    } else if (title) {
+    if (title) {
       // Use the title field only to query for books with a specific title
       booksQuery = query(
         booksRef,
         orderByChild("title"),
         startAt(title),
+        // The \uf8ff character is a very high code point in the Unicode range.
+        // By appending it to the end of the title, we are creating a range that includes all possible values that start with the title.
         endAt(title + "\uf8ff")
       );
-      searchType = "title";
     } else if (author || (firstName && lastName)) {
       const authorName = author || firstName + " " + lastName;
 
@@ -86,7 +79,6 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
         startAt(authorName),
         endAt(authorName + "\uf8ff")
       );
-      searchType = "author";
     } else if (firstName) {
       booksQuery = query(
         booksRef,
@@ -94,7 +86,7 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
         startAt(firstName),
         endAt(firstName + "\uf8ff")
       );
-      searchType = "First Name";
+      searchType = "first name";
     } else if (lastName) {
       booksQuery = query(
         booksRef,
@@ -102,12 +94,11 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
         startAt(lastName),
         endAt(lastName + "\uf8ff")
       );
-      searchType = "Last Name";
     }
 
     if (booksQuery) {
       const snapshot = await get(booksQuery);
-      const booksArray = [];
+      let booksArray = [];
       snapshot.forEach((childSnapshot) => {
         booksArray.push({
           id: childSnapshot.key,
@@ -115,42 +106,46 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
         });
       });
 
+      if (title) {
+        if (author) {
+          // filter client side based on author
+          booksArray = booksArray.filter((book) =>
+            book.author.includes(author)
+          );
+        } else if (firstName && lastName) {
+          // filter client side based on first name and last name
+          booksArray = booksArray.filter(
+            (book) =>
+              book.firstName.includes(firstName) &&
+              book.lastName.includes(lastName)
+          );
+        } else if (firstName) {
+          // filter client side based on first name
+          booksArray = booksArray.filter((book) =>
+            book.firstName.includes(firstName)
+          );
+        } else if (lastName) {
+          // filter client side based on last name
+          booksArray = booksArray.filter((book) =>
+            book.lastName.includes(lastName)
+          );
+        }
+      }
+
       setSearchResults(booksArray);
 
       //Success message for search showing type of search
       if (booksArray.length > 0) {
-        let successMessage;
-        switch (searchType) {
-          case "title and author":
-            successMessage = (
-              <>
-                Books found by the title <em>{title}</em> and the author{" "}
-                <em>{author}</em>.
-              </>
-            );
-            break;
-          case "title":
-            successMessage = (
-              <>
-                Books found that match the title <em>{title}</em>.
-              </>
-            );
-            break;
-          case "author":
-            successMessage = (
-              <>
-                Books found that are written by <em>{author}</em>.
-              </>
-            );
-            break;
-          default:
-            successMessage = "Books found!";
-        }
+        const searchFields = [];
+        if (title) searchFields.push(`title "${title}"`);
+        if (author) searchFields.push(`author "${author}"`);
+        if (firstName) searchFields.push(`first name "${firstName}"`);
+        if (lastName) searchFields.push(`last name "${lastName}"`);
+
+        const successMessage = `Books found by ${searchFields.join(" and ")}.`;
         setSuccessMessage(successMessage);
-        setErrorMessage("");
       } else {
-        setErrorMessage(`No books found by ${searchType}.`);
-        setSuccessMessage("");
+        setErrorMessage("No books found.");
       }
     }
   };
