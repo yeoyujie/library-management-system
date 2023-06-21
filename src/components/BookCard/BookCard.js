@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { searchBooksByTitle } from '../../api/openLibrary.js';
+import { fetchBookCoverUrl } from '../../api/openLibrary.js';
 import "./BookCards.css"
 
 function BookCard({ book }) {
@@ -7,13 +7,8 @@ function BookCard({ book }) {
 
   useEffect(() => {
     async function fetchCover() {
-      const books = await searchBooksByTitle(book.title);
-      if (books.length > 0) {
-        const coverEditionKey = books[0].cover_edition_key;
-        if (coverEditionKey) {
-          setCoverUrl(`https://covers.openlibrary.org/b/olid/${coverEditionKey}-M.jpg`);
-        }
-      }
+      const url = await fetchBookCoverUrl(book.title);
+      setCoverUrl(url);
     }
     fetchCover();
   }, [book.title]);

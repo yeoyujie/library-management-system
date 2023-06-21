@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import DeleteBookButton from "../Buttons/DeleteBookButton";
 import ReturnBookButton from "../Buttons/ReturnBookButton";
-import { searchBooksByTitle } from '../../api/openLibrary.js';
-
+import { fetchBookCoverUrl } from '../../api/openLibrary.js';
 
 function DetailedBookCard({
   isAdmin,
@@ -15,6 +14,8 @@ function DetailedBookCard({
   setErrorMessage,
 }) {
   const [showMore, setShowMore] = useState(false);
+  const [coverUrl, setCoverUrl] = useState(null);
+
 
   const handleViewMore = () => {
     setShowMore(!showMore);
@@ -29,6 +30,14 @@ function DetailedBookCard({
       );
     }
   };
+
+  useEffect(() => {
+    async function fetchCover() {
+      const url = await fetchBookCoverUrl(book.title);
+      setCoverUrl(url);
+    }
+    fetchCover();
+  }, [book.title]);
 
   return (
     <div className="book-card" key={book.id}>
@@ -104,6 +113,13 @@ function DetailedBookCard({
             />
           )}
         </div>
+      </div>
+      <div className="book-cover">
+        {coverUrl ? (
+          <img src={coverUrl} alt={book.title} />
+        ) : (
+          <div className="loading-circle"></div>
+        )}
       </div>
     </div>
   );
