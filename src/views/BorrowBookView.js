@@ -167,10 +167,10 @@ function BorrowBookForm({ isAdmin, selectedBook }) {
     }
 
     // specify the domain you want the email to be from
-    if (!email.endsWith(".sg")) {
-      setErrorMessage("Please enter your xxx domain email.");
-      return;
-    }
+    // if (!email.endsWith(".sg")) {
+    //   setErrorMessage("Please enter your xxx domain email.");
+    //   return;
+    // }
 
     // Borrow the selected book based on its title and author
     borrowBook(title, author, email)

@@ -158,11 +158,11 @@ function SearchBookForm({ isAdmin, onBorrowBook, onEditBook }) {
     // Update the isBorrowed status and borrowerEmail of the book in the database
     update(bookRef, {
       isBorrowed: true,
-      borrowerEmail: "JTCA",
+      borrowerEmail: "Admin",
       borrowCount: increment(1),
     });
 
-    setSuccessMessage("Book borrowed by JTCA successfully!");
+    setSuccessMessage("Book borrowed by Admin successfully!");
     setErrorMessage("");
   };
 
