@@ -1,6 +1,8 @@
 import { useState } from "react";
 import DeleteBookButton from "../Buttons/DeleteBookButton";
 import ReturnBookButton from "../Buttons/ReturnBookButton";
+import { searchBooksByTitle } from '../../api/openLibrary.js';
+
 
 function DetailedBookCard({
   isAdmin,

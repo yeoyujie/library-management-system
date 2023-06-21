@@ -1,3 +1,5 @@
+import { searchBooksByTitle } from '../../api/openLibrary.js';
+
 function EditableBookCard({
   book,
   fields,

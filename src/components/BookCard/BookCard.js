@@ -1,11 +1,6 @@
 import { useState, useEffect } from 'react';
+import { searchBooksByTitle } from '../../api/openLibrary.js';
 import "./BookCards.css"
-
-async function searchBooksByTitle(title) {
-  const response = await fetch(`http://openlibrary.org/search.json?title=${title}`);
-  const data = await response.json();
-  return data.docs;
-}
 
 function BookCard({ book }) {
   const [coverUrl, setCoverUrl] = useState(null);
@@ -30,11 +25,13 @@ function BookCard({ book }) {
         <h3>by {book.author}</h3>
         <p>Book ID: {book.id}</p>
       </div>
-      {coverUrl && (
-        <div className="book-cover">
+      <div className="book-cover">
+        {coverUrl ? (
           <img src={coverUrl} alt={book.title} />
-        </div>
-      )}
+        ) : (
+          <div className="loading-circle"></div>
+        )}
+      </div>
     </div>
   );
 }
