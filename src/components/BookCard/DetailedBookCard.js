@@ -30,76 +30,78 @@ function DetailedBookCard({
 
   return (
     <div className="book-card" key={book.id}>
-      <h2>{book.title}</h2>
-      <h3>by {book.author}</h3>
-      <ViewMoreButton book={book} />
-      {showMore && (
-        <div>
-          {book.firstName && <p>First Name: {book.firstName}</p>}
-          {book.lastName && <p>Last Name: {book.lastName}</p>}
-          <p>
-            Book ID: {book.id}
+      <div className="book-info">
+        <h2>{book.title}</h2>
+        <h3>by {book.author}</h3>
+        <ViewMoreButton book={book} />
+        {showMore && (
+          <div>
+            {book.firstName && <p>First Name: {book.firstName}</p>}
+            {book.lastName && <p>Last Name: {book.lastName}</p>}
+            <p>
+              Book ID: {book.id}
+              <button
+                className="copy-to-clipboard-button"
+                onClick={() => handleCopyToClipboard(book.id)}
+              >
+                Copy to clipboard
+              </button>
+            </p>
+          </div>
+        )}
+        <p>
+          Number of times borrowed:{" "}
+          <span style={{ fontWeight: "bold", fontSize: "larger" }}>
+            {book.borrowCount}
+          </span>
+        </p>
+        {book.isBorrowed && <p>Borrowed by: {book.borrowerEmail}</p>}
+        <p
+          style={{
+            fontWeight: "bold",
+            fontSize: "1.1rem",
+            color: book.isBorrowed ? "red" : "green",
+          }}
+        >
+          {book.isBorrowed ? "Borrowed" : "Available"}
+        </p>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {book.isBorrowed ? (
+            isAdmin && (
+              <ReturnBookButton
+                book={book}
+                onSuccess={(message) => setSuccessMessage(message)}
+                onError={(message) => setErrorMessage(message)}
+              />
+            )
+          ) : (
             <button
-              className="copy-to-clipboard-button"
-              onClick={() => handleCopyToClipboard(book.id)}
+              className="borrow-button"
+              onClick={() => {
+                isAdmin ? onBorrowBookAdminClick(book) : onBorrowBookClick(book);
+              }}
             >
-              Copy to clipboard
+              Borrow Book
             </button>
-          </p>
-        </div>
-      )}
-      <p>
-        Number of times borrowed:{" "}
-        <span style={{ fontWeight: "bold", fontSize: "larger" }}>
-          {book.borrowCount}
-        </span>
-      </p>
-      {book.isBorrowed && <p>Borrowed by: {book.borrowerEmail}</p>}
-      <p
-        style={{
-          fontWeight: "bold",
-          fontSize: "1.1rem",
-          color: book.isBorrowed ? "red" : "green",
-        }}
-      >
-        {book.isBorrowed ? "Borrowed" : "Available"}
-      </p>
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        {book.isBorrowed ? (
-          isAdmin && (
-            <ReturnBookButton
+          )}
+          {isAdmin && (
+            <button
+              className="edit-button"
+              onClick={() => {
+                onEditBookClick(book);
+              }}
+            >
+              Edit Book
+            </button>
+          )}
+          {isAdmin && (
+            <DeleteBookButton
               book={book}
               onSuccess={(message) => setSuccessMessage(message)}
               onError={(message) => setErrorMessage(message)}
             />
-          )
-        ) : (
-          <button
-            className="borrow-button"
-            onClick={() => {
-              isAdmin ? onBorrowBookAdminClick(book) : onBorrowBookClick(book);
-            }}
-          >
-            Borrow Book
-          </button>
-        )}
-        {isAdmin && (
-          <button
-            className="edit-button"
-            onClick={() => {
-              onEditBookClick(book);
-            }}
-          >
-            Edit Book
-          </button>
-        )}
-        {isAdmin && (
-          <DeleteBookButton
-            book={book}
-            onSuccess={(message) => setSuccessMessage(message)}
-            onError={(message) => setErrorMessage(message)}
-          />
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

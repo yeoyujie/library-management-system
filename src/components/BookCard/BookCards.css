@@ -1,0 +1,33 @@
+.book-card {
+  display: flex;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.5s ease-in-out;
+}
+
+.book-card h2 {
+  margin-top: 8px;
+  text-align: left;
+}
+
+.book-card h3 {
+  margin-top: 6px;
+}
+
+.book-info {
+  flex: 1;
+}
+
+.book-cover img {
+  max-width: 100%;
+}
+
+.book-cover {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
